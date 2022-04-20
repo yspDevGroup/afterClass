@@ -3,8 +3,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-11-29 15:20:16
- * @LastEditTime: 2021-12-09 12:12:32
- * @LastEditors: Sissle Lynn
+ * @LastEditTime: 2022-04-20 18:00:34
+ * @LastEditors: Wu Zhan
  */
 import React, { useEffect, useState } from 'react';
 import { Link, useModel } from 'umi';
@@ -84,7 +84,6 @@ const OperationBar = (props: { courseData: any }) => {
             onClick={() => {
               Modal.info({
                 title: `教师补签时段为每月${start}日到${end}日`,
-                width: '70vw',
                 className: styles.modalSign,
                 centered: true,
                 okText: '知道了',

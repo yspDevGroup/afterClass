@@ -2,8 +2,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-11-29 17:16:51
- * @LastEditTime: 2022-03-29 10:16:10
- * @LastEditors: Sissle Lynn
+ * @LastEditTime: 2022-04-20 18:06:25
+ * @LastEditors: Wu Zhan
  */
 import React, { useEffect, useRef, useState } from 'react';
 import { useModel } from 'umi';
@@ -34,6 +34,7 @@ import { ParentHomeData } from '@/services/local-services/mobileHome';
 
 import noOrder from '@/assets/noOrder1.png';
 import styles from './index.less';
+import MobileCon from '@/components/MobileCon';
 
 const { confirm } = Modal;
 const Study = () => {
@@ -300,267 +301,269 @@ const Study = () => {
     }
   };
   return (
-    <div className={styles.selectedPage}>
-      <GoBack title="我要选课" teacher onclick="/teacher/education/selectCourse" />
-      <div className={styles.selectedCard}>
-        <div className={styles.selectedCon}>
-          <div className={styles.searchVal}>
-            {/* <span>全校区</span> */}
-            <span onClick={(e) => handleSearch(e, 'grade')}>{NjVal || '全年级'}</span>
-            <span onClick={(e) => handleSearch(e, 'type')}>{LXVal || '全部课程'}</span>
-            <span onClick={(e) => handleSearch(e, 'date')}>
-              {moment(day).format('MM月DD日') || '今天'}
-            </span>
-          </div>
-          <div
-            className="searchWrapper"
-            ref={divRef}
-            onClick={(e) => {
-              if (e.target === e.currentTarget) {
-                e.currentTarget.style.display = 'none';
-              }
-            }}
-          >
-            <div>
-              {/* <div>
+    <MobileCon>
+      <div className={styles.selectedPage}>
+        <GoBack title="我要选课" teacher onclick="/teacher/education/selectCourse" />
+        <div className={styles.selectedCard}>
+          <div className={styles.selectedCon}>
+            <div className={styles.searchVal}>
+              {/* <span>全校区</span> */}
+              <span onClick={(e) => handleSearch(e, 'grade')}>{NjVal || '全年级'}</span>
+              <span onClick={(e) => handleSearch(e, 'type')}>{LXVal || '全部课程'}</span>
+              <span onClick={(e) => handleSearch(e, 'date')}>
+                {moment(day).format('MM月DD日') || '今天'}
+              </span>
+            </div>
+            <div
+              className="searchWrapper"
+              ref={divRef}
+              onClick={(e) => {
+                if (e.target === e.currentTarget) {
+                  e.currentTarget.style.display = 'none';
+                }
+              }}
+            >
+              <div>
+                {/* <div>
                 <ul>
                   {XQData?.map((item: any) => {
                     return <li key={item.id} onClick={() => setXQId(item.id)}>{item.XQMC}</li>;
                   })}
                 </ul>
               </div> */}
-              <div className="gradeWrapper">
-                <ul>
-                  <li
-                    className={NjId === undefined ? styles.active : ''}
-                    key={undefined}
-                    onClick={() => {
-                      setNjId(undefined);
-                      setNjVal('全年级');
-                      divRef!.current!.style.display = 'none';
-                    }}
-                  >
-                    全年级
-                  </li>
-                  {NjData &&
-                    NjData?.map((item: any) => {
-                      return (
-                        <li
-                          className={NjId === item.id ? styles.active : ''}
-                          key={item.id}
-                          onClick={() => {
-                            setNjId(item.id);
-                            setNjVal(`${item.XD}${item.NJMC}`);
-                            divRef!.current!.style.display = 'none';
-                          }}
-                        >{`${item.XD}${item.NJMC}`}</li>
-                      );
-                    })}
-                </ul>
-              </div>
-              <div className="typeWrapper">
-                <ul>
-                  <li
-                    className={LXId === undefined ? styles.active : ''}
-                    key={undefined}
-                    onClick={() => {
-                      setLXId(undefined);
-                      setLXVal('全部课程');
-                      divRef!.current!.style.display = 'none';
-                    }}
-                  >
-                    全部课程
-                  </li>
-                  {kclxOptions &&
-                    kclxOptions?.map((item: any) => {
-                      return (
-                        <li
-                          className={LXId === item.value ? styles.active : ''}
-                          key={item.value}
-                          onClick={() => {
-                            setLXId(item.value);
-                            setLXVal(item.label);
-                            divRef!.current!.style.display = 'none';
-                          }}
-                        >
-                          {item.label}
-                        </li>
-                      );
-                    })}
-                </ul>
-              </div>
-              <div className="dateWrapper">
-                <ConfigProvider locale={locale}>
-                  <DatePicker
-                    style={{ width: '100%' }}
-                    bordered={false}
-                    allowClear={false}
-                    inputReadOnly={true}
-                    value={moment(day)}
-                    onChange={onChange}
-                  />
-                </ConfigProvider>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className={styles.listWrapper}>
-        {dataSource?.length ? (
-          <List
-            style={{ background: '#fff', paddingLeft: '10px' }}
-            itemLayout="horizontal"
-            dataSource={dataSource}
-            renderItem={(item: any) => {
-              const { XXSJPZ, FJSJ } = item.KHPKSJs?.[0];
-              return (
-                <List.Item
-                  key={`${item.id}+${item.BMKSSJ}`}
-                  actions={[
-                    <input
-                      key="fruit"
-                      name="Fruit"
-                      type="radio"
-                      value={`${item.id}+${item.BMKSSJ}`}
+                <div className="gradeWrapper">
+                  <ul>
+                    <li
+                      className={NjId === undefined ? styles.active : ''}
+                      key={undefined}
                       onClick={() => {
-                        setCurrent(item);
-                      }}
-                    />,
-                  ]}
-                >
-                  <List.Item.Meta
-                    title={`${item?.KHKCSJ?.KCMC}【${item?.BJMC}】`}
-                    description={`${XXSJPZ?.KSSJ?.substring?.(0, 5)} - ${XXSJPZ?.JSSJ?.substring?.(
-                      0,
-                      5,
-                    )} | ${FJSJ.FJMC}`}
-                  />
-                </List.Item>
-              );
-            }}
-          />
-        ) : (
-          <div className={styles.noData}>
-            <img src={noOrder} alt="" />
-            <p>暂无数据</p>
-          </div>
-        )}
-      </div>
-      {current ? (
-        <div
-          className={styles.applyWrapper}
-          onClick={(e) => {
-            if (e.target === e.currentTarget) {
-              setCurrent(undefined);
-              setMainTeacher(undefined);
-              setSubTeacher([]);
-            }
-          }}
-        >
-          <div>
-            <div className={styles.title}>{`${current?.KHKCSJ?.KCMC} - ${current?.BJMC}`}</div>
-            <div className={styles.content}>
-              <div className={styles.items}>
-                <span>主班教师</span>
-                <div>
-                  {mainTeacher ? (
-                    <Tag
-                      closable={mainTeacher?.JZGJBSJ?.id === userId}
-                      onClose={() => {
-                        const subs = subTeacher.find((val: any) => val.JZGJBSJ?.id === userId);
-                        if (!subs) {
-                          setBtnAble(false);
-                        }
-                        setMainTeacher(undefined);
+                        setNjId(undefined);
+                        setNjVal('全年级');
+                        divRef!.current!.style.display = 'none';
                       }}
                     >
-                      <ShowName
-                        type="userName"
-                        openid={mainTeacher?.JZGJBSJ?.WechatUserId}
-                        XM={mainTeacher?.JZGJBSJ?.XM}
-                      />
-                    </Tag>
-                  ) : (
-                    <span className={styles.tipText}>暂无安排</span>
-                  )}
-                </div>
-              </div>
-              <div className={styles.items}>
-                <span>
-                  副班教师<span className={styles.tipText}>（最多3人）</span>
-                </span>
-                <div>
-                  {subTeacher?.length ? (
-                    <>
-                      {subTeacher.map((v: any) => {
+                      全年级
+                    </li>
+                    {NjData &&
+                      NjData?.map((item: any) => {
                         return (
-                          <Tag
-                            key={v.id}
-                            closable={v?.JZGJBSJ?.id === userId}
-                            onClose={() => {
-                              const subs = subTeacher.filter(
-                                (val: any) => val.JZGJBSJ?.id !== userId,
-                              );
-                              if (mainTeacher?.JZGJBSJ?.id !== userId) {
-                                setBtnAble(false);
-                              }
-                              setSubTeacher(subs);
+                          <li
+                            className={NjId === item.id ? styles.active : ''}
+                            key={item.id}
+                            onClick={() => {
+                              setNjId(item.id);
+                              setNjVal(`${item.XD}${item.NJMC}`);
+                              divRef!.current!.style.display = 'none';
+                            }}
+                          >{`${item.XD}${item.NJMC}`}</li>
+                        );
+                      })}
+                  </ul>
+                </div>
+                <div className="typeWrapper">
+                  <ul>
+                    <li
+                      className={LXId === undefined ? styles.active : ''}
+                      key={undefined}
+                      onClick={() => {
+                        setLXId(undefined);
+                        setLXVal('全部课程');
+                        divRef!.current!.style.display = 'none';
+                      }}
+                    >
+                      全部课程
+                    </li>
+                    {kclxOptions &&
+                      kclxOptions?.map((item: any) => {
+                        return (
+                          <li
+                            className={LXId === item.value ? styles.active : ''}
+                            key={item.value}
+                            onClick={() => {
+                              setLXId(item.value);
+                              setLXVal(item.label);
+                              divRef!.current!.style.display = 'none';
                             }}
                           >
-                            <ShowName
-                              type="userName"
-                              openid={v?.JZGJBSJ?.WechatUserId}
-                              XM={v?.JZGJBSJ?.XM}
-                            />
-                          </Tag>
+                            {item.label}
+                          </li>
                         );
-                      })}{' '}
-                    </>
-                  ) : (
-                    <span className={styles.tipText}>暂无安排</span>
-                  )}
+                      })}
+                  </ul>
                 </div>
-              </div>
-              <Divider />
-              <div className={styles.items}>
-                <div>
-                  <h3>
-                    选择角色
-                    <span
-                      style={{ display: mainTeacher ? 'block' : 'none' }}
-                      className={styles.tipText}
-                    >
-                      已有主班教师
-                    </span>
-                  </h3>
+                <div className="dateWrapper">
+                  <ConfigProvider locale={locale}>
+                    <DatePicker
+                      style={{ width: '100%' }}
+                      bordered={false}
+                      allowClear={false}
+                      inputReadOnly={true}
+                      value={moment(day)}
+                      onChange={onChange}
+                    />
+                  </ConfigProvider>
                 </div>
-                <Radio.Group>
-                  <Radio.Button
-                    onClick={(e) => handleChange(e)}
-                    disabled={mainTeacher && mainTeacher?.JZGJBSJ?.id !== userId}
-                    value="1"
-                  >
-                    主班
-                  </Radio.Button>
-                  <Radio.Button onClick={(e) => handleChange(e)} value="0">
-                    副班
-                  </Radio.Button>
-                </Radio.Group>
               </div>
             </div>
-            <Button
-              className={styles.submit}
-              disabled={!btnAble && !exist}
-              onClick={() => prevJudge()}
-            >
-              提交
-            </Button>
           </div>
         </div>
-      ) : (
-        ''
-      )}
-    </div>
+        <div className={styles.listWrapper}>
+          {dataSource?.length ? (
+            <List
+              style={{ background: '#fff', paddingLeft: '10px' }}
+              itemLayout="horizontal"
+              dataSource={dataSource}
+              renderItem={(item: any) => {
+                const { XXSJPZ, FJSJ } = item.KHPKSJs?.[0];
+                return (
+                  <List.Item
+                    key={`${item.id}+${item.BMKSSJ}`}
+                    actions={[
+                      <input
+                        key="fruit"
+                        name="Fruit"
+                        type="radio"
+                        value={`${item.id}+${item.BMKSSJ}`}
+                        onClick={() => {
+                          setCurrent(item);
+                        }}
+                      />,
+                    ]}
+                  >
+                    <List.Item.Meta
+                      title={`${item?.KHKCSJ?.KCMC}【${item?.BJMC}】`}
+                      description={`${XXSJPZ?.KSSJ?.substring?.(
+                        0,
+                        5,
+                      )} - ${XXSJPZ?.JSSJ?.substring?.(0, 5)} | ${FJSJ.FJMC}`}
+                    />
+                  </List.Item>
+                );
+              }}
+            />
+          ) : (
+            <div className={styles.noData}>
+              <img src={noOrder} alt="" />
+              <p>暂无数据</p>
+            </div>
+          )}
+        </div>
+        {current ? (
+          <div
+            className={styles.applyWrapper}
+            onClick={(e) => {
+              if (e.target === e.currentTarget) {
+                setCurrent(undefined);
+                setMainTeacher(undefined);
+                setSubTeacher([]);
+              }
+            }}
+          >
+            <div>
+              <div className={styles.title}>{`${current?.KHKCSJ?.KCMC} - ${current?.BJMC}`}</div>
+              <div className={styles.content}>
+                <div className={styles.items}>
+                  <span>主班教师</span>
+                  <div>
+                    {mainTeacher ? (
+                      <Tag
+                        closable={mainTeacher?.JZGJBSJ?.id === userId}
+                        onClose={() => {
+                          const subs = subTeacher.find((val: any) => val.JZGJBSJ?.id === userId);
+                          if (!subs) {
+                            setBtnAble(false);
+                          }
+                          setMainTeacher(undefined);
+                        }}
+                      >
+                        <ShowName
+                          type="userName"
+                          openid={mainTeacher?.JZGJBSJ?.WechatUserId}
+                          XM={mainTeacher?.JZGJBSJ?.XM}
+                        />
+                      </Tag>
+                    ) : (
+                      <span className={styles.tipText}>暂无安排</span>
+                    )}
+                  </div>
+                </div>
+                <div className={styles.items}>
+                  <span>
+                    副班教师<span className={styles.tipText}>（最多3人）</span>
+                  </span>
+                  <div>
+                    {subTeacher?.length ? (
+                      <>
+                        {subTeacher.map((v: any) => {
+                          return (
+                            <Tag
+                              key={v.id}
+                              closable={v?.JZGJBSJ?.id === userId}
+                              onClose={() => {
+                                const subs = subTeacher.filter(
+                                  (val: any) => val.JZGJBSJ?.id !== userId,
+                                );
+                                if (mainTeacher?.JZGJBSJ?.id !== userId) {
+                                  setBtnAble(false);
+                                }
+                                setSubTeacher(subs);
+                              }}
+                            >
+                              <ShowName
+                                type="userName"
+                                openid={v?.JZGJBSJ?.WechatUserId}
+                                XM={v?.JZGJBSJ?.XM}
+                              />
+                            </Tag>
+                          );
+                        })}{' '}
+                      </>
+                    ) : (
+                      <span className={styles.tipText}>暂无安排</span>
+                    )}
+                  </div>
+                </div>
+                <Divider />
+                <div className={styles.items}>
+                  <div>
+                    <h3>
+                      选择角色
+                      <span
+                        style={{ display: mainTeacher ? 'block' : 'none' }}
+                        className={styles.tipText}
+                      >
+                        已有主班教师
+                      </span>
+                    </h3>
+                  </div>
+                  <Radio.Group>
+                    <Radio.Button
+                      onClick={(e) => handleChange(e)}
+                      disabled={mainTeacher && mainTeacher?.JZGJBSJ?.id !== userId}
+                      value="1"
+                    >
+                      主班
+                    </Radio.Button>
+                    <Radio.Button onClick={(e) => handleChange(e)} value="0">
+                      副班
+                    </Radio.Button>
+                  </Radio.Group>
+                </div>
+              </div>
+              <Button
+                className={styles.submit}
+                disabled={!btnAble && !exist}
+                onClick={() => prevJudge()}
+              >
+                提交
+              </Button>
+            </div>
+          </div>
+        ) : (
+          ''
+        )}
+      </div>
+    </MobileCon>
   );
 };
 
