@@ -1,22 +1,28 @@
+@import '../../../theme.less';
+
 .Evaluation {
-  min-height: 100%;
+  min-height: 100vh;
   background: #f5f5f5;
+
   :global {
     .ant-tabs-nav {
       .ant-tabs-nav-wrap {
         .ant-tabs-nav-list {
           width: 100%;
+
           .ant-tabs-tab {
             width: 50%;
             margin-left: 0;
             background: #f5f5f5;
             border: none;
             border-radius: 0%;
+
             .ant-tabs-tab-btn {
               margin: 0 auto;
               font-size: 16px;
             }
           }
+
           .ant-tabs-tab-active {
             .ant-tabs-tab-btn {
               color: #15b628;
@@ -27,13 +33,16 @@
       }
     }
   }
+
   .Application {
     padding: 0 10px;
+
     // height: calc(~"100vh - 85px");
     .choice {
       color: #999;
       font-size: 12px;
     }
+
     .cards {
       position: relative;
       width: 100%;
@@ -42,23 +51,27 @@
       padding: 10px;
       background-color: #fff;
       border-radius: 8px;
+
       p {
         margin-bottom: 5px;
         color: #999;
         font-size: 12px;
       }
+
       p:nth-of-type(2) {
         width: 100%;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
       }
+
       .title {
         margin-bottom: 10px;
         color: #333;
         font-weight: bold;
         font-size: 16px;
       }
+
       button {
         position: absolute;
         right: 10px;
@@ -68,7 +81,9 @@
         border: 1px solid #15b628;
         border-radius: 15px;
       }
+
       :global {
+
         .ant-btn:hover,
         .ant-btn:focus {
           color: #15b628;
@@ -77,9 +92,11 @@
       }
     }
   }
+
   .History {
     width: 100%;
     padding: 0 10px;
+
     .Pjcards {
       position: relative;
       width: 100%;
@@ -88,23 +105,28 @@
       padding: 5px 10px 10px;
       background-color: #fff;
       border-radius: 8px;
+
       p {
         margin: 0;
       }
+
       .name {
-        > span {
+        >span {
           color: #000;
           font-weight: bold;
           line-height: 38px;
         }
+
         ul {
           float: right;
         }
       }
-      > p:nth-child(2) {
+
+      >p:nth-child(2) {
         color: #999;
         font-size: 12px;
       }
+
       .PY {
         max-height: 70px;
         margin: 5px 0;
@@ -113,6 +135,7 @@
         font-size: 14px;
         word-break: break-all;
       }
+
       .BJXX {
         width: 100%;
         height: 56px;
@@ -122,10 +145,12 @@
         line-height: 22px;
         background: #e9e9e9;
         border-radius: 8px;
-        > p:nth-child(2) {
+
+        >p:nth-child(2) {
           color: #999;
         }
       }
+
       button {
         width: 88px;
         height: 30px;
@@ -135,7 +160,9 @@
         border: 1px solid #15b628;
         border-radius: 15px;
       }
+
       :global {
+
         .ant-btn:hover,
         .ant-btn:focus {
           color: #15b628;
@@ -149,22 +176,26 @@
 .EvaluationDetails {
   height: 100%;
   background: #f5f5f5;
+
   .header {
     display: flex;
     padding: 16px 10px;
+
     img {
       width: 110px;
       height: 70px;
       margin-right: 10px;
       background-color: #fff;
     }
-    > div {
+
+    >div {
       p {
         margin: 0;
         color: #999;
         font-size: 12px;
         line-height: 22px;
       }
+
       p:nth-child(1) {
         color: #333;
         font-weight: bold;
@@ -173,23 +204,28 @@
       }
     }
   }
+
   .content {
     padding: 16px 10px 30px 10px;
     background-color: #fff;
-    > div {
+
+    >div {
       textarea {
         height: 230px;
       }
     }
   }
+
   .btn {
     position: fixed;
     bottom: 0;
     width: 100%;
+    max-width: @mobileMaxWidth;
     height: 54px;
     padding: 8px 14px;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+
     button {
       width: 100%;
       height: 100%;
@@ -200,6 +236,7 @@
       border: none;
       border-radius: 19px;
     }
+
     button[disabled] {
       background-color: #c5c4c4;
     }
@@ -210,6 +247,7 @@
   color: #999;
   font-size: 12px;
   text-align: center;
+
   img {
     display: block;
     width: 180px;

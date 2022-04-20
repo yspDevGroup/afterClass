@@ -29,7 +29,7 @@
         font-size: 20px;
         line-height: 24px;
 
-        > span:nth-child(1) {
+        >span:nth-child(1) {
           display: inline-block;
           min-width: 200px;
           max-width: 80vw;
@@ -38,7 +38,7 @@
           text-overflow: ellipsis;
         }
 
-        & + div {
+        &+div {
           color: @text-color-secondary;
           font-size: @font-size-sm;
         }
@@ -120,7 +120,7 @@
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 
-      > img {
+      >img {
         width: 14px;
         height: 18px;
         margin-right: 8px;
@@ -155,14 +155,14 @@
 
       .noticeText {
         flex: auto;
-        width: calc(~'100vw - 130px');
+        width: calc(~'100% - 130px');
         padding-top: 3px;
 
         .lunbo {
           height: 22px;
         }
 
-        > span {
+        >span {
           display: block;
           width: calc(~'100vw - 110px');
           margin: 10px 6px 4px 6px;
@@ -184,7 +184,7 @@
             border-radius: 11px;
           }
 
-          & + a {
+          &+a {
             display: inline-block;
             width: calc(~'100vw - 125px');
             overflow: hidden;
@@ -215,7 +215,7 @@
       justify-content: space-around;
       margin: 20px 0;
 
-      > a {
+      >a {
         min-width: 68px;
         text-align: center;
 
@@ -251,7 +251,7 @@
         margin-bottom: 10px;
         line-height: 24px;
 
-        > div:nth-of-type(1) {
+        >div:nth-of-type(1) {
           display: inline-block;
           width: 3px;
           height: 19px;
@@ -285,7 +285,7 @@
         }
       }
 
-      > p {
+      >p {
         color: #666;
         font-size: 12px;
         text-align: center;
@@ -334,14 +334,14 @@
         background: rgba(255, 141, 77, 0.2);
         border-radius: 8px;
 
-        > p {
+        >p {
           position: absolute;
           top: 12px;
           left: 12px;
           font-weight: bold;
         }
 
-        > img {
+        >img {
           position: absolute;
           top: 12px;
           right: 12px;
@@ -361,14 +361,14 @@
         background: rgba(27, 227, 167, 0.2);
         border-radius: 8px;
 
-        > p {
+        >p {
           position: absolute;
           top: 12px;
           left: 12px;
           font-weight: bold;
         }
 
-        > img {
+        >img {
           position: absolute;
           top: 12px;
           right: 12px;
@@ -386,13 +386,13 @@
       background-repeat: no-repeat;
       background-size: 100% 100%;
 
-      > span {
+      >span {
         margin-left: 20px;
         color: #fff;
         font-size: 16px;
         line-height: 50px;
 
-        > span {
+        >span {
           margin-left: 4px;
           font-size: 12px;
           vertical-align: inherit;
@@ -432,14 +432,14 @@
         background-position: center;
         background-size: 100% 100%;
 
-        > p {
+        >p {
           margin-bottom: 0;
           margin-left: 20px;
           color: #fff;
           font-size: 14px;
         }
 
-        > img {
+        >img {
           width: 5px;
           height: 8px;
           margin-left: 6px;
@@ -449,23 +449,23 @@
   }
 
   :global {
-    .ant-tabs-tab + .ant-tabs-tab {
+    .ant-tabs-tab+.ant-tabs-tab {
       margin-left: 28px;
     }
 
-    .ant-tabs-top > .ant-tabs-nav,
-    .ant-tabs-bottom > .ant-tabs-nav,
-    .ant-tabs-top > div > .ant-tabs-nav,
-    .ant-tabs-bottom > div > .ant-tabs-nav {
+    .ant-tabs-top>.ant-tabs-nav,
+    .ant-tabs-bottom>.ant-tabs-nav,
+    .ant-tabs-top>div>.ant-tabs-nav,
+    .ant-tabs-bottom>div>.ant-tabs-nav {
       height: 22px;
       margin-bottom: 12px;
       line-height: 22px;
     }
 
-    .ant-tabs-top > .ant-tabs-nav::before,
-    .ant-tabs-bottom > .ant-tabs-nav::before,
-    .ant-tabs-top > div > .ant-tabs-nav::before,
-    .ant-tabs-bottom > div > .ant-tabs-nav::before {
+    .ant-tabs-top>.ant-tabs-nav::before,
+    .ant-tabs-bottom>.ant-tabs-nav::before,
+    .ant-tabs-top>div>.ant-tabs-nav::before,
+    .ant-tabs-bottom>div>.ant-tabs-nav::before {
       border-bottom: 0;
     }
 
@@ -561,7 +561,7 @@
         display: flex;
         margin-bottom: 16px;
 
-        > div:nth-child(1) {
+        >div:nth-child(1) {
           width: 110px;
           height: 70px;
           margin-right: 10px;
@@ -573,7 +573,7 @@
           }
         }
 
-        > div:nth-child(2) {
+        >div:nth-child(2) {
           width: calc(~'100% - 120px');
 
           p {

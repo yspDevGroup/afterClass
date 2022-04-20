@@ -12,6 +12,7 @@ import { ParentHomeData } from '@/services/local-services/mobileHome';
 import { getAllKHXSCQ } from '@/services/after-class/khxscq';
 import { getAllKHBJKSSJ, getTeachersByBJId } from '@/services/after-class/khbjsj';
 import ShowName from '@/components/ShowName';
+import MobileCon from '@/components/MobileCon';
 
 const CourseTable: React.FC = () => {
   const { initialState } = useModel('@@initialState');
@@ -178,111 +179,113 @@ const CourseTable: React.FC = () => {
   };
 
   return (
-    <div className={styles.CourseDetails2}>
-      {path ? (
-        <GoBack title={'课程详情'} onclick={`/parent/home?index=${path}`} />
-      ) : (
-        <GoBack title={'课程详情'} />
-      )}
-      <div className={styles.KCXX}>
-        {/* 上课时段 */}
-        <p className={styles.title}>{KcDetail?.title}</p>
-        <ul>
+    <MobileCon>
+      <div className={styles.CourseDetails2}>
+        {path ? (
+          <GoBack title={'课程详情'} onclick={`/parent/home?index=${path}`} />
+        ) : (
+          <GoBack title={'课程详情'} />
+        )}
+        <div className={styles.KCXX}>
+          {/* 上课时段 */}
+          <p className={styles.title}>{KcDetail?.title}</p>
           <ul>
-            <li>
-              <span>上课时段：</span>
-              {moment(KcDetail?.KKRQ).format('YYYY.MM.DD')}~
-              {moment(KcDetail?.JKRQ).format('YYYY.MM.DD')}
-            </li>
-            <li>
-              <span>上课地点：</span>
-              {KcDetail?.xq} | {KcDetail?.address}
-            </li>
-            {KcDetail?.KSS === 0 || KcDetail?.KSS === null ? (
-              ''
-            ) : (
+            <ul>
               <li>
-                <span>{KcDetail?.ISFW === 1 ? '周课时：' : '总课时：'}</span>
-                {KcDetail?.KSS}课时
+                <span>上课时段：</span>
+                {moment(KcDetail?.KKRQ).format('YYYY.MM.DD')}~
+                {moment(KcDetail?.JKRQ).format('YYYY.MM.DD')}
               </li>
-            )}
-            <li>
-              <span>授课班级：</span>
-              {KcDetail?.BJMC}
-            </li>
-            {mainTeacher ? (
               <li>
-                <span>主班：</span>
-                <span className={styles.teacherName}>
-                  <ShowName
-                    type="userName"
-                    openid={mainTeacher?.JZGJBSJ?.WechatUserId}
-                    XM={mainTeacher?.JZGJBSJ?.XM}
-                  />
-                </span>
+                <span>上课地点：</span>
+                {KcDetail?.xq} | {KcDetail?.address}
               </li>
-            ) : (
-              ''
-            )}
-            {teacherList && teacherList?.length ? (
+              {KcDetail?.KSS === 0 || KcDetail?.KSS === null ? (
+                ''
+              ) : (
+                <li>
+                  <span>{KcDetail?.ISFW === 1 ? '周课时：' : '总课时：'}</span>
+                  {KcDetail?.KSS}课时
+                </li>
+              )}
               <li>
-                <span>副班：</span>
-                {teacherList.map((ele) => {
-                  return (
-                    <span className={styles.teacherName}>
-                      <ShowName
-                        type="userName"
-                        openid={ele?.JZGJBSJ?.WechatUserId}
-                        XM={ele?.JZGJBSJ?.XM}
-                      />
-                    </span>
-                  );
-                })}
+                <span>授课班级：</span>
+                {KcDetail?.BJMC}
               </li>
-            ) : (
-              ''
-            )}
+              {mainTeacher ? (
+                <li>
+                  <span>主班：</span>
+                  <span className={styles.teacherName}>
+                    <ShowName
+                      type="userName"
+                      openid={mainTeacher?.JZGJBSJ?.WechatUserId}
+                      XM={mainTeacher?.JZGJBSJ?.XM}
+                    />
+                  </span>
+                </li>
+              ) : (
+                ''
+              )}
+              {teacherList && teacherList?.length ? (
+                <li>
+                  <span>副班：</span>
+                  {teacherList.map((ele) => {
+                    return (
+                      <span className={styles.teacherName}>
+                        <ShowName
+                          type="userName"
+                          openid={ele?.JZGJBSJ?.WechatUserId}
+                          XM={ele?.JZGJBSJ?.XM}
+                        />
+                      </span>
+                    );
+                  })}
+                </li>
+              ) : (
+                ''
+              )}
+            </ul>
           </ul>
-        </ul>
-      </div>
-      <div className={styles.Timetable}>
-        <p className={styles.title}>
-          <span>课程表</span>
-          <span style={{ textAlign: 'right' }}>
-            <Badge className={styles.legend} color="#AC90FB" text="教师调课" />
-            <Badge className={styles.legend} color="#7A8990" text="教师请假" />
-            <br />
-            <Badge className={`${styles.legend} ${styles.legend1}`} color="#FFF" text="出勤" />
-            <Badge className={styles.legend} color="#F48A82" text="缺勤" />
-            <Badge className={styles.legend} color="#F2C862" text="请假" />
-            <Badge className={styles.legend} color="#2196F3" text="今日" />
-            <Badge className={styles.legend} color="#89DA8C" text="待上" />
-          </span>
-        </p>
-        <div className={styles.cards}>
-          {!(timetableList?.length === 0) ? (
-            timetableList?.map((value) => {
-              return (
-                <div
-                  className={styles.card}
-                  style={value?.style}
-                  onClick={() => handleModal(value)}
-                >
-                  <p>
-                    {value.tag && value.tag === '假'
-                      ? `【${value.tag}】`
-                      : `第${value.index + 1}节`}
-                  </p>
-                  <p>{value.day}</p>
-                </div>
-              );
-            })
-          ) : (
-            <Nodata imgSrc={noData} desc="暂无课表" />
-          )}
+        </div>
+        <div className={styles.Timetable}>
+          <p className={styles.title}>
+            <span>课程表</span>
+            <span style={{ textAlign: 'right' }}>
+              <Badge className={styles.legend} color="#AC90FB" text="教师调课" />
+              <Badge className={styles.legend} color="#7A8990" text="教师请假" />
+              <br />
+              <Badge className={`${styles.legend} ${styles.legend1}`} color="#FFF" text="出勤" />
+              <Badge className={styles.legend} color="#F48A82" text="缺勤" />
+              <Badge className={styles.legend} color="#F2C862" text="请假" />
+              <Badge className={styles.legend} color="#2196F3" text="今日" />
+              <Badge className={styles.legend} color="#89DA8C" text="待上" />
+            </span>
+          </p>
+          <div className={styles.cards}>
+            {!(timetableList?.length === 0) ? (
+              timetableList?.map((value) => {
+                return (
+                  <div
+                    className={styles.card}
+                    style={value?.style}
+                    onClick={() => handleModal(value)}
+                  >
+                    <p>
+                      {value.tag && value.tag === '假'
+                        ? `【${value.tag}】`
+                        : `第${value.index + 1}节`}
+                    </p>
+                    <p>{value.day}</p>
+                  </div>
+                );
+              })
+            ) : (
+              <Nodata imgSrc={noData} desc="暂无课表" />
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </MobileCon>
   );
 };
 

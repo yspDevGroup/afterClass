@@ -11,6 +11,7 @@ import { getAllFWByschooId } from '@/services/after-class/khzzfw';
 import { Link, useModel } from 'umi';
 import noPic from '@/assets/noPic.png';
 import noData from '@/assets/noCourses.png';
+import MobileCon from '@/components/MobileCon';
 
 const defaultMsgs: ListData = {
   type: 'picList',
@@ -37,7 +38,7 @@ const Course = () => {
         XXJBSJId: currentUser?.xxId,
         FWMC: '',
         FWZT: 1,
-        NJSJId:StorageNjId,
+        NJSJId: StorageNjId,
         page: 0,
         pageSize: 0,
       });
@@ -85,56 +86,59 @@ const Course = () => {
     }
   };
   return (
-    <div className={styles.CourseBox}>
-      <GoBack title={'订餐&托管'} onclick="/parent/home?index=index" />
-      <div className={`${styles.tabHeader}`}>
-        <div className={styles.category}>
-          {LBData && LBData.length === 0 ? (
-            <ListComponent listData={defaultMsgs} />
-          ) : (
-            <Tabs type="card" onChange={callback}>
-              {LBData?.map((value: any) => {
-                return (
-                  <TabPane tab={value.FWMC} key={value?.id}>
-                    <div className={styles.wrap}>
-                      {DataSource &&
-                        DataSource?.map((item: any) => {
-                          const hrefs = `/parent/home/serviceReservation/details?type=KS&id=${item.id}`;
-                          return (
-                            <Link to={hrefs} key={item?.id}>
-                              <div className={styles.box}>
-                                <div>
-                                  <img
-                                    src={item?.FWTP || noPic}
-                                    style={{ width: item?.FWTP ? '110px' : '70px' }}
-                                    alt=""
-                                  />
+    <MobileCon>
+      <div className={styles.CourseBox}>
+        <GoBack title={'订餐&托管'} onclick="/parent/home?index=index" />
+        <div className={`${styles.tabHeader}`}>
+          <div className={styles.category}>
+            {LBData && LBData.length === 0 ? (
+              <ListComponent listData={defaultMsgs} />
+            ) : (
+              <Tabs type="card" onChange={callback}>
+                {LBData?.map((value: any) => {
+                  return (
+                    <TabPane tab={value.FWMC} key={value?.id}>
+                      <div className={styles.wrap}>
+                        {DataSource &&
+                          DataSource?.map((item: any) => {
+                            const hrefs = `/parent/home/serviceReservation/details?type=KS&id=${item.id}`;
+                            return (
+                              <Link to={hrefs} key={item?.id}>
+                                <div className={styles.box}>
+                                  <div>
+                                    <img
+                                      src={item?.FWTP || noPic}
+                                      style={{ width: item?.FWTP ? '110px' : '70px' }}
+                                      alt=""
+                                    />
+                                  </div>
+                                  <div>
+                                    <p className={styles.title}> {item?.FWMC} </p>
+                                    <p>
+                                      预定时段：{moment(item?.BMKSSJ).format('YYYY.MM.DD')}~
+                                      {moment(item?.BMJSSJ).format('YYYY.MM.DD')}
+                                    </p>
+                                    <p>
+                                      服务时段：{moment(item?.KSRQ).format('YYYY.MM.DD')}~
+                                      {moment(item?.JSRQ).format('YYYY.MM.DD')}
+                                    </p>
+                                  </div>
                                 </div>
-                                <div>
-                                  <p className={styles.title}> {item?.FWMC} </p>
-                                  <p>
-                                    预定时段：{moment(item?.BMKSSJ).format('YYYY.MM.DD')}~
-                                    {moment(item?.BMJSSJ).format('YYYY.MM.DD')}
-                                  </p>
-                                  <p>
-                                    服务时段：{moment(item?.KSRQ).format('YYYY.MM.DD')}~
-                                    {moment(item?.JSRQ).format('YYYY.MM.DD')}
-                                  </p>
-                                </div>
-                              </div>
-                            </Link>
-                          );
-                        })}
-                    </div>
-                  </TabPane>
-                );
-              })}
-            </Tabs>
-          )}
+                              </Link>
+                            );
+                          })}
+                      </div>
+                    </TabPane>
+                  );
+                })}
+              </Tabs>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </MobileCon>
   );
 };
 
 export default Course;
+

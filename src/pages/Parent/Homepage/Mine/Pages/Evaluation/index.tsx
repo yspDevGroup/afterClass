@@ -2,8 +2,8 @@
  * @description:
  * @author: wsl
  * @Date: 2021-09-04 14:33:06
- * @LastEditTime: 2021-12-10 13:31:55
- * @LastEditors: zpl
+ * @LastEditTime: 2022-04-20 09:33:13
+ * @LastEditors: Wu Zhan
  */
 import GoBack from '@/components/GoBack';
 import { deleteKHBJPJ, getKHBJPJ } from '@/services/after-class/khbjpj';
@@ -15,6 +15,7 @@ import { useModel, Link } from 'umi';
 import styles from './index.less';
 import noOrder from '@/assets/noOrder.png';
 import ShowName from '@/components/ShowName';
+import MobileCon from '@/components/MobileCon';
 
 const { TabPane } = Tabs;
 
@@ -62,95 +63,96 @@ const Evaluation = () => {
   };
 
   return (
-    <div className={styles.Evaluation}>
-      <GoBack title={'课程评价'} onclick="/parent/home?index=mine" />
-      <Tabs type="card">
-        <TabPane tab="评价" key="评价">
-          {KcData?.length !== 0 ? (
-            <>
-              <div className={styles.Application}>
+    <MobileCon>
+      <div className={styles.Evaluation}>
+        <GoBack title={'课程评价'} onclick="/parent/home?index=mine" />
+        <Tabs type="card">
+          <TabPane tab="评价" key="评价">
+            {KcData?.length !== 0 ? (
+              <>
+                <div className={styles.Application}>
+                  <div>
+                    {KcData?.map((value: any) => {
+                      return (
+                        <>
+                          <div className={styles.cards}>
+                            <p className={styles.title}>{value?.KHKCSJ?.KCMC}</p>
+                            <p>班级：{value?.BJMC}</p>
+                            <p>
+                              任课教师：
+                              <ShowName
+                                type="userName"
+                                openid={value?.KHBJJs?.[0].JZGJBSJ?.WechatUserId}
+                                XM={value?.KHBJJs?.[0].JZGJBSJ?.XM}
+                              />
+                            </p>
+                            <Link
+                              key="pj"
+                              to={{
+                                pathname: '/parent/mine/evaluation/evaluationDetails',
+                                state: value,
+                              }}
+                            >
+                              <Button>去评价</Button>
+                            </Link>
+                          </div>
+                        </>
+                      );
+                    })}
+                  </div>
+                </div>
+              </>
+            ) : (
+              <div className={styles.ZWSJ}>
+                <img src={noOrder} alt="" />
+                <p>暂无数据</p>
+              </div>
+            )}
+          </TabPane>
+          <TabPane tab="评价历史" key="评价历史">
+            {History?.length === 0 ? (
+              <div className={styles.ZWSJ}>
+                <img src={noOrder} alt="" />
+                <p>暂无数据</p>
+              </div>
+            ) : (
+              <div className={styles.History}>
                 <div>
-                  {KcData?.map((value: any) => {
+                  {History?.map((value: any) => {
                     return (
-                      <>
-                        <div className={styles.cards}>
-                          <p className={styles.title}>{value?.KHKCSJ?.KCMC}</p>
+                      <div className={styles.Pjcards}>
+                        <p className={styles.name}>
+                          <span>{value?.PJR}</span>
+                          <Rate value={parseInt(value.PJFS, 10)} disabled />
+                        </p>
+                        <p>{value.createdAt.split(' ')[0]}评价</p>
+                        <div className={styles.PY}>{value.PY}</div>
+                        <div className={styles.BJXX}>
+                          <p>{value.KHBJSJ?.KHKCSJ?.KCMC}</p>
                           <p>
-                            班级：{value?.BJMC}
+                            班级：{value.KHBJSJ?.BJMC} ｜ 任课教师：
+                            {value.KHBJSJ?.KHBJJs?.[0].JZGJBSJ?.XM}
                           </p>
-                          <p>
-                            任课教师：
-                            <ShowName
-                              type="userName"
-                              openid={value?.KHBJJs?.[0].JZGJBSJ?.WechatUserId}
-                              XM={value?.KHBJJs?.[0].JZGJBSJ?.XM}
-                            />
-                          </p>
-                          <Link
-                            key="pj"
-                            to={{
-                              pathname: '/parent/mine/evaluation/evaluationDetails',
-                              state: value,
-                            }}
-                          >
-                            <Button>去评价</Button>
-                          </Link>
                         </div>
-                      </>
+                        <Button
+                          onClick={() => {
+                            submit(value);
+                          }}
+                        >
+                          撤销
+                        </Button>
+                      </div>
                     );
                   })}
                 </div>
               </div>
-            </>
-          ) : (
-            <div className={styles.ZWSJ}>
-              <img src={noOrder} alt="" />
-              <p>暂无数据</p>
-            </div>
-          )}
-        </TabPane>
-        <TabPane tab="评价历史" key="评价历史">
-          {History?.length === 0 ? (
-            <div className={styles.ZWSJ}>
-              <img src={noOrder} alt="" />
-              <p>暂无数据</p>
-            </div>
-          ) : (
-            <div className={styles.History}>
-              <div>
-                {History?.map((value: any) => {
-                  return (
-                    <div className={styles.Pjcards}>
-                      <p className={styles.name}>
-                        <span>{value?.PJR}</span>
-                        <Rate value={parseInt(value.PJFS, 10)} disabled />
-                      </p>
-                      <p>{value.createdAt.split(' ')[0]}评价</p>
-                      <div className={styles.PY}>{value.PY}</div>
-                      <div className={styles.BJXX}>
-                        <p>{value.KHBJSJ?.KHKCSJ?.KCMC}</p>
-                        <p>
-                          班级：{value.KHBJSJ?.BJMC} ｜ 任课教师：
-                          {value.KHBJSJ?.KHBJJs?.[0].JZGJBSJ?.XM}
-                        </p>
-                      </div>
-                      <Button
-                        onClick={() => {
-                          submit(value);
-                        }}
-                      >
-                        撤销
-                      </Button>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-        </TabPane>
-      </Tabs>
-    </div>
+            )}
+          </TabPane>
+        </Tabs>
+      </div>
+    </MobileCon>
   );
 };
 
 export default Evaluation;
+

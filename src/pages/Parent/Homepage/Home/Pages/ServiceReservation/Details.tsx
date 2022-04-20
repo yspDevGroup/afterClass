@@ -2,7 +2,7 @@
  * @description: 服务详情
  * @author: wsl
  * @Date: 2021-09-26 17:28:08
- * @LastEditTime: 2022-03-28 16:51:25
+ * @LastEditTime: 2022-04-20 10:13:12
  * @LastEditors: Wu Zhan
  */
 import GoBack from '@/components/GoBack';
@@ -18,6 +18,7 @@ import { enHenceMsg, getQueryString } from '@/utils/utils';
 import { signService } from '@/services/after-class/xsjbsj';
 import noOrder from '@/assets/noOrder.png';
 import GroupS from '@/assets/GroupS.png';
+import MobileCon from '@/components/MobileCon';
 
 const Details = () => {
   const { initialState } = useModel('@@initialState');
@@ -130,122 +131,124 @@ const Details = () => {
   };
 
   return (
-    <div className={styles.Details}>
-      {path ? (
-        <GoBack title={'服务详情'} onclick={`/parent/home?index=${path}`} />
-      ) : (
-        <GoBack title={'服务详情'} />
-      )}
+    <MobileCon>
+      <div className={styles.Details}>
+        {path ? (
+          <GoBack title={'服务详情'} onclick={`/parent/home?index=${path}`} />
+        ) : (
+          <GoBack title={'服务详情'} />
+        )}
 
-      <div className={styles.wrap}>
-        <img src={Data?.FWTP} alt="" />
-        <div>
-          <p className={styles.title}>{Data?.FWMC}</p>
-          <p>
-            预定时段：{moment(Data?.BMKSSJ).format('YYYY.MM.DD')}~
-            {moment(Data?.BMJSSJ).format('YYYY.MM.DD')}
-          </p>
-          <p>
-            服务时段：{moment(Data?.KSRQ).format('YYYY.MM.DD')}~
-            {moment(Data?.JSRQ).format('YYYY.MM.DD')}
-          </p>
-          <p>合作单位：{Data?.KHZZFW.FWJGMC}</p>
-        </div>
-        <div>
-          <p className={styles.title}>套餐内容</p>
-          <p>{Data?.FWNR}</p>
-        </div>
-      </div>
-      {type === 'YX' ? (
-        <></>
-      ) : (
-        <div className={styles.footer}>
-          {Data?.FY && Data?.FY > 0 ? <span>￥{Data?.FY}</span> : <span>免费</span>}
-          <Button
-            onClick={() => {
-              setstate(true);
-            }}
-          >
-            立即订购
-          </Button>
-        </div>
-      )}
-
-      {state === true ? (
-        <div className={styles.box} onClick={() => setstate(false)}>
-          <div onClick={onchanges}>
+        <div className={styles.wrap}>
+          <img src={Data?.FWTP} alt="" />
+          <div>
             <p className={styles.title}>{Data?.FWMC}</p>
-            {Data?.FY && Data?.FY > 0 ? <span>￥{Data?.FY}</span> : <span>免费</span>}
-            <div className={styles.agreement}>
-              <Checkbox onChange={onFxChange} checked={Xystate}>
-                <span>我已阅读并同意</span>
-              </Checkbox>
-              <a onClick={showModal}>《增值服务协议》</a>
-            </div>
-            <Button className={styles.submit} disabled={!Xystate} onClick={submit}>
-              {Data?.FY && Data?.FY > 0 ? '提交并付款' : '提交'}
-            </Button>
-            <Link
-              style={{ visibility: 'hidden' }}
-              ref={linkRef}
-              to={{
-                pathname: '/parent/mine/orderDetails',
-                state: {
-                  title: Data.FWMC,
-                  detail: '',
-                  payOrder: orderInfo,
-                  user: currentUser,
-                  KKRQ: '',
-                  JKRQ: '',
-                  fwdetail: Data,
-                },
-              }}
-            />
+            <p>
+              预定时段：{moment(Data?.BMKSSJ).format('YYYY.MM.DD')}~
+              {moment(Data?.BMJSSJ).format('YYYY.MM.DD')}
+            </p>
+            <p>
+              服务时段：{moment(Data?.KSRQ).format('YYYY.MM.DD')}~
+              {moment(Data?.JSRQ).format('YYYY.MM.DD')}
+            </p>
+            <p>合作单位：{Data?.KHZZFW.FWJGMC}</p>
+          </div>
+          <div>
+            <p className={styles.title}>套餐内容</p>
+            <p>{Data?.FWNR}</p>
           </div>
         </div>
-      ) : (
-        <></>
-      )}
-      <Modal
-        visible={isModalVisible}
-        onOk={handleOk}
-        onCancel={handleCancel}
-        closable={false}
-        bodyStyle={{
-          width: 200,
-        }}
-        className={styles.showagreement}
-        footer={[
-          <Button shape="round" key="submit" type="primary" onClick={handleOk}>
-            确定
-          </Button>,
-        ]}
-      >
-        {KHFUXY?.length !== 0 ? (
-          <>
-            <p className={styles.title}>增值服务协议书</p>
-            <div dangerouslySetInnerHTML={{ __html: KHFUXY?.[0].NR }} />
-          </>
+        {type === 'YX' ? (
+          <></>
         ) : (
-          <div className={styles.ZWSJ}>
-            <img src={noOrder} alt="" />
-            <p>暂无增值服务协议</p>
+          <div className={styles.footer}>
+            {Data?.FY && Data?.FY > 0 ? <span>￥{Data?.FY}</span> : <span>免费</span>}
+            <Button
+              onClick={() => {
+                setstate(true);
+              }}
+            >
+              立即订购
+            </Button>
           </div>
         )}
-      </Modal>
-      <Modal className={styles.SignIn} visible={ModalVisible} footer={null} closable={false}>
-        <img src={GroupS} alt="" />
-        <h3>报名成功</h3>
-        <Button
-          type="primary"
-          onClick={() => {
-            history.push('/parent/home?index=index');
+
+        {state === true ? (
+          <div className={styles.box} onClick={() => setstate(false)}>
+            <div onClick={onchanges}>
+              <p className={styles.title}>{Data?.FWMC}</p>
+              {Data?.FY && Data?.FY > 0 ? <span>￥{Data?.FY}</span> : <span>免费</span>}
+              <div className={styles.agreement}>
+                <Checkbox onChange={onFxChange} checked={Xystate}>
+                  <span>我已阅读并同意</span>
+                </Checkbox>
+                <a onClick={showModal}>《增值服务协议》</a>
+              </div>
+              <Button className={styles.submit} disabled={!Xystate} onClick={submit}>
+                {Data?.FY && Data?.FY > 0 ? '提交并付款' : '提交'}
+              </Button>
+              <Link
+                style={{ visibility: 'hidden' }}
+                ref={linkRef}
+                to={{
+                  pathname: '/parent/mine/orderDetails',
+                  state: {
+                    title: Data.FWMC,
+                    detail: '',
+                    payOrder: orderInfo,
+                    user: currentUser,
+                    KKRQ: '',
+                    JKRQ: '',
+                    fwdetail: Data,
+                  },
+                }}
+              />
+            </div>
+          </div>
+        ) : (
+          <></>
+        )}
+        <Modal
+          visible={isModalVisible}
+          onOk={handleOk}
+          onCancel={handleCancel}
+          closable={false}
+          bodyStyle={{
+            width: 200,
           }}
+          className={styles.showagreement}
+          footer={[
+            <Button shape="round" key="submit" type="primary" onClick={handleOk}>
+              确定
+            </Button>,
+          ]}
         >
-          我知道了
-        </Button>
-      </Modal>
-    </div>
+          {KHFUXY?.length !== 0 ? (
+            <>
+              <p className={styles.title}>增值服务协议书</p>
+              <div dangerouslySetInnerHTML={{ __html: KHFUXY?.[0].NR }} />
+            </>
+          ) : (
+            <div className={styles.ZWSJ}>
+              <img src={noOrder} alt="" />
+              <p>暂无增值服务协议</p>
+            </div>
+          )}
+        </Modal>
+        <Modal className={styles.SignIn} visible={ModalVisible} footer={null} closable={false}>
+          <img src={GroupS} alt="" />
+          <h3>报名成功</h3>
+          <Button
+            type="primary"
+            onClick={() => {
+              history.push('/parent/home?index=index');
+            }}
+          >
+            我知道了
+          </Button>
+        </Modal>
+      </div>
+    </MobileCon>
   );
 };
 

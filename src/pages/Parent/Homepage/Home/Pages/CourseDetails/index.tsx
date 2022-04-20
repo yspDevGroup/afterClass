@@ -20,6 +20,7 @@ import { RightOutlined } from '@ant-design/icons';
 import { ParentHomeData } from '@/services/local-services/mobileHome';
 import noOrder from '@/assets/noOrder.png';
 import GroupS from '@/assets/GroupS.png';
+import MobileCon from '@/components/MobileCon';
 
 const { Panel } = Collapse;
 
@@ -313,115 +314,116 @@ const CourseDetails: React.FC = () => {
 
   console.log(KBClass, 'KBClass');
   return (
-    <div className={styles.CourseDetails}>
-      {index === 'all' ? (
-        <GoBack title={'课程简介'} />
-      ) : (
-        <GoBack title={'课程简介'} onclick="/parent/home?index=index" />
-      )}
-      <div className={styles.wrap}>
-        {KcDetail?.KCTP && KcDetail?.KCTP.indexOf('http') > -1 ? (
-          <img src={KcDetail?.KCTP} alt="" style={{ marginBottom: '18px', height: '200px' }} />
+    <MobileCon>
+      <div className={styles.CourseDetails}>
+        {index === 'all' ? (
+          <GoBack title={'课程简介'} />
         ) : (
-          <div
-            style={{
-              padding: '10px',
-              border: '1px solid #F7F7F7',
-              textAlign: 'center',
-              marginBottom: '18px',
-            }}
-          >
-            <img style={{ width: '180px', height: 'auto', marginBottom: 0 }} src={noPic} />
-          </div>
+          <GoBack title={'课程简介'} onclick="/parent/home?index=index" />
         )}
-        <p className={styles.title}>{KcDetail?.KCMC}</p>
+        <div className={styles.wrap}>
+          {KcDetail?.KCTP && KcDetail?.KCTP.indexOf('http') > -1 ? (
+            <img src={KcDetail?.KCTP} alt="" style={{ marginBottom: '18px', height: '200px' }} />
+          ) : (
+            <div
+              style={{
+                padding: '10px',
+                border: '1px solid #F7F7F7',
+                textAlign: 'center',
+                marginBottom: '18px',
+              }}
+            >
+              <img style={{ width: '180px', height: 'auto', marginBottom: 0 }} src={noPic} />
+            </div>
+          )}
+          <p className={styles.title}>{KcDetail?.KCMC}</p>
 
-        <ul>
-          <li>上课地点：本校</li>
-        </ul>
-        <p className={styles.title}>课程简介</p>
-        <p className={styles.content}>{KcDetail?.KCMS}</p>
-        <Divider />
-        <p className={styles.title}>开设班级</p>
-        {KcDetail ? (
-          <Collapse
-            defaultActiveKey={KBClass?.[0].id}
-            onChange={callback}
-            ghost
-            className={styles.classInformation}
-            accordion
-            expandIcon={({ isActive }) => (
-              <span>
-                {isActive ? '收起' : '展开'}
-                <RightOutlined rotate={isActive ? 90 : 0} />
-              </span>
-            )}
-            expandIconPosition="right"
-          >
-            {KBClass?.map((value: any) => {
-              if (value?.BJZT === '已开班') {
-                return (
-                  <Panel header={value?.BJMC} key={value?.id}>
-                    <p>
-                      上课时段：{moment(value.KKRQ).format('YYYY.MM.DD')}-
-                      {moment(value.JKRQ).format('YYYY.MM.DD')}
-                    </p>
-                    <p>总课时：{value.KSS}课时</p>
-                    <p>总人数：{value.BJRS}人</p>
-                    {BjDetails?.KHBJJs?.find((item: any) => item.JSLX === '主教师') ? (
+          <ul>
+            <li>上课地点：本校</li>
+          </ul>
+          <p className={styles.title}>课程简介</p>
+          <p className={styles.content}>{KcDetail?.KCMS}</p>
+          <Divider />
+          <p className={styles.title}>开设班级</p>
+          {KcDetail ? (
+            <Collapse
+              defaultActiveKey={KBClass?.[0].id}
+              onChange={callback}
+              ghost
+              className={styles.classInformation}
+              accordion
+              expandIcon={({ isActive }) => (
+                <span>
+                  {isActive ? '收起' : '展开'}
+                  <RightOutlined rotate={isActive ? 90 : 0} />
+                </span>
+              )}
+              expandIconPosition="right"
+            >
+              {KBClass?.map((value: any) => {
+                if (value?.BJZT === '已开班') {
+                  return (
+                    <Panel header={value?.BJMC} key={value?.id}>
                       <p>
-                        主班：
-                        {BjDetails?.KHBJJs?.map((item: any) => {
-                          if (item.JSLX.indexOf('副') === -1) {
-                            return (
-                              <span style={{ marginRight: '1em' }}>
-                                <ShowName
-                                  type="userName"
-                                  openid={item?.JZGJBSJ?.WechatUserId}
-                                  XM={item?.JZGJBSJ?.XM}
-                                />
-                              </span>
-                            );
-                          }
-                          return '';
-                        })}
+                        上课时段：{moment(value.KKRQ).format('YYYY.MM.DD')}-
+                        {moment(value.JKRQ).format('YYYY.MM.DD')}
                       </p>
-                    ) : (
-                      ''
-                    )}
-                    {BjDetails?.KHBJJs?.find((item: any) => item.JSLX === '副教师') ? (
-                      <p>
-                        副班：
-                        {BjDetails?.KHBJJs?.map((item: any) => {
-                          if (item.JSLX.indexOf('主') === -1) {
-                            return (
-                              <span style={{ marginRight: '1em' }}>
-                                <ShowName
-                                  type="userName"
-                                  openid={item?.JZGJBSJ?.WechatUserId}
-                                  XM={item.JZGJBSJ?.XM}
-                                />
-                              </span>
-                            );
-                          }
-                          return '';
-                        })}
-                      </p>
-                    ) : (
-                      ''
-                    )}
-
-                    <p>报名费：{value.FY}元</p>
-                    <p>
-                      报名方式：
-                      {BjDetails?.BMLX === 0 ? (
-                        '先报名后缴费'
+                      <p>总课时：{value.KSS}课时</p>
+                      <p>总人数：{value.BJRS}人</p>
+                      {BjDetails?.KHBJJs?.find((item: any) => item.JSLX === '主教师') ? (
+                        <p>
+                          主班：
+                          {BjDetails?.KHBJJs?.map((item: any) => {
+                            if (item.JSLX.indexOf('副') === -1) {
+                              return (
+                                <span style={{ marginRight: '1em' }}>
+                                  <ShowName
+                                    type="userName"
+                                    openid={item?.JZGJBSJ?.WechatUserId}
+                                    XM={item?.JZGJBSJ?.XM}
+                                  />
+                                </span>
+                              );
+                            }
+                            return '';
+                          })}
+                        </p>
                       ) : (
-                        <>{BjDetails?.BMLX === 1 ? '缴费即报名' : '免费'}</>
+                        ''
                       )}
-                    </p>
+                      {BjDetails?.KHBJJs?.find((item: any) => item.JSLX === '副教师') ? (
+                        <p>
+                          副班：
+                          {BjDetails?.KHBJJs?.map((item: any) => {
+                            if (item.JSLX.indexOf('主') === -1) {
+                              return (
+                                <span style={{ marginRight: '1em' }}>
+                                  <ShowName
+                                    type="userName"
+                                    openid={item?.JZGJBSJ?.WechatUserId}
+                                    XM={item.JZGJBSJ?.XM}
+                                  />
+                                </span>
+                              );
+                            }
+                            return '';
+                          })}
+                        </p>
+                      ) : (
+                        ''
+                      )}
 
-                    {/* <table>
+                      <p>报名费：{value.FY}元</p>
+                      <p>
+                        报名方式：
+                        {BjDetails?.BMLX === 0 ? (
+                          '先报名后缴费'
+                        ) : (
+                          <>{BjDetails?.BMLX === 1 ? '缴费即报名' : '免费'}</>
+                        )}
+                      </p>
+
+                      {/* <table>
                       <thead>
                         <tr>
                           <th>上课时间</th>
@@ -458,209 +460,212 @@ const CourseDetails: React.FC = () => {
                         </tr>
                       </tbody>
                     </table> */}
-                    <p style={{ fontWeight: 'bold' }}>班级简介</p>
-                    <p className={styles.content}>{BjDetails?.BJMS}</p>
-                  </Panel>
-                );
-              }
-              return <></>;
-            })}
-          </Collapse>
-        ) : (
-          <></>
-        )}
-      </div>
-      <div className={styles.footer}>
-        <button className={styles.btn} onClick={() => setstate(true)}>
-          立即报名
-        </button>
-      </div>
-      {state === true ? (
-        <div className={styles.payment} onClick={() => setstate(false)}>
-          <div onClick={onchanges}>
-            <div className={styles.wraps}>
-              <p className={styles.title} style={{ fontSize: 18, marginBottom: 12 }}>
-                {KcDetail?.KCMC}
-              </p>
-              <p className={styles.title}>选择班级</p>
-              <Radio.Group onChange={onBJChange} value={`${BJ}+${FY}`}>
-                {KBClass?.map(
-                  (
-                    value: {
-                      BJMC: string;
-                      id: string;
-                      FY: string;
-                      BJRS: number;
-                      KHXSBJs: any[];
-                      BJZT: string;
-                      xs_count?: number;
-                      ISFW: number;
+                      <p style={{ fontWeight: 'bold' }}>班级简介</p>
+                      <p className={styles.content}>{BjDetails?.BJMS}</p>
+                    </Panel>
+                  );
+                }
+                return <></>;
+              })}
+            </Collapse>
+          ) : (
+            <></>
+          )}
+        </div>
+        <MobileCon>
+          <div className={styles.footer}>
+            <button className={styles.btn} onClick={() => setstate(true)}>
+              立即报名
+            </button>
+          </div>
+        </MobileCon>
+        {state === true ? (
+          <div className={styles.payment} onClick={() => setstate(false)}>
+            <div onClick={onchanges}>
+              <div className={styles.wraps}>
+                <p className={styles.title} style={{ fontSize: 18, marginBottom: 12 }}>
+                  {KcDetail?.KCMC}
+                </p>
+                <p className={styles.title}>选择班级</p>
+                <Radio.Group onChange={onBJChange} value={`${BJ}+${FY}`}>
+                  {KBClass?.map(
+                    (
+                      value: {
+                        BJMC: string;
+                        id: string;
+                        FY: string;
+                        BJRS: number;
+                        KHXSBJs: any[];
+                        BJZT: string;
+                        xs_count?: number;
+                        ISFW: number;
+                      },
+                      ind: number,
+                    ) => {
+                      const valueName = `${value.id}+${value.FY}`;
+                      if (value.BJZT === '已开班' && value?.ISFW === 0) {
+                        return (
+                          <Radio.Button
+                            value={valueName}
+                            style={{ marginRight: '14px' }}
+                            onClick={() => butonclick(value, ind)}
+                          >
+                            {value.BJMC}
+                          </Radio.Button>
+                        );
+                      }
+                      return '';
                     },
-                    ind: number,
-                  ) => {
-                    const valueName = `${value.id}+${value.FY}`;
-                    if (value.BJZT === '已开班' && value?.ISFW === 0) {
-                      return (
-                        <Radio.Button
-                          value={valueName}
-                          style={{ marginRight: '14px' }}
-                          onClick={() => butonclick(value, ind)}
-                        >
-                          {value.BJMC}
-                        </Radio.Button>
-                      );
-                    }
-                    return '';
-                  },
-                )}
-              </Radio.Group>
-              <p className={styles.title}>课程费用</p>
-              <p className={styles.price}>
-                {FY <= 0 ? (
-                  <>
-                    <span>免费</span>
-                    <span style={{ color: '#666', marginLeft: 10 }}>
-                      余{BjDetails?.BJRS - BjDetails?.KHXSBJs?.length}个名额
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    <span style={{ fontWeight: 'bold', fontSize: '22px' }}>￥{FY}</span>
-                    <span>/学期</span>
-                    <span style={{ color: '#666', marginLeft: 10 }}>
-                      余{BjDetails?.BJRS - BjDetails?.KHXSBJs?.length}个名额
-                    </span>
-                  </>
-                )}
-              </p>
-              <p className={styles.title}>缴费方式</p>
-              <span style={{ color: '#666' }}>
-                {BjDetails?.BMLX === 0 ? (
-                  '先报名后缴费'
-                ) : (
-                  <>{BjDetails?.BMLX === 1 ? '缴费即报名' : '免费'}</>
-                )}
-              </span>
-              <div className={styles.Teachingaterial}>
-                {!JFData?.length ? (
-                  <></>
-                ) : (
-                  <>
-                    <p className={styles.title}>教辅教材</p>
-                    <div
-                      className={styles.box}
-                      style={{ borderRadius: JFstate === true ? '8px 8px 0 0' : '8px' }}
-                    >
-                      <Checkbox onChange={onJFChange} checked={JFstate}>
-                        <span>选购教辅</span>
-                      </Checkbox>
-                      {JFTotalost <= 0 ? <div>免费</div> : <div>￥{JFTotalost?.toFixed(2)}</div>}
-                    </div>
-                  </>
-                )}
-                <div className={styles.tables}>
-                  {JFstate === true ? (
+                  )}
+                </Radio.Group>
+                <p className={styles.title}>课程费用</p>
+                <p className={styles.price}>
+                  {FY <= 0 ? (
                     <>
-                      {JFData ? (
-                        <>
-                          {JFData?.map((value: any) => {
-                            return (
-                              <div>
-                                <div>{value.JCMC}</div>
-                                {value.JCFY <= 0 ? <div>免费</div> : <div>￥{value.JCFY}</div>}
-                              </div>
-                            );
-                          })}
-                        </>
-                      ) : (
-                        <>
-                          {KBClass?.[0].KHKCJCs?.map((value: any) => {
-                            return (
-                              <div>
-                                <div>{value.JCMC}</div>
-                                {value.JCFY <= 0 ? <div>免费</div> : <div>￥{value.JCFY}</div>}
-                              </div>
-                            );
-                          })}
-                        </>
-                      )}
+                      <span>免费</span>
+                      <span style={{ color: '#666', marginLeft: 10 }}>
+                        余{BjDetails?.BJRS - BjDetails?.KHXSBJs?.length}个名额
+                      </span>
                     </>
                   ) : (
-                    <></>
+                    <>
+                      <span style={{ fontWeight: 'bold', fontSize: '22px' }}>￥{FY}</span>
+                      <span>/学期</span>
+                      <span style={{ color: '#666', marginLeft: 10 }}>
+                        余{BjDetails?.BJRS - BjDetails?.KHXSBJs?.length}个名额
+                      </span>
+                    </>
                   )}
+                </p>
+                <p className={styles.title}>缴费方式</p>
+                <span style={{ color: '#666' }}>
+                  {BjDetails?.BMLX === 0 ? (
+                    '先报名后缴费'
+                  ) : (
+                    <>{BjDetails?.BMLX === 1 ? '缴费即报名' : '免费'}</>
+                  )}
+                </span>
+                <div className={styles.Teachingaterial}>
+                  {!JFData?.length ? (
+                    <></>
+                  ) : (
+                    <>
+                      <p className={styles.title}>教辅教材</p>
+                      <div
+                        className={styles.box}
+                        style={{ borderRadius: JFstate === true ? '8px 8px 0 0' : '8px' }}
+                      >
+                        <Checkbox onChange={onJFChange} checked={JFstate}>
+                          <span>选购教辅</span>
+                        </Checkbox>
+                        {JFTotalost <= 0 ? <div>免费</div> : <div>￥{JFTotalost?.toFixed(2)}</div>}
+                      </div>
+                    </>
+                  )}
+                  <div className={styles.tables}>
+                    {JFstate === true ? (
+                      <>
+                        {JFData ? (
+                          <>
+                            {JFData?.map((value: any) => {
+                              return (
+                                <div>
+                                  <div>{value.JCMC}</div>
+                                  {value.JCFY <= 0 ? <div>免费</div> : <div>￥{value.JCFY}</div>}
+                                </div>
+                              );
+                            })}
+                          </>
+                        ) : (
+                          <>
+                            {KBClass?.[0].KHKCJCs?.map((value: any) => {
+                              return (
+                                <div>
+                                  <div>{value.JCMC}</div>
+                                  {value.JCFY <= 0 ? <div>免费</div> : <div>￥{value.JCFY}</div>}
+                                </div>
+                              );
+                            })}
+                          </>
+                        )}
+                      </>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className={styles.agreement}>
-              <Checkbox onChange={onFxChange} checked={Xystate}>
-                <span>我已阅读并同意</span>
-              </Checkbox>
-              <a onClick={showModal}>《缤纷课堂协议》</a>
-            </div>
-            <Button className={styles.submit} disabled={!Xystate} onClick={submit}>
-              {JFTotalost! + Number(FY) <= 0 || BjDetails?.BMLX !== 1 ? '提交' : '提交并付款'}
-            </Button>
+              <div className={styles.agreement}>
+                <Checkbox onChange={onFxChange} checked={Xystate}>
+                  <span>我已阅读并同意</span>
+                </Checkbox>
+                <a onClick={showModal}>《缤纷课堂协议》</a>
+              </div>
+              <Button className={styles.submit} disabled={!Xystate} onClick={submit}>
+                {JFTotalost! + Number(FY) <= 0 || BjDetails?.BMLX !== 1 ? '提交' : '提交并付款'}
+              </Button>
 
-            <Link
-              style={{ visibility: 'hidden' }}
-              ref={linkRef}
-              to={{
-                pathname: '/parent/mine/orderDetails',
-                state: {
-                  title: KcDetail?.KCMC,
-                  detail: classDetail,
-                  payOrder: orderInfo,
-                  user: currentUser,
-                  KKRQ: KcDetail?.KCRQ,
-                  JKRO: KcDetail?.KCRQ,
-                },
-              }}
-            />
+              <Link
+                style={{ visibility: 'hidden' }}
+                ref={linkRef}
+                to={{
+                  pathname: '/parent/mine/orderDetails',
+                  state: {
+                    title: KcDetail?.KCMC,
+                    detail: classDetail,
+                    payOrder: orderInfo,
+                    user: currentUser,
+                    KKRQ: KcDetail?.KCRQ,
+                    JKRO: KcDetail?.KCRQ,
+                  },
+                }}
+              />
+            </div>
           </div>
-        </div>
-      ) : (
-        ''
-      )}
-      <Modal
-        visible={isModalVisible}
-        onOk={handleOk}
-        onCancel={handleCancel}
-        closable={false}
-        bodyStyle={{
-          width: 200,
-        }}
-        className={styles.showagreement}
-        footer={[
-          <Button shape="round" key="submit" type="primary" onClick={handleOk}>
-            确定
-          </Button>,
-        ]}
-      >
-        {KHFUXY?.length !== 0 ? (
-          <>
-            <p className={styles.title}>缤纷课堂协议书</p>
-            <div dangerouslySetInnerHTML={{ __html: KHFUXY?.[0].NR }} />
-          </>
         ) : (
-          <div className={styles.ZWSJ}>
-            <img src={noOrder} alt="" />
-            <p>暂无缤纷课堂协议</p>
-          </div>
+          ''
         )}
-      </Modal>
-      <Modal className={styles.SignIn} visible={ModalVisible} footer={null} closable={false}>
-        <img src={GroupS} alt="" />
-        <h3>报名成功</h3>
-        <Button
-          type="primary"
-          onClick={() => {
-            history.push('/parent/home?index=index&reload=true');
+        <Modal
+          visible={isModalVisible}
+          onOk={handleOk}
+          onCancel={handleCancel}
+          closable={false}
+          bodyStyle={{
+            width: 200,
           }}
+          className={styles.showagreement}
+          footer={[
+            <Button shape="round" key="submit" type="primary" onClick={handleOk}>
+              确定
+            </Button>,
+          ]}
         >
-          我知道了
-        </Button>
-      </Modal>
-    </div>
+          {KHFUXY?.length !== 0 ? (
+            <>
+              <p className={styles.title}>缤纷课堂协议书</p>
+              <div dangerouslySetInnerHTML={{ __html: KHFUXY?.[0].NR }} />
+            </>
+          ) : (
+            <div className={styles.ZWSJ}>
+              <img src={noOrder} alt="" />
+              <p>暂无缤纷课堂协议</p>
+            </div>
+          )}
+        </Modal>
+        <Modal className={styles.SignIn} visible={ModalVisible} footer={null} closable={false}>
+          <img src={GroupS} alt="" />
+          <h3>报名成功</h3>
+          <Button
+            type="primary"
+            onClick={() => {
+              history.push('/parent/home?index=index&reload=true');
+            }}
+          >
+            我知道了
+          </Button>
+        </Modal>
+      </div>
+    </MobileCon>
   );
 };
 

@@ -5,6 +5,7 @@ import { useState } from 'react';
 import styles from './index.less';
 import { history, useModel } from 'umi';
 import noPic from '@/assets/noPicBig.png';
+import MobileCon from '@/components/MobileCon';
 
 const { TextArea } = Input;
 
@@ -42,29 +43,31 @@ const EvaluationDetails = (props: any) => {
     }
   };
   return (
-    <div className={styles.EvaluationDetails}>
-      <GoBack title={'课程评价'} />
-      <div className={styles.header}>
-        <img src={state?.KHKCSJ?.KCTP || noPic} alt="" />
-        <div>
-          <p>{state?.KHBJSJ?.KHKCSJ?.KCMC}</p>
-          <p>班级：{state?.BJMC}</p>
-          <p>任课教师：{state?.KHBJJs?.[0].JZGJBSJ?.XM}</p>
+    <MobileCon>
+      <div className={styles.EvaluationDetails}>
+        <GoBack title={'课程评价'} />
+        <div className={styles.header}>
+          <img src={state?.KHKCSJ?.KCTP || noPic} alt="" />
+          <div>
+            <p>{state?.KHBJSJ?.KHKCSJ?.KCMC}</p>
+            <p>班级：{state?.BJMC}</p>
+            <p>任课教师：{state?.KHBJJs?.[0].JZGJBSJ?.XM}</p>
+          </div>
+        </div>
+        <div className={styles.content}>
+          <p>
+            综合评价：
+            <Rate onChange={handleChange} />
+          </p>
+          <TextArea placeholder="请输入您的评价" showCount maxLength={200} onChange={onChange} />
+        </div>
+        <div className={styles.btn}>
+          <Button onClick={submit} disabled={false}>
+            提交
+          </Button>
         </div>
       </div>
-      <div className={styles.content}>
-        <p>
-          综合评价：
-          <Rate onChange={handleChange} />
-        </p>
-        <TextArea placeholder="请输入您的评价" showCount maxLength={200} onChange={onChange} />
-      </div>
-      <div className={styles.btn}>
-        <Button onClick={submit} disabled={false}>
-          提交
-        </Button>
-      </div>
-    </div>
+    </MobileCon>
   );
 };
 

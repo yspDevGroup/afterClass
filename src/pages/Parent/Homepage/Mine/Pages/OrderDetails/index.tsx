@@ -10,6 +10,7 @@ import moment from 'moment';
 import styles from './index.less';
 import { enHenceMsg } from '@/utils/utils';
 import GoBack from '@/components/GoBack';
+import MobileCon from '@/components/MobileCon';
 
 const { Countdown } = Statistic;
 const OrderDetails: React.FC = (props: any) => {
@@ -88,7 +89,7 @@ const OrderDetails: React.FC = (props: any) => {
     const deadline = orderTime + 1000 * 60 * 30;
     const JFJG = Number(orderInfo?.DDFY) - Number(detail?.FY);
     return (
-      <>
+      <MobileCon>
         <GoBack title={'订单详情'} />
         <div className={styles.OrderDetails}>
           <div className={styles.hender}>
@@ -248,10 +249,11 @@ const OrderDetails: React.FC = (props: any) => {
             ''
           )}
         </div>
-      </>
+      </MobileCon>
     );
   }
   return <></>;
 };
 
 export default OrderDetails;
+

@@ -60,7 +60,7 @@
         font-size: 20px;
         line-height: 24px;
 
-        & + div {
+        &+div {
           color: @text-color-secondary;
           font-size: @font-size-sm;
         }
@@ -123,7 +123,7 @@
       height: 90%;
       background-position: center;
 
-      > p {
+      >p {
         margin: 0;
         font-weight: bold;
         font-size: 18px;
@@ -226,7 +226,7 @@
       }
     }
 
-    > button {
+    >button {
       width: 100%;
       height: 54px;
       color: #fff;
@@ -253,11 +253,11 @@
     max-height: 180px;
     overflow: auto;
 
-    > span {
+    >span {
       width: 50%;
       min-width: 144px;
 
-      > span {
+      >span {
         display: block;
         width: 90%;
         min-width: 144px;
@@ -280,7 +280,7 @@
           text-overflow: ellipsis;
         }
 
-        > span {
+        >span {
           float: right;
           margin-top: -2px;
         }
@@ -319,7 +319,7 @@
         width: 100% !important;
         padding: 16px 16px 0 16px;
 
-        > div {
+        >div {
           p {
             margin-bottom: 16px;
           }
@@ -485,8 +485,7 @@
         }
       }
 
-      .ant-radio-group-solid
-        .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):active {
+      .ant-radio-group-solid .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):active {
         border: none !important;
       }
 
@@ -523,7 +522,7 @@
     margin-bottom: 10px;
     line-height: 24px;
 
-    > div:nth-of-type(1) {
+    >div:nth-of-type(1) {
       display: inline-block;
       width: 3px;
       height: 19px;
@@ -551,7 +550,7 @@
     padding: 14px 10px;
     background-color: #fff;
 
-    > span {
+    >span {
       color: #666 !important;
     }
   }
@@ -673,6 +672,7 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
+    max-width: @mobileMaxWidth;
     height: 54px;
     padding: 8px 15px;
     background-color: #fff;
@@ -748,7 +748,7 @@
         width: 100% !important;
         padding: 16px;
 
-        > div {
+        >div {
           max-height: 120px;
           overflow: auto;
           line-height: 40px;
@@ -767,7 +767,7 @@
           }
         }
 
-        > div::-webkit-scrollbar {
+        >div::-webkit-scrollbar {
           display: none;
         }
       }
@@ -802,19 +802,23 @@
   width: 260px !important;
   height: 250px;
   text-align: center;
+
   :global {
     .ant-modal-content {
       border-radius: 16px;
     }
   }
+
   img {
     width: 84px;
     height: 84px;
   }
+
   h3 {
     font-weight: bold;
     line-height: 50px;
   }
+
   button {
     width: 144px;
     height: 38px;

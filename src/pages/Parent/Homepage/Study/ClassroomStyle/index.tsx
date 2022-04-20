@@ -7,6 +7,7 @@ import { useModel } from 'umi';
 import { getPresenceByStudent } from '@/services/after-class/khktfc';
 import noOrder from '@/assets/noOrder.png';
 import { queryXNXQList } from '@/services/local-services/xnxq';
+import MobileCon from '@/components/MobileCon';
 
 const ClassroomStyle = () => {
   const { initialState } = useModel('@@initialState');
@@ -84,98 +85,100 @@ const ClassroomStyle = () => {
   };
 
   return (
-    <div
-      className={styles.ClassroomStyle}
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
-    >
-      <GoBack title={'课堂风采'} onclick="/parent/home?index=study" />
-      {showData && showData?.length === 0 ? (
-        <div className={styles.ZWSJ}>
-          <img src={noOrder} alt="" />
-          <p>暂无数据</p>
-        </div>
-      ) : (
-        <div className={styles.wrap}>
-          {!loading ? (
-            <>
-              {showData.map((item: any) => {
-                return (
-                  <div className={styles.cards}>
-                    <p>
-                      <Avatar
-                        style={{
-                          backgroundColor: '#15B628',
-                          verticalAlign: 'middle',
-                          fontSize: 18,
-                        }}
-                        size="large"
-                      >
-                        {item.teacherName.slice(0, 1)}
-                      </Avatar>
-                      <p className={styles.name}>
-                        <p>{item.teacherName}</p>
-                        <p>{item.schoolName}</p>
+    <MobileCon>
+      <div
+        className={styles.ClassroomStyle}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
+        <GoBack title={'课堂风采'} onclick="/parent/home?index=study" />
+        {showData && showData?.length === 0 ? (
+          <div className={styles.ZWSJ}>
+            <img src={noOrder} alt="" />
+            <p>暂无数据</p>
+          </div>
+        ) : (
+          <div className={styles.wrap}>
+            {!loading ? (
+              <>
+                {showData.map((item: any) => {
+                  return (
+                    <div className={styles.cards}>
+                      <p>
+                        <Avatar
+                          style={{
+                            backgroundColor: '#15B628',
+                            verticalAlign: 'middle',
+                            fontSize: 18,
+                          }}
+                          size="large"
+                        >
+                          {item.teacherName.slice(0, 1)}
+                        </Avatar>
+                        <p className={styles.name}>
+                          <p>{item.teacherName}</p>
+                          <p>{item.schoolName}</p>
+                        </p>
                       </p>
-                    </p>
-                    <div className={styles.content}>
-                      <p>{item.content}</p>
-                      <div className={styles.imgContainer}>
-                        <Image.PreviewGroup>
-                          <Row gutter={[6, 6]} style={{ width: '100%' }}>
-                            {item.imgs.map((url: string) => {
-                              return (
-                                <Col
-                                  span={
-                                    item.imgs.length === 2 || item.imgs.length === 4
-                                      ? 12
-                                      : item.imgs.length === 1
-                                      ? 24
-                                      : 8
-                                  }
-                                  className={
-                                    item.imgs.length === 2 || item.imgs.length === 4
-                                      ? styles.pairImg
-                                      : item.imgs.length === 1
-                                      ? styles.oneImg
-                                      : styles.nineImg
-                                  }
-                                >
-                                  <Image src={url} />
-                                </Col>
-                              );
-                            })}
-                          </Row>
-                        </Image.PreviewGroup>
+                      <div className={styles.content}>
+                        <p>{item.content}</p>
+                        <div className={styles.imgContainer}>
+                          <Image.PreviewGroup>
+                            <Row gutter={[6, 6]} style={{ width: '100%' }}>
+                              {item.imgs.map((url: string) => {
+                                return (
+                                  <Col
+                                    span={
+                                      item.imgs.length === 2 || item.imgs.length === 4
+                                        ? 12
+                                        : item.imgs.length === 1
+                                        ? 24
+                                        : 8
+                                    }
+                                    className={
+                                      item.imgs.length === 2 || item.imgs.length === 4
+                                        ? styles.pairImg
+                                        : item.imgs.length === 1
+                                        ? styles.oneImg
+                                        : styles.nineImg
+                                    }
+                                  >
+                                    <Image src={url} />
+                                  </Col>
+                                );
+                              })}
+                            </Row>
+                          </Image.PreviewGroup>
+                        </div>
+                        <p>
+                          <span>{item.time}</span>
+                        </p>
+                        <p>
+                          <span>
+                            {item.className}｜{item.classNum}
+                          </span>
+                        </p>
                       </div>
-                      <p>
-                        <span>{item.time}</span>
-                      </p>
-                      <p>
-                        <span>
-                          {item.className}｜{item.classNum}
-                        </span>
-                      </p>
                     </div>
-                  </div>
-                );
-              })}
-            </>
-          ) : (
-            <div>
-              {[1, 2, 3].map(() => {
-                return (
-                  <div className={styles.cards}>
-                    <Skeleton avatar active loading={loading} />
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
-      )}
-    </div>
+                  );
+                })}
+              </>
+            ) : (
+              <div>
+                {[1, 2, 3].map(() => {
+                  return (
+                    <div className={styles.cards}>
+                      <Skeleton avatar active loading={loading} />
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </MobileCon>
   );
 };
 export default ClassroomStyle;

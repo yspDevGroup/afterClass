@@ -6,6 +6,7 @@ import { useModel } from 'umi';
 import { CheckCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import styles from './index.less';
 import GoBack from '@/components/GoBack';
+import MobileCon from '@/components/MobileCon';
 
 const Details = (props: any) => {
   const { state } = props.location;
@@ -34,7 +35,7 @@ const Details = (props: any) => {
     }
   }, []);
   return (
-    <>
+    <MobileCon>
       <GoBack title={'退款详情'} />
       <div className={styles.OrderDetails}>
         <div className={styles.hender}>
@@ -201,8 +202,9 @@ const Details = (props: any) => {
           )}
         </div>
       </div>
-    </>
+    </MobileCon>
   );
 };
 
 export default Details;
+

@@ -7,6 +7,7 @@ import noData from '@/assets/noData.png';
 import { useEffect, useState } from 'react';
 import { getJYJGTZGG } from '@/services/after-class/jyjgtzgg';
 import { getXXTZGG } from '@/services/after-class/xxtzgg';
+import MobileCon from '@/components/MobileCon';
 
 const { TabPane } = Tabs;
 const AllNotice = () => {
@@ -14,7 +15,7 @@ const AllNotice = () => {
   const { currentUser } = initialState || {};
   const [dataTZGG, setTZGGData] = useState<any>();
   const [dataZCGG, setZCGGData] = useState<any>();
- const [keys, setKeys] = useState<string>('notify');
+  const [keys, setKeys] = useState<string>('notify');
   useEffect(() => {
     async function fetchData() {
       // 通知公告
@@ -62,61 +63,63 @@ const AllNotice = () => {
   }, []);
 
   return (
-    <div className={styles.AllNotice}>
-      <TopNav title="全部公告" state={true} />
-      <div className={styles.allNotices}>
-        <Tabs
-          centered={true}
-          activeKey={keys}
-          onChange={(key) => {
-            setKeys(key);
-          }}
-        >
-          <TabPane tab="校内通知" key="notify">
-            {dataTZGG?.list.length ? (
-              <>
-                <ListComp listData={dataTZGG} type="tz" />
-              </>
-            ) : (
-              <Empty
-                image={noData}
-                imageStyle={{
-                  minHeight: 135,
-                }}
-                style={{
-                  minHeight: 200,
-                  background: '#fff',
-                  borderRadius: '8px',
-                  marginTop: '10px',
-                }}
-                description={'暂无公告'}
-              />
-            )}
-          </TabPane>
-          <TabPane tab="政策公告" key="policy">
-            {dataZCGG?.list.length ? (
-              <>
-                <ListComp listData={dataZCGG} type="zc" />
-              </>
-            ) : (
-              <Empty
-                image={noData}
-                imageStyle={{
-                  minHeight: 135,
-                }}
-                style={{
-                  minHeight: 200,
-                  background: '#fff',
-                  borderRadius: '8px',
-                  marginTop: '10px',
-                }}
-                description={'暂无公告'}
-              />
-            )}
-          </TabPane>
-        </Tabs>
+    <MobileCon>
+      <div className={styles.AllNotice}>
+        <TopNav title="全部公告" state={true} />
+        <div className={styles.allNotices}>
+          <Tabs
+            centered={true}
+            activeKey={keys}
+            onChange={(key) => {
+              setKeys(key);
+            }}
+          >
+            <TabPane tab="校内通知" key="notify">
+              {dataTZGG?.list.length ? (
+                <>
+                  <ListComp listData={dataTZGG} type="tz" />
+                </>
+              ) : (
+                <Empty
+                  image={noData}
+                  imageStyle={{
+                    minHeight: 135,
+                  }}
+                  style={{
+                    minHeight: 200,
+                    background: '#fff',
+                    borderRadius: '8px',
+                    marginTop: '10px',
+                  }}
+                  description={'暂无公告'}
+                />
+              )}
+            </TabPane>
+            <TabPane tab="政策公告" key="policy">
+              {dataZCGG?.list.length ? (
+                <>
+                  <ListComp listData={dataZCGG} type="zc" />
+                </>
+              ) : (
+                <Empty
+                  image={noData}
+                  imageStyle={{
+                    minHeight: 135,
+                  }}
+                  style={{
+                    minHeight: 200,
+                    background: '#fff',
+                    borderRadius: '8px',
+                    marginTop: '10px',
+                  }}
+                  description={'暂无公告'}
+                />
+              )}
+            </TabPane>
+          </Tabs>
+        </div>
       </div>
-    </div>
+    </MobileCon>
   );
 };
 

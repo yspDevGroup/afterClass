@@ -2,8 +2,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-15 09:57:23
- * @LastEditTime: 2021-11-10 17:23:09
- * @LastEditors: Sissle Lynn
+ * @LastEditTime: 2022-04-19 18:49:25
+ * @LastEditors: Wu Zhan
  */
 import React, { useEffect, useState } from 'react';
 import { Tabs } from 'antd';
@@ -16,6 +16,7 @@ import LeaveHistory from './Components/LeaveHistory';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import { enHenceMsg } from '@/utils/utils';
 import { getAllKHXSQJ } from '@/services/after-class/khxsqj';
+import MobileCon from '@/components/MobileCon';
 
 const { TabPane } = Tabs;
 
@@ -37,9 +38,7 @@ const AskForLeave: React.FC = () => {
   const getData = async () => {
     const res = await getAllKHXSQJ({
       XSJBSJId:
-        localStorage.getItem('studentId') ||
-        (student && student[0].XSJBSJId) ||
-        testStudentId,
+        localStorage.getItem('studentId') || (student && student[0].XSJBSJId) || testStudentId,
       XNXQId: curXNXQId,
     });
     if (res.status === 'ok') {
@@ -59,7 +58,7 @@ const AskForLeave: React.FC = () => {
     }
   }, [activeKey, reload]);
   return (
-    <>
+    <MobileCon>
       <GoBack title={'请假'} onclick="/parent/home?index=study" />
       <div className={styles.leaveList}>
         <Tabs
@@ -81,7 +80,7 @@ const AskForLeave: React.FC = () => {
           </TabPane>
         </Tabs>
       </div>
-    </>
+    </MobileCon>
   );
 };
 

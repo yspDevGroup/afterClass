@@ -24,7 +24,7 @@ const Homepage = () => {
       <div className={styles.mobilePageHeader}>
         <TopNav title={title} state={false} />
         <Tabs
-          tabPosition="bottom"
+          // tabPosition="bottom"
           className={styles.menuTab}
           onTabClick={(key: string) => {
             setActiveKey(key);

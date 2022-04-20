@@ -2,8 +2,8 @@
  * @description: 课后服务选课
  * @author: wsl
  * @Date: 2021-12-23 14:26:31
- * @LastEditTime: 2022-03-17 14:28:29
- * @LastEditors: zpl
+ * @LastEditTime: 2022-04-19 18:11:16
+ * @LastEditors: Wu Zhan
  */
 
 import { queryXNXQList } from '@/services/local-services/xnxq';
@@ -26,6 +26,7 @@ import {
   studentRegistration,
 } from '@/services/after-class/khfwbj';
 import moment from 'moment';
+import MobileCon from '@/components/MobileCon';
 
 const InterestClassroom = () => {
   const { initialState } = useModel('@@initialState');
@@ -443,7 +444,7 @@ const InterestClassroom = () => {
   const tagChild = WbmDatas?.map(forMap);
 
   return (
-    <>
+    <MobileCon>
       <div className={styles.InterestClassroom}>
         <GoBack title={'选课报名'} onclick="/parent/home?index=index" />
 
@@ -976,7 +977,7 @@ const InterestClassroom = () => {
           我知道了
         </Button>
       </Modal>
-    </>
+    </MobileCon>
   );
 };
 export default InterestClassroom;

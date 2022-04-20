@@ -9,8 +9,7 @@
     flex-direction: column-reverse;
     width: 100%;
 
-    > div[class='ant-tabs-nav'] {
-      // position: fixed;
+    >div[class='ant-tabs-nav'] {
       bottom: 0;
       display: block;
       width: 100%;
@@ -36,6 +35,7 @@
               color: @text-color-secondary;
               font-size: 10px;
               text-align: center;
+
               .anticon {
                 display: block;
                 margin: 0;
@@ -45,7 +45,7 @@
                 color: #22c76d;
               }
 
-              & + .ant-tabs-tab {
+              &+.ant-tabs-tab {
                 margin: 0;
               }
             }
@@ -59,11 +59,11 @@
       }
     }
 
-    > div[class='ant-tabs-content-holder'] {
+    >div[class='ant-tabs-content-holder'] {
       height: calc(100vh - 60px);
       overflow-y: auto;
 
-      > div {
+      >div {
         height: 100%;
       }
     }

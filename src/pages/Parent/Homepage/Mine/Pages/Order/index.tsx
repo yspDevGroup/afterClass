@@ -10,6 +10,7 @@ import { enHenceMsg, getQueryString } from '@/utils/utils';
 import noOrder from '@/assets/noOrder.png';
 import Nodata from '@/components/Nodata';
 import GoBack from '@/components/GoBack';
+import MobileCon from '@/components/MobileCon';
 
 const { TabPane } = Tabs;
 
@@ -137,7 +138,7 @@ const Order: React.FC = () => {
   }, []);
 
   return (
-    <>
+    <MobileCon>
       <GoBack title={'订单'} onclick="/parent/home?index=mine" showReFund />
       <div className={styles.orderList}>
         <Tabs type="card" defaultActiveKey={type}>
@@ -167,7 +168,7 @@ const Order: React.FC = () => {
           </TabPane>
         </Tabs>
       </div>
-    </>
+    </MobileCon>
   );
 };
 

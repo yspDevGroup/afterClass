@@ -1,49 +1,61 @@
 .DetailsBox {
   min-height: 100%;
   background-color: #eee;
+  height: 100vh;
+
   .Selected {
     text-align: center;
     padding-top: 120px;
+
     .noOrder {
       img {
         width: 175px;
         height: 175px;
       }
-      p{
+
+      p {
         text-align: center;
         color: #999;
       }
     }
   }
+
   .wrap {
     padding: 60px 10px;
+
     .box {
       height: 80px;
       margin-bottom: 10px;
       padding: 10px;
       background-color: #fff;
       border-radius: 8px;
+
       p {
         margin: 0;
       }
+
       p:nth-of-type(1) {
         display: flex;
         justify-content: space-between;
         margin-bottom: 10px;
         line-height: 24px;
+
         .name {
           font-weight: bold;
           font-size: 16px;
           height: 24px;
         }
+
         .time {
           color: #999;
         }
       }
+
       p:nth-of-type(2) {
         display: flex;
         justify-content: space-between;
-        > span:nth-of-type(1) {
+
+        >span:nth-of-type(1) {
           height: 24px;
           padding: 0 8px;
           color: #5575ef;
@@ -51,7 +63,8 @@
           background: rgba(85, 117, 239, 0.1);
           border-radius: 6px;
         }
-        > span:nth-of-type(2) {
+
+        >span:nth-of-type(2) {
           color: #999;
         }
       }
