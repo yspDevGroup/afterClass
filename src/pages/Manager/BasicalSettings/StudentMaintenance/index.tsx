@@ -12,7 +12,7 @@ import SearchLayout from '@/components/Search/Layout';
 import styles from './index.less';
 import { getAllXSJBSJ } from '@/services/after-class/xsjbsj';
 import EllipsisHint from '@/components/EllipsisHint';
-import SelectParent from './selectParent';
+import SelectParent from './SelectParent';
 
 const { Search } = Input;
 const StudentMaintenance = () => {
@@ -23,7 +23,7 @@ const StudentMaintenance = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [name, setName] = useState<string>();
-  const [Telephone, setTelephone] = useState<string>();
+  // const [Telephone, setTelephone] = useState<string>();
   const getData = async () => {
     const obj = {
       XXJBSJId: currentUser?.xxId,
@@ -136,7 +136,7 @@ const StudentMaintenance = () => {
 
   useEffect(() => {
     getData();
-  }, [name, Telephone]);
+  }, [name]);
 
   return (
     <PageContainer cls={styles.roomWrapper}>
@@ -163,7 +163,7 @@ const StudentMaintenance = () => {
                 }}
               />
             </div>
-            <div>
+            {/* <div>
               <label htmlFor="type">联系电话：</label>
               <Search
                 placeholder="联系电话"
@@ -172,7 +172,7 @@ const StudentMaintenance = () => {
                   setTelephone(value.replace(/^\s*|\s*$/g, ''));
                 }}
               />
-            </div>
+            </div> */}
           </SearchLayout>
         }
         options={{
