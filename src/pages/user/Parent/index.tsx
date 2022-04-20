@@ -3,7 +3,7 @@
  * @author: zpl
  * @Date: 2021-07-22 08:52:55
 
- * @LastEditTime: 2022-04-15 17:39:40
+ * @LastEditTime: 2022-04-20 14:45:39
  * @LastEditors: Wu Zhan
  */
 import { useEffect, useState } from 'react';
@@ -16,6 +16,7 @@ import styles from './index.less';
 import { registerParent } from '@/services/after-class/auth';
 import type { FormItemType } from '@/components/CustomForm/interfice';
 import CustomForm from '@/components/CustomForm';
+import MobileCon from '@/components/MobileCon';
 
 const formLayout: {
   labelCol: {
@@ -76,30 +77,32 @@ const ParentRegister = () => {
   useEffect(() => {}, []);
 
   return (
-    <div className={styles.container}>
-      <div className={styles.content}>
-        <div className={styles.main}>
-          <div className={styles.circular1} />
-          <div className={styles.circular2} />
-          <div className={styles.top}>
-            <img src={logo} />
-            <span>家长您好!</span>
-            <span>欢迎注册课后服务平台</span>
-          </div>
-          <div className={styles.form}>
-            <CustomForm
-              setForm={setForm}
-              formLayout={formLayout}
-              formItems={formItemList}
-              hideBtn={true}
-            />
-            <Button shape="round" block onClick={loginHandler} className={styles.but}>
-              注册
-            </Button>
+    <MobileCon>
+      <div className={styles.container}>
+        <div className={styles.content}>
+          <div className={styles.main}>
+            <div className={styles.circular1} />
+            <div className={styles.circular2} />
+            <div className={styles.top}>
+              <img src={logo} />
+              <span>家长您好!</span>
+              <span>欢迎注册课后服务平台</span>
+            </div>
+            <div className={styles.form}>
+              <CustomForm
+                setForm={setForm}
+                formLayout={formLayout}
+                formItems={formItemList}
+                hideBtn={true}
+              />
+              <Button shape="round" block onClick={loginHandler} className={styles.but}>
+                注册
+              </Button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </MobileCon>
   );
 };
 

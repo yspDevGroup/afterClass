@@ -2,7 +2,7 @@
  * @description:
  * @author: Wu Zhan
  * @Date: 2022-04-15 09:02:57
- * @LastEditTime: 2022-04-15 17:43:21
+ * @LastEditTime: 2022-04-20 14:58:25
  * @LastEditors: Wu Zhan
  */
 import { message, Spin, Select } from 'antd';
@@ -111,6 +111,7 @@ const SelectParent = (props: {
           rules={[{ required: false, message: '请选择家长' }]}
           name="ParentIds"
           key="ParentIds"
+          initialValue={ParentIds}
         >
           <Select
             mode="multiple"

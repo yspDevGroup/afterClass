@@ -70,11 +70,11 @@ const AllNotice = () => {
           <Tabs
             centered={true}
             activeKey={keys}
-            onChange={(key) => {
+            onTabClick={(key) => {
               setKeys(key);
             }}
           >
-            <TabPane tab="校内通知" key="notify">
+            <TabPane tab={<span>校内通知</span>} key="notify">
               {dataTZGG?.list.length ? (
                 <>
                   <ListComp listData={dataTZGG} type="tz" />
@@ -95,7 +95,7 @@ const AllNotice = () => {
                 />
               )}
             </TabPane>
-            <TabPane tab="政策公告" key="policy">
+            <TabPane tab={<span>校内通知</span>} key="policy">
               {dataZCGG?.list.length ? (
                 <>
                   <ListComp listData={dataZCGG} type="zc" />
