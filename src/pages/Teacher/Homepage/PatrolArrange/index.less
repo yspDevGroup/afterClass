@@ -1,13 +1,18 @@
+@import '../theme.less';
+
 .patrolWrapper {
   min-height: calc(~'100vh - 45px');
   padding-top: 8px;
   background: #f5f5f5;
+
   div[class*='react-h5-calendar'] {
     padding-top: 8px;
+
     div[class*='bottom-operate'] {
       display: none;
     }
   }
+
   .patrolContent {
     padding: 8px;
 
@@ -16,10 +21,12 @@
         display: block;
         margin-bottom: 8px;
       }
+
       li {
         padding: 10px;
         background: #fff;
         border-radius: 8px;
+
         div[class*='description'] {
           color: #999;
           font-size: 12px;
@@ -180,10 +187,11 @@
     .footer {
       position: fixed;
       bottom: 0;
-      left: 0;
+      // left: 0;
       display: flex;
       justify-content: space-between;
-      width: 100vw;
+      width: 100%;
+      max-width: @mobileMaxWidth;
       height: 54px;
       padding: 0 14px;
       background: #fff;
@@ -208,6 +216,7 @@
     }
   }
 }
+
 :global {
   .ant-picker-dropdown {
     left: 0 !important;
@@ -216,6 +225,7 @@
     justify-content: center;
     width: 100%;
   }
+
   .ant-picker-dropdown-hidden {
     display: none !important;
   }

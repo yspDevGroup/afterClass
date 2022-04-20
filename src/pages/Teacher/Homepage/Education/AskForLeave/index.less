@@ -1,3 +1,5 @@
+@import '../../theme.less';
+
 .leaveList {
   height: auto;
   min-height: calc(~'100vh - 60px');
@@ -203,13 +205,24 @@
       margin: 50px auto;
     }
   }
-  .apply {
+
+  .footer {
     position: fixed;
-    right: 20px;
     bottom: 15px;
+    display: flex;
+    flex-direction: row-reverse;
+    width: 100%;
+    max-width: @mobileMaxWidth;
+  }
+
+  .apply {
+    // position: fixed;
+    // right: 20px;
+    // bottom: 15px;
     width: 80px;
     color: #3e88f8;
     text-align: center;
+
     > div {
       width: 48px;
       height: 48px;
@@ -219,6 +232,7 @@
       background-color: #3e88f8;
       border-radius: 50%;
       box-shadow: 0 0 30px rgba(0, 102, 255, 0.4);
+
       img {
         width: 28px;
         margin-top: 10px;

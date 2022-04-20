@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-25 17:55:59
- * @LastEditTime: 2022-04-08 09:40:17
+ * @LastEditTime: 2022-04-20 10:33:47
  * @LastEditors: Wu Zhan
  */
 import { useEffect, useState } from 'react';
@@ -13,6 +13,7 @@ import GoBack from '@/components/GoBack';
 
 import styles from '../index.less';
 import { queryXNXQList } from '@/services/local-services/xnxq';
+import MobileCon from '@/components/MobileCon';
 
 const PatrolArrange = (props: any) => {
   const { id, day, xxId, kcmc } = props?.location?.state;
@@ -47,7 +48,7 @@ const PatrolArrange = (props: any) => {
   }, []);
 
   return (
-    <>
+    <MobileCon>
       <GoBack title={'巡课'} onclick="/teacher/patrolArrange" teacher />
       <div className={styles.patrolWrapper}>
         <div className={styles.patrolContent}>
@@ -116,7 +117,7 @@ const PatrolArrange = (props: any) => {
           </div>
         </div>
       </div>
-    </>
+    </MobileCon>
   );
 };
 

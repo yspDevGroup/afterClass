@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-26 10:30:36
- * @LastEditTime: 2022-04-08 10:36:42
+ * @LastEditTime: 2022-04-20 10:35:01
  * @LastEditors: Wu Zhan
  */
 import { useEffect, useState } from 'react';
@@ -16,6 +16,7 @@ import moment from 'moment';
 import { getAllKHXSCQ } from '@/services/after-class/khxscq';
 import { getSerEnrolled } from '@/services/after-class/khbjsj';
 import { createKHXKJL, KHXKJL, updateKHXKJL } from '@/services/after-class/khxkjl';
+import MobileCon from '@/components/MobileCon';
 
 const { TextArea } = Input;
 const NewPatrol = (props: any) => {
@@ -170,7 +171,7 @@ const NewPatrol = (props: any) => {
     return value?.replace(/[^\d]+/g, '');
   };
   return (
-    <>
+    <MobileCon>
       <GoBack title={'巡课记录'} teacher />
       <div className={styles.patrolWrapper}>
         <div className={styles.patrolContent}>
@@ -327,7 +328,7 @@ const NewPatrol = (props: any) => {
           </div>
         </div>
       </div>
-    </>
+    </MobileCon>
   );
 };
 

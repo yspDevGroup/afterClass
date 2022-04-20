@@ -9,6 +9,7 @@ import { useModel } from 'umi';
 import ShowName from '@/components/ShowName';
 import noData from '@/assets/noData.png';
 import Nodata from '@/components/Nodata';
+import MobileCon from '@/components/MobileCon';
 
 const Record = () => {
   const { initialState } = useModel('@@initialState');
@@ -104,131 +105,133 @@ const Record = () => {
     }
   };
   return (
-    <div
-      className={styles.ClassroomStyle}
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
-    >
-      <GoBack title="课堂风采" teacher onclick="/teacher/home?index=education" />
-      <div className={styles.wrap}>
-        {!loading ? (
-          showData && showData?.length ? (
-            showData.map((item: any) => {
-              return (
-                <div className={styles.cards}>
-                  <p>
-                    <Avatar
-                      style={{ backgroundColor: '#0066FF', verticalAlign: 'middle' }}
-                      size="large"
-                    >
-                      <p style={{ fontSize: '14px', lineHeight: '21px', height: '21px' }}>
-                        {moment(item.time).format('DD')}
-                      </p>
-                      <p
-                        style={{
-                          fontSize: '12px',
-                          lineHeight: '12px',
-                          height: '12px',
-                          fontWeight: 300,
-                        }}
-                      >
-                        {`${moment(item.time).format('MM')}月`}
-                      </p>
-                    </Avatar>
-                    <div className={styles.name}>
-                      <p>{item.className}</p>
-                      <p>
-                        {`${item.classNum}\u00A0\u00A0`}{' '}
-                        <ShowName
-                          type="userName"
-                          openid={item?.teacher?.WechatUserId}
-                          XM={item?.teacher?.XM}
-                        />
-                      </p>
-                    </div>
-                  </p>
-                  <div className={styles.content}>
-                    <p>{item.content}</p>
-                    <div className={styles.imgContainer}>
-                      <Image.PreviewGroup>
-                        <Row gutter={[6, 6]} style={{ width: '100%' }}>
-                          {item.imgs.map((url: string) => {
-                            return (
-                              <Col
-                                span={
-                                  item.imgs.length === 2 || item.imgs.length === 4
-                                    ? 12
-                                    : item.imgs.length === 1
-                                    ? 24
-                                    : 8
-                                }
-                                className={
-                                  item.imgs.length === 2 || item.imgs.length === 4
-                                    ? styles.pairImg
-                                    : item.imgs.length === 1
-                                    ? styles.oneImg
-                                    : styles.nineImg
-                                }
-                              >
-                                <Image src={url} />
-                              </Col>
-                            );
-                          })}
-                        </Row>
-                      </Image.PreviewGroup>
-                    </div>
+    <MobileCon>
+      <div
+        className={styles.ClassroomStyle}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
+        <GoBack title="课堂风采" teacher onclick="/teacher/home?index=education" />
+        <div className={styles.wrap}>
+          {!loading ? (
+            showData && showData?.length ? (
+              showData.map((item: any) => {
+                return (
+                  <div className={styles.cards}>
                     <p>
-                      <span>{moment(item.time).format('HH:mm:ss')}</span>
-                      {currentUser?.JSId === item.JSId ? (
-                        <a
-                          onClick={() => {
-                            setModalVisible(true);
-                            setids(item?.id);
+                      <Avatar
+                        style={{ backgroundColor: '#0066FF', verticalAlign: 'middle' }}
+                        size="large"
+                      >
+                        <p style={{ fontSize: '14px', lineHeight: '21px', height: '21px' }}>
+                          {moment(item.time).format('DD')}
+                        </p>
+                        <p
+                          style={{
+                            fontSize: '12px',
+                            lineHeight: '12px',
+                            height: '12px',
+                            fontWeight: 300,
                           }}
                         >
-                          删除
-                        </a>
-                      ) : (
-                        <></>
-                      )}
+                          {`${moment(item.time).format('MM')}月`}
+                        </p>
+                      </Avatar>
+                      <div className={styles.name}>
+                        <p>{item.className}</p>
+                        <p>
+                          {`${item.classNum}\u00A0\u00A0`}{' '}
+                          <ShowName
+                            type="userName"
+                            openid={item?.teacher?.WechatUserId}
+                            XM={item?.teacher?.XM}
+                          />
+                        </p>
+                      </div>
                     </p>
+                    <div className={styles.content}>
+                      <p>{item.content}</p>
+                      <div className={styles.imgContainer}>
+                        <Image.PreviewGroup>
+                          <Row gutter={[6, 6]} style={{ width: '100%' }}>
+                            {item.imgs.map((url: string) => {
+                              return (
+                                <Col
+                                  span={
+                                    item.imgs.length === 2 || item.imgs.length === 4
+                                      ? 12
+                                      : item.imgs.length === 1
+                                      ? 24
+                                      : 8
+                                  }
+                                  className={
+                                    item.imgs.length === 2 || item.imgs.length === 4
+                                      ? styles.pairImg
+                                      : item.imgs.length === 1
+                                      ? styles.oneImg
+                                      : styles.nineImg
+                                  }
+                                >
+                                  <Image src={url} />
+                                </Col>
+                              );
+                            })}
+                          </Row>
+                        </Image.PreviewGroup>
+                      </div>
+                      <p>
+                        <span>{moment(item.time).format('HH:mm:ss')}</span>
+                        {currentUser?.JSId === item.JSId ? (
+                          <a
+                            onClick={() => {
+                              setModalVisible(true);
+                              setids(item?.id);
+                            }}
+                          >
+                            删除
+                          </a>
+                        ) : (
+                          <></>
+                        )}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              );
-            })
+                );
+              })
+            ) : (
+              <Nodata imgSrc={noData} desc="暂无课堂风采" />
+            )
           ) : (
-            <Nodata imgSrc={noData} desc="暂无课堂风采" />
-          )
-        ) : (
-          <div>
-            {[1, 2, 3].map(() => {
-              return (
-                <div className={styles.cards}>
-                  <Skeleton avatar active loading={loading} />
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </div>
-      <Modal
-        title="删除确认"
-        visible={ModalVisible}
-        onOk={handleOks}
-        onCancel={() => {
-          setModalVisible(false);
-        }}
-        closable={false}
-        className={styles.signUpModal}
-        okText="确认"
-        cancelText="取消"
-      >
-        <div>
-          <p>您确定要删除此条内容吗？</p>
+            <div>
+              {[1, 2, 3].map(() => {
+                return (
+                  <div className={styles.cards}>
+                    <Skeleton avatar active loading={loading} />
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
-      </Modal>
-    </div>
+        <Modal
+          title="删除确认"
+          visible={ModalVisible}
+          onOk={handleOks}
+          onCancel={() => {
+            setModalVisible(false);
+          }}
+          closable={false}
+          className={styles.signUpModal}
+          okText="确认"
+          cancelText="取消"
+        >
+          <div>
+            <p>您确定要删除此条内容吗？</p>
+          </div>
+        </Modal>
+      </div>
+    </MobileCon>
   );
 };
 export default Record;

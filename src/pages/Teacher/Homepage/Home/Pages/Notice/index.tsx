@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ListComp from '@/components/ListComponent';
-import styles from "./index.less";
+import styles from './index.less';
 import type { ListData, ListItem } from '@/components/ListComponent/data';
 import moment from 'moment';
 import Nodata from '@/components/Nodata';
@@ -12,12 +12,13 @@ import { getJYJGTZGG } from '@/services/after-class/jyjgtzgg';
 import { getXXTZGG } from '@/services/after-class/xxtzgg';
 import { enHenceMsg } from '@/utils/utils';
 import { useModel } from 'umi';
+import MobileCon from '@/components/MobileCon';
 
 const defaultList: ListData = {
   type: 'onlyList',
   cls: 'onlyOneList',
-  list: []
-}
+  list: [],
+};
 const { TabPane } = Tabs;
 const Notice = () => {
   const { initialState } = useModel('@@initialState');
@@ -75,8 +76,8 @@ const Notice = () => {
             text: moment(notification[i].RQ).format('YYYY-MM-DD'),
           },
         };
-        if (i >= ((pages - 1) * 10) && i < pages * 10) {
-          data.push(listdata)
+        if (i >= (pages - 1) * 10 && i < pages * 10) {
+          data.push(listdata);
         }
       }
       const newData = { ...defaultList };
@@ -93,35 +94,45 @@ const Notice = () => {
             text: moment(policyData[i].RQ).format('YYYY-MM-DD'),
           },
         };
-        if (i >= ((ZCpages - 1) * 10) && i < ZCpages * 10) {
-          data.push(listdata)
+        if (i >= (ZCpages - 1) * 10 && i < ZCpages * 10) {
+          data.push(listdata);
         }
       }
       const newData = { ...defaultList };
       newData.list = data;
       setZCDataList(newData);
     }
-  }, [policyData, notification, pages, ZCpages])
+  }, [policyData, notification, pages, ZCpages]);
 
   return (
-    <div className={styles.gonggao}>
-      <GoBack title={'公告'} onclick='/teacher/home?index=index' teacher />
-      <Tabs type="card">
-        <TabPane tab="校内通知" key="xntz">
-          {notification && notification.length ? <div className={styles.NoticeBox}>
-            <ListComp listData={annoceList} />
-            <Pagina total={notification.length} setPages={setPages} />
-          </div> : <Nodata imgSrc={noData} desc='暂无公告' />}
-        </TabPane>
-        <TabPane tab="政策公告" key="zcgg">
-          {policyData && policyData.length ? <div className={styles.NoticeBox}>
-            <ListComp listData={ZCDataList} />
-            <Pagina total={policyData.length} setPages={setZCPages} />
-          </div> : <Nodata imgSrc={noData} desc='暂无公告' />}
-        </TabPane>
-      </Tabs>
-    </div>
-  )
-}
+    <MobileCon>
+      <div className={styles.gonggao}>
+        <GoBack title={'公告'} onclick="/teacher/home?index=index" teacher />
+        <Tabs type="card">
+          <TabPane tab="校内通知" key="xntz">
+            {notification && notification.length ? (
+              <div className={styles.NoticeBox}>
+                <ListComp listData={annoceList} />
+                <Pagina total={notification.length} setPages={setPages} />
+              </div>
+            ) : (
+              <Nodata imgSrc={noData} desc="暂无公告" />
+            )}
+          </TabPane>
+          <TabPane tab="政策公告" key="zcgg">
+            {policyData && policyData.length ? (
+              <div className={styles.NoticeBox}>
+                <ListComp listData={ZCDataList} />
+                <Pagina total={policyData.length} setPages={setZCPages} />
+              </div>
+            ) : (
+              <Nodata imgSrc={noData} desc="暂无公告" />
+            )}
+          </TabPane>
+        </Tabs>
+      </div>
+    </MobileCon>
+  );
+};
 
-export default Notice
+export default Notice;

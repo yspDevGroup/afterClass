@@ -2,8 +2,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-11-29 17:16:51
- * @LastEditTime: 2022-02-09 14:17:47
- * @LastEditors: zpl
+ * @LastEditTime: 2022-04-20 11:22:20
+ * @LastEditors: Wu Zhan
  */
 import React, { useEffect, useState } from 'react';
 import { useModel, history } from 'umi';
@@ -15,6 +15,7 @@ import { ParentHomeData } from '@/services/local-services/mobileHome';
 import noOrder from '@/assets/noOrder1.png';
 import icon_select from '@/assets/icon_classroom.png';
 import styles from './index.less';
+import MobileCon from '@/components/MobileCon';
 
 const Index = () => {
   const { initialState } = useModel('@@initialState');
@@ -48,59 +49,64 @@ const Index = () => {
     getData();
   }, [XNXQId]);
   return (
-    <div className={styles.selectedPage}>
-      <GoBack title="选课记录" teacher onclick="/teacher/home?index=education" />
-      <div className={styles.listWrapper}>
-        {dataSource?.length ? (
-          <List
-            style={{ background: '#fff', paddingLeft: '10px' }}
-            itemLayout="horizontal"
-            dataSource={dataSource}
-            renderItem={(item: any) => {
-              const { XXSJPZ, KHBJSJ } = item;
-              return (
-                <List.Item key={`${item.id}+${XXSJPZ?.KSSJ}`}>
-                  <List.Item.Meta
-                    title={`${KHBJSJ?.KHKCSJ?.KCMC}【${KHBJSJ?.BJMC}】`}
-                    description={`上课时间：${item.RQ} ${XXSJPZ?.KSSJ?.substring?.(
-                      0,
-                      5,
-                    )} - ${XXSJPZ?.JSSJ?.substring?.(0, 5)}`}
-                  />
-                  <span
-                    style={{
-                      background: '#3e88f8',
-                      padding: '4px 14px',
-                      borderRadius: '14px',
-                      color: '#fff',
-                      fontSize: '12px',
-                    }}
-                  >
-                    {item.JSLX === 0 ? '副班' : '主班'}
-                  </span>
-                </List.Item>
-              );
-            }}
-          />
-        ) : (
-          <div className={styles.noData}>
-            <img src={noOrder} alt="" />
-            <p>暂无数据</p>
-          </div>
-        )}
-      </div>
-      <div
-        className={styles.apply}
-        onClick={() => {
-          history.push('/teacher/education/selectCourse/apply');
-        }}
-      >
-        <div>
-          <img src={icon_select} />
+    <MobileCon>
+      <div className={styles.selectedPage}>
+        <GoBack title="选课记录" teacher onclick="/teacher/home?index=education" />
+        <div className={styles.listWrapper}>
+          {dataSource?.length ? (
+            <List
+              style={{ background: '#fff', paddingLeft: '10px' }}
+              itemLayout="horizontal"
+              dataSource={dataSource}
+              renderItem={(item: any) => {
+                const { XXSJPZ, KHBJSJ } = item;
+                return (
+                  <List.Item key={`${item.id}+${XXSJPZ?.KSSJ}`}>
+                    <List.Item.Meta
+                      title={`${KHBJSJ?.KHKCSJ?.KCMC}【${KHBJSJ?.BJMC}】`}
+                      description={`上课时间：${item.RQ} ${XXSJPZ?.KSSJ?.substring?.(
+                        0,
+                        5,
+                      )} - ${XXSJPZ?.JSSJ?.substring?.(0, 5)}`}
+                    />
+                    <span
+                      style={{
+                        background: '#3e88f8',
+                        padding: '4px 14px',
+                        borderRadius: '14px',
+                        color: '#fff',
+                        fontSize: '12px',
+                      }}
+                    >
+                      {item.JSLX === 0 ? '副班' : '主班'}
+                    </span>
+                  </List.Item>
+                );
+              }}
+            />
+          ) : (
+            <div className={styles.noData}>
+              <img src={noOrder} alt="" />
+              <p>暂无数据</p>
+            </div>
+          )}
         </div>
-        我要选课
+
+        <div className={styles.footer}>
+          <div
+            className={styles.apply}
+            onClick={() => {
+              history.push('/teacher/education/selectCourse/apply');
+            }}
+          >
+            <div>
+              <img src={icon_select} />
+            </div>
+            我要选课
+          </div>
+        </div>
       </div>
-    </div>
+    </MobileCon>
   );
 };
 

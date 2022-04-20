@@ -11,6 +11,7 @@ import moment from 'moment';
 import { enHenceMsg } from '@/utils/utils';
 import { PlusOutlined } from '@ant-design/icons';
 import TDKList from './TDKList';
+import MobileCon from '@/components/MobileCon';
 
 const { TabPane } = Tabs;
 const CourseAdjustment = () => {
@@ -77,116 +78,126 @@ const CourseAdjustment = () => {
     setstate(key);
   };
   return (
-    <div className={styles.CourseAdjustment}>
-      <GoBack title={'教师调代课'} teacher onclick="/teacher/home?index=education" />
-      <Tabs type="card" activeKey={state} onChange={onchange}>
-        <TabPane tab="待处理" key="DCL">
-          <TDKList data={DCLDatas} type="edit" />
-        </TabPane>
-        <TabPane tab="已处理" key="YCL">
-          <TDKList data={YCLDatas} type="view" />
-        </TabPane>
-        <TabPane tab="已发起" key="YFQ">
-          {Datas?.length === 0 ? (
-            <div className={styles.Selected}>
-              <div className={styles.noOrder}>
-                <div>
-                  <p>您当前没有任何记录</p>
-                </div>
-                <img src={noOrder1} alt="" />
-              </div>
-            </div>
-          ) : (
-            <div className={styles.wrap}>
-              {Datas.map((item: any) => {
-                return (
-                  <div className={styles.Information}>
-                    <Link
-                      to={{
-                        pathname: '/teacher/education/courseAdjustment/details',
-                        state: { id: item.id, type: 'view' },
-                      }}
-                    >
-                      <div>
-                        <h4>
-                          <ShowName
-                            type="userName"
-                            openid={item?.SKJS?.WechatUserId}
-                            XM={item.SKJS?.XM}
-                          />
-                          教师的{item?.LX === 1 ? '代课' : '调课'}申请
-                          {item.ZT === 3 ? (
-                            <span className={styles.cards}>已撤销</span>
-                          ) : item.ZT === 0 || item.ZT === 4 ? (
-                            <span
-                              className={styles.cards}
-                              style={{ color: '#FFB257', borderColor: '#FFB257' }}
-                            >
-                              审批中
-                            </span>
-                          ) : item.ZT === 1 ? (
-                            <span
-                              className={styles.cards}
-                              style={{ color: '#15B628', borderColor: '#15B628' }}
-                            >
-                              已通过
-                            </span>
-                          ) : item.ZT === 2 || item.ZT === 5 ? (
-                            <span
-                              className={styles.cards}
-                              style={{ color: '#FF4B4B', borderColor: '#FF4B4B' }}
-                            >
-                              已驳回
-                            </span>
-                          ) : (
-                            ''
-                          )}
-                        </h4>
-                        <span>{moment(item.updatedAt || item.createdAt).format('YYYY.MM.DD')}</span>
-                      </div>
-
-                      <p>
-                        课程：{item.KHBJSJ?.KHKCSJ?.KCMC} — {item.KHBJSJ?.BJMC}
-                      </p>
-                      <p>
-                        {`${item?.LX === 0 ? '原上课' : ''}时间：${moment(item?.SKRQ).format(
-                          'MM月DD日',
-                        )}，${item.SKJC?.TITLE}【${item.SKJC?.KSSJ.substring(0, 5)}-
-              ${item.SKJC?.JSSJ.substring(0, 5)}】`}
-                      </p>
-                      <p>
-                        {item?.LX === 0
-                          ? `调课后时间：${moment(item?.TKRQ).format('MM月DD日')}，${
-                              item.TKJC?.TITLE
-                            }【${item.TKJC?.KSSJ.substring(0, 5)}-
-              ${item.TKJC?.JSSJ.substring(0, 5)}】`
-                          : ''}
-                      </p>
-                      <p>
-                        {item?.LX === 1 ? '代课' : '调课'}原因：{item.BZ}
-                      </p>
-                    </Link>
-                    {item.ZT === 0 ? <Button onClick={() => handleCancle(item)}>撤销</Button> : ''}
+    <MobileCon>
+      <div className={styles.CourseAdjustment}>
+        <GoBack title={'教师调代课'} teacher onclick="/teacher/home?index=education" />
+        <Tabs type="card" activeKey={state} onChange={onchange}>
+          <TabPane tab="待处理" key="DCL">
+            <TDKList data={DCLDatas} type="edit" />
+          </TabPane>
+          <TabPane tab="已处理" key="YCL">
+            <TDKList data={YCLDatas} type="view" />
+          </TabPane>
+          <TabPane tab="已发起" key="YFQ">
+            {Datas?.length === 0 ? (
+              <div className={styles.Selected}>
+                <div className={styles.noOrder}>
+                  <div>
+                    <p>您当前没有任何记录</p>
                   </div>
-                );
-              })}
-            </div>
-          )}
-        </TabPane>
-      </Tabs>
+                  <img src={noOrder1} alt="" />
+                </div>
+              </div>
+            ) : (
+              <div className={styles.wrap}>
+                {Datas.map((item: any) => {
+                  return (
+                    <div className={styles.Information}>
+                      <Link
+                        to={{
+                          pathname: '/teacher/education/courseAdjustment/details',
+                          state: { id: item.id, type: 'view' },
+                        }}
+                      >
+                        <div>
+                          <h4>
+                            <ShowName
+                              type="userName"
+                              openid={item?.SKJS?.WechatUserId}
+                              XM={item.SKJS?.XM}
+                            />
+                            教师的{item?.LX === 1 ? '代课' : '调课'}申请
+                            {item.ZT === 3 ? (
+                              <span className={styles.cards}>已撤销</span>
+                            ) : item.ZT === 0 || item.ZT === 4 ? (
+                              <span
+                                className={styles.cards}
+                                style={{ color: '#FFB257', borderColor: '#FFB257' }}
+                              >
+                                审批中
+                              </span>
+                            ) : item.ZT === 1 ? (
+                              <span
+                                className={styles.cards}
+                                style={{ color: '#15B628', borderColor: '#15B628' }}
+                              >
+                                已通过
+                              </span>
+                            ) : item.ZT === 2 || item.ZT === 5 ? (
+                              <span
+                                className={styles.cards}
+                                style={{ color: '#FF4B4B', borderColor: '#FF4B4B' }}
+                              >
+                                已驳回
+                              </span>
+                            ) : (
+                              ''
+                            )}
+                          </h4>
+                          <span>
+                            {moment(item.updatedAt || item.createdAt).format('YYYY.MM.DD')}
+                          </span>
+                        </div>
 
-      <div
-        className={styles.apply}
-        onClick={() => {
-          history.push('/teacher/education/courseAdjustment/applys');
-        }}
-      >
-        <div>
-          <PlusOutlined />
+                        <p>
+                          课程：{item.KHBJSJ?.KHKCSJ?.KCMC} — {item.KHBJSJ?.BJMC}
+                        </p>
+                        <p>
+                          {`${item?.LX === 0 ? '原上课' : ''}时间：${moment(item?.SKRQ).format(
+                            'MM月DD日',
+                          )}，${item.SKJC?.TITLE}【${item.SKJC?.KSSJ.substring(0, 5)}-
+              ${item.SKJC?.JSSJ.substring(0, 5)}】`}
+                        </p>
+                        <p>
+                          {item?.LX === 0
+                            ? `调课后时间：${moment(item?.TKRQ).format('MM月DD日')}，${
+                                item.TKJC?.TITLE
+                              }【${item.TKJC?.KSSJ.substring(0, 5)}-
+              ${item.TKJC?.JSSJ.substring(0, 5)}】`
+                            : ''}
+                        </p>
+                        <p>
+                          {item?.LX === 1 ? '代课' : '调课'}原因：{item.BZ}
+                        </p>
+                      </Link>
+                      {item.ZT === 0 ? (
+                        <Button onClick={() => handleCancle(item)}>撤销</Button>
+                      ) : (
+                        ''
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </TabPane>
+        </Tabs>
+
+        <div className={styles.footer}>
+          <div
+            className={styles.apply}
+            onClick={() => {
+              history.push('/teacher/education/courseAdjustment/applys');
+            }}
+          >
+            <div>
+              <PlusOutlined />
+            </div>
+            发起申请
+          </div>
         </div>
-        发起申请
       </div>
-    </div>
+    </MobileCon>
   );
 };
 

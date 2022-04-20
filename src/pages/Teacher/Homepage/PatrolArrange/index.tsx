@@ -3,8 +3,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-25 09:20:56
- * @LastEditTime: 2022-04-02 15:30:49
- * @LastEditors: Sissle Lynn
+ * @LastEditTime: 2022-04-20 10:33:06
+ * @LastEditors: Wu Zhan
  */
 import { useEffect, useState } from 'react';
 import { Link, useModel } from 'umi';
@@ -22,6 +22,7 @@ import noData from '@/assets/noCourses1.png';
 import { getScheduleByDate, getXKrecordBydate } from '@/services/after-class/khxksj';
 import { getWeekday } from '@/services/local-services/mobileHome';
 import { queryXNXQList } from '@/services/local-services/xnxq';
+import MobileCon from '@/components/MobileCon';
 
 const PatrolArrange = () => {
   const { initialState } = useModel('@@initialState');
@@ -71,7 +72,7 @@ const PatrolArrange = () => {
   }, [day]);
 
   return (
-    <>
+    <MobileCon>
       <GoBack title={'巡课安排'} onclick="/teacher/home?index=index" teacher />
       <div className={styles.patrolWrapper}>
         <MobileCalendar
@@ -134,7 +135,7 @@ const PatrolArrange = () => {
           )}
         </div>
       </div>
-    </>
+    </MobileCon>
   );
 };
 

@@ -17,6 +17,7 @@ import styles from './index.less';
 import ShowName from '@/components/ShowName';
 import { ParentHomeData } from '@/services/local-services/mobileHome';
 import { sendMessageToParent } from '@/services/after-class/wechat';
+import MobileCon from '@/components/MobileCon';
 
 /**
  * 课堂点名
@@ -442,92 +443,94 @@ const CallTheRoll = (props: any) => {
     },
   ];
   return (
-    <div className={styles.callTheRoll}>
-      <GoBack title="课堂点名" teacher onclick="/teacher/home?index=education" />
-      <div className={styles.rollHeader}>
-        <div>
-          <b>
-            <span ref={userRef}>
-              <ShowName type="userName" openid={currentUser.wechatUserId} XM={currentUser.XM} />
+    <MobileCon>
+      <div className={styles.callTheRoll}>
+        <GoBack title="课堂点名" teacher onclick="/teacher/home?index=education" />
+        <div className={styles.rollHeader}>
+          <div>
+            <b>
+              <span ref={userRef}>
+                <ShowName type="userName" openid={currentUser.wechatUserId} XM={currentUser.XM} />
+              </span>
+              老师
+            </b>
+            <span>
+              <Button onClick={teacherCheckIn} disabled={btnDis !== 'doing'}>
+                {btnDis === 'done' ? '已' : btnDis === 'undone' ? '未' : '立即'}签到
+              </Button>
             </span>
-            老师
-          </b>
-          <span>
-            <Button onClick={teacherCheckIn} disabled={btnDis !== 'doing'}>
-              {btnDis === 'done' ? '已' : btnDis === 'undone' ? '未' : '立即'}签到
-            </Button>
-          </span>
+          </div>
         </div>
-      </div>
-      <div className={styles.classCourseName}>{claName?.KCMC}</div>
-      <div className={styles.classCourseInfo}>
-        {claName?.BJMC} {/* ${claName?.KSS ? '/ ' + claName?.KSS : ''} */}
-        {curNum ? `｜第 ${curNum}  课时` : ''}
-      </div>
-      <div className={styles.checkWorkAttendance}>
-        {checkWorkInfo.map((item) => {
-          return (
-            <div className={styles.checkWorkInfo} key={item.key}>
-              <div className={styles.number}>{item.shouldArrive}</div>
-              <div className={styles.word}>{item.text}</div>
-            </div>
-          );
-        })}
-      </div>
-      <div className={styles.studentList}>
-        <Table
-          dataSource={dataSource}
-          columns={columns}
-          rowKey="id"
-          pagination={false}
-          scroll={{ y: 'calc(100vh - 390px)' }}
-        />
-      </div>
-      <div className={styles.footerButton}>
-        {dataSource?.length ? (
+        <div className={styles.classCourseName}>{claName?.KCMC}</div>
+        <div className={styles.classCourseInfo}>
+          {claName?.BJMC} {/* ${claName?.KSS ? '/ ' + claName?.KSS : ''} */}
+          {curNum ? `｜第 ${curNum}  课时` : ''}
+        </div>
+        <div className={styles.checkWorkAttendance}>
+          {checkWorkInfo.map((item) => {
+            return (
+              <div className={styles.checkWorkInfo} key={item.key}>
+                <div className={styles.number}>{item.shouldArrive}</div>
+                <div className={styles.word}>{item.text}</div>
+              </div>
+            );
+          })}
+        </div>
+        <div className={styles.studentList}>
+          <Table
+            dataSource={dataSource}
+            columns={columns}
+            rowKey="id"
+            pagination={false}
+            scroll={{ y: 'calc(100vh - 390px)' }}
+          />
+        </div>
+        <div className={styles.footerButton}>
+          {dataSource?.length ? (
+            <Button
+              style={{
+                background: theme.primaryColor,
+                borderColor: theme.primaryColor,
+                width: '100%',
+              }}
+              type="primary"
+              shape="round"
+              onClick={onButtonClick}
+              disabled={
+                butDis !== 'doing' && butDis === 'done' && dayjs().format('YYYY-MM-DD') !== pkDate
+              }
+            >
+              {butDis === 'done' ? '已' : butDis === 'undone' ? '已默认' : '确认'}点名
+            </Button>
+          ) : (
+            <Button
+              style={{
+                background: theme.primaryColor,
+                borderColor: theme.primaryColor,
+                width: '100%',
+              }}
+              type="primary"
+              shape="round"
+              disabled
+            >
+              无需点名
+            </Button>
+          )}
+        </div>
+        <Modal className={styles.SignIn} visible={isModalVisible} footer={null} closable={false}>
+          <img src={GroupT} alt="" />
+          <h3>点名成功</h3>
           <Button
-            style={{
-              background: theme.primaryColor,
-              borderColor: theme.primaryColor,
-              width: '100%',
-            }}
             type="primary"
-            shape="round"
-            onClick={onButtonClick}
-            disabled={
-              butDis !== 'doing' && butDis === 'done' && dayjs().format('YYYY-MM-DD') !== pkDate
-            }
-          >
-            {butDis === 'done' ? '已' : butDis === 'undone' ? '已默认' : '确认'}点名
-          </Button>
-        ) : (
-          <Button
-            style={{
-              background: theme.primaryColor,
-              borderColor: theme.primaryColor,
-              width: '100%',
+            onClick={() => {
+              history.push('/teacher/home?index=education');
             }}
-            type="primary"
-            shape="round"
-            disabled
           >
-            无需点名
+            我知道了
           </Button>
-        )}
+        </Modal>
       </div>
-      <Modal className={styles.SignIn} visible={isModalVisible} footer={null} closable={false}>
-        <img src={GroupT} alt="" />
-        <h3>点名成功</h3>
-        <Button
-          type="primary"
-          onClick={() => {
-            history.push('/teacher/home?index=education');
-          }}
-        >
-          我知道了
-        </Button>
-      </Modal>
-    </div>
+    </MobileCon>
   );
 };
 

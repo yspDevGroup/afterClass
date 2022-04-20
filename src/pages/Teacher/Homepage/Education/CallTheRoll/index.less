@@ -1,3 +1,4 @@
+@import '../../theme.less';
 .callTheRoll {
   height: 100vh;
   overflow-y: hidden;
@@ -92,7 +93,7 @@
           background: #f5f5f5;
         }
       }
-      .ant-table-body{
+      .ant-table-body {
         padding-bottom: 40px;
       }
 
@@ -137,6 +138,7 @@
     position: absolute;
     bottom: 0;
     width: 100%;
+    max-width: @mobileMaxWidth;
     height: 54px;
     padding: 0 14px;
     line-height: 54px;
@@ -173,13 +175,13 @@
     line-height: 50px;
   }
   p {
-    color: #999999;
+    color: #999;
     font-size: 14px;
   }
   :global {
     .ant-modal-content {
       border-radius: 16px !important;
-      .ant-modal-body{
+      .ant-modal-body {
         padding: 24px;
       }
     }
@@ -188,7 +190,7 @@
     }
     .ant-modal-confirm-body {
       text-align: center;
-      >span{
+      > span {
         display: none;
       }
     }
@@ -266,7 +268,7 @@
   button {
     width: 144px;
     height: 38px;
-    background: #0066ff;
+    background: #06f;
     border-radius: 22px;
   }
 }

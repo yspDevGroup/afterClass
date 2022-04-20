@@ -1,3 +1,5 @@
+@import '../../theme.less';
+
 .selectedPage {
   position: relative;
   height: 100vh;
@@ -315,11 +317,18 @@
     }
   }
 
-  .apply {
+  .footer {
     position: fixed;
-    right: 20px;
     bottom: 15px;
+    display: flex;
+    flex-direction: row-reverse;
+    width: 100%;
+    max-width: @mobileMaxWidth;
+  }
+
+  .apply {
     width: 80px;
+    max-width: 480px;
     color: #3e88f8;
     text-align: center;
 
