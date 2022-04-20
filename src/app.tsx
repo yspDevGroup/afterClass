@@ -343,6 +343,7 @@ export const request: RequestConfig = {
         path !== '/' &&
         !path.startsWith(authCallbackPath) &&
         !path.startsWith('/40') &&
+        !path.startsWith('/user/parent') &&
         (ctx.res.message?.includes('Authorization token is invalid') ||
           ctx.res.message?.includes('Invalid Token'))
       ) {
