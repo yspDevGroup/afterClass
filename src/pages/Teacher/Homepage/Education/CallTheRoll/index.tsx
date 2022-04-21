@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { history, useModel } from 'umi';
 import dayjs from 'dayjs';
-import { Modal, Table, Button, Switch, message, notification, Tooltip } from 'antd';
+import { Modal, Table, Button, Switch, message, Tooltip } from 'antd';
 import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
 import { enHenceMsg } from '@/utils/utils';
 import GoBack from '@/components/GoBack';
@@ -219,11 +219,7 @@ const CallTheRoll = (props: any) => {
         }
         if (futureSta) {
           setButDis('undo');
-          notification.warning({
-            message: '',
-            description: '本节课尚未开始点名',
-            duration: 4,
-          });
+          message.warning('本节课尚未开始点名');
         }
       }
     } else {
@@ -444,7 +440,7 @@ const CallTheRoll = (props: any) => {
   ];
   return (
     <MobileCon>
-      <div className={styles.callTheRoll}>
+      <div className={styles.callTheRoll} id="DM">
         <GoBack title="课堂点名" teacher onclick="/teacher/home?index=education" />
         <div className={styles.rollHeader}>
           <div>
