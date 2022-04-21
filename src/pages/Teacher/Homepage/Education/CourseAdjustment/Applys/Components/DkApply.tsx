@@ -2,8 +2,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-15 11:14:11
- * @LastEditTime: 2021-12-13 09:31:47
- * @LastEditors: zpl
+ * @LastEditTime: 2022-04-21 14:55:16
+ * @LastEditors: Wu Zhan
  */
 import { useEffect, useState } from 'react';
 import { Button, Form, Input, message, Select } from 'antd';
@@ -64,7 +64,7 @@ const DkApply = () => {
         BQRId: currentUser.JSId || testTeacherId,
         KHBJSJId: dateData?.bjid,
         XXSJPZId: dateData?.jcId,
-        DKRId: DKJsId
+        DKRId: DKJsId,
       });
       history.push('/teacher/education/resign');
     } else {
@@ -87,7 +87,6 @@ const DkApply = () => {
         setDateData([]);
         form.resetFields();
         history.push('/teacher/education/courseAdjustment');
-
       } else {
         message.error(res.message);
       }
@@ -105,11 +104,12 @@ const DkApply = () => {
         <ClassCalendar setDatedata={setDateData} type="dksq" form={form} />
         <Form
           name="basic"
-          labelCol={{ span: 8 }}
-          wrapperCol={{ span: 16 }}
+          // labelCol={{ span: 8 }}
+          // wrapperCol={{ span: 16 }}
           autoComplete="off"
           form={form}
           onFinish={onFinish}
+          layout="vertical"
         >
           <div className={styles.verticalTk}>
             <Form.Item

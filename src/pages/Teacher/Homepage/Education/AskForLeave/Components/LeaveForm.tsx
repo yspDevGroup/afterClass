@@ -2,8 +2,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-15 11:14:11
- * @LastEditTime: 2021-12-09 10:20:55
- * @LastEditors: Sissle Lynn
+ * @LastEditTime: 2022-04-21 14:52:56
+ * @LastEditors: Wu Zhan
  */
 import { useState } from 'react';
 import { Button, Form, Input, message } from 'antd';
@@ -118,11 +118,12 @@ const LeaveForm = () => {
         <ClassCalendar setDatedata={setDateData} type="edit" form={form} />
         <Form
           name="basic"
-          labelCol={{ span: 8 }}
-          wrapperCol={{ span: 16 }}
+          // labelCol={{ span: 8 }}
+          // wrapperCol={{ span: 16 }}
           autoComplete="off"
           form={form}
           onFinish={onFinish}
+          layout="vertical"
         >
           <Form.Item label="QJLX" name="QJLX" hidden={true} initialValue="按课时请假">
             <Input />

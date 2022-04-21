@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-15 11:14:11
- * @LastEditTime: 2022-04-20 10:21:59
+ * @LastEditTime: 2022-04-21 14:06:42
  * @LastEditors: Wu Zhan
  */
 import { useState } from 'react';
@@ -80,9 +80,10 @@ const LeaveForm = (props: {
       <div className={styles.wrapper}>
         <ClassCalendar setDatedata={setDateData} type="edit" form={form} />
         <Form
+          layout="vertical"
           name="basic"
-          labelCol={{ span: 8 }}
-          wrapperCol={{ span: 16 }}
+          // labelCol={{ span: 8 }}
+          // wrapperCol={{ span: 16 }}
           autoComplete="off"
           form={form}
           onFinish={onFinish}

@@ -177,13 +177,16 @@
         :global {
           .ant-form-item {
             display: flex;
+            flex-direction: row;
+            align-items: center;
             justify-content: space-between;
             padding: 6px 10px;
 
             .ant-form-item-label {
               width: 80px;
               max-width: 80px !important;
-
+              padding-bottom: 0 !important;
+              // vertical-align: middle;
               label {
                 color: #333;
                 font-size: 14px;

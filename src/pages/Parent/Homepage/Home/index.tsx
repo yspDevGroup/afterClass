@@ -204,7 +204,7 @@ const Home = () => {
       <header className={styles.cusHeader} style={{ backgroundImage: `url(${index_header})` }}>
         <div className={styles.headerText}>
           <h4>
-            <span>{`${ParentalIdentity || '家长'}，你好！`}</span>
+            <span>{`${ParentalIdentity}家长，你好！`}</span>
           </h4>
           <div className={styles.NjBj}>
             <div>{currentUser?.QYMC || ''}</div>

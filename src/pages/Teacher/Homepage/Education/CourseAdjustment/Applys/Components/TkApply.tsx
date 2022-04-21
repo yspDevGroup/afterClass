@@ -2,8 +2,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-15 11:14:11
- * @LastEditTime: 2021-12-20 15:49:26
- * @LastEditors: Sissle Lynn
+ * @LastEditTime: 2022-04-21 14:59:49
+ * @LastEditors: Wu Zhan
  */
 import { useEffect, useState } from 'react';
 import { Button, DatePicker, Form, Input, message, Radio, Select, Tabs } from 'antd';
@@ -81,7 +81,6 @@ const TkApply = () => {
   }, [NewRQ, NewKSSJ, NewJSSJ]);
   useEffect(() => {
     (async () => {
-
       const oriData = await ParentHomeData(
         'teacher',
         currentUser?.xxId,
@@ -89,7 +88,7 @@ const TkApply = () => {
       );
       const { xnxqId } = oriData.data;
       setTermId(xnxqId);
-      if(xnxqId){
+      if (xnxqId) {
         const opt = {
           XNXQId: xnxqId,
           XXJBSJId: currentUser.xxId,
@@ -244,17 +243,15 @@ const TkApply = () => {
         >
           <TabPane tab="自由调课" key="1">
             <p>选择时间与场地进行调课</p>
-            <Form
-              name="basic"
-              labelCol={{ span: 8 }}
-              wrapperCol={{ span: 16 }}
-              autoComplete="off"
-              form={form}
-              onFinish={onFinish}
-            >
+            <Form name="basic" autoComplete="off" form={form} onFinish={onFinish} layout="vertical">
               <p className={styles.tkhsj}>调课后时间</p>
               <div className={styles.kcbjTk}>
-                <Form.Item name="TKRQ" label="日期">
+                <Form.Item
+                  name="TKRQ"
+                  label="日期"
+                  labelCol={{ span: 8 }}
+                  wrapperCol={{ span: 16 }}
+                >
                   <DatePicker
                     disabledDate={disabledDate}
                     inputReadOnly={true}
@@ -268,7 +265,12 @@ const TkApply = () => {
                 </Form.Item>
               </div>
               <div className={styles.kcbjTk}>
-                <Form.Item name="KSSJ" label="节次">
+                <Form.Item
+                  name="KSSJ"
+                  label="节次"
+                  labelCol={{ span: 8 }}
+                  wrapperCol={{ span: 16 }}
+                >
                   <Select
                     placeholder="请选择"
                     onChange={(value: string) => {
