@@ -2,7 +2,7 @@
  * @description: 西安教育信息化综合服务平台登录
  * @author: zpl
  * @Date: 2022-03-15 15:30:49
- * @LastEditTime: 2022-03-29 20:12:21
+ * @LastEditTime: 2022-04-21 15:03:21
  * @LastEditors: zpl
  */
 import { useEffect, useState } from 'react';
@@ -41,13 +41,15 @@ const Index = () => {
         access_token: data!,
       });
       // 刷新全局属性后向首页跳转
-      if (initialState) {
-        const userInfo = await initialState.fetchUserInfo?.();
-        setInitialState({ ...initialState, currentUser: { ...userInfo, type: '系统管理员' } });
+      const userInfo = await initialState?.fetchUserInfo?.();
+      if (userInfo) {
+        setInitialState({ ...initialState!, currentUser: { ...userInfo, type: '系统管理员' } });
         history.replace('/');
-      } else {
-        history.push(`/403?title=登录失败，请联系管理员&message=${message}`);
+        return;
       }
+      history.push(`/403?title=登录失败，请联系管理员&message=${userInfo}`);
+    } else {
+      history.push(`/403?title=登录失败，请联系管理员&message=${message}`);
     }
   };
 
