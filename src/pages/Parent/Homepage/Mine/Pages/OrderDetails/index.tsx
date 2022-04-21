@@ -3,12 +3,13 @@
 /* eslint-disable array-callback-return */
 import React, { useEffect, useRef, useState } from 'react';
 import { history, useModel } from 'umi';
-import { message, Statistic } from 'antd';
+import QRCode from 'qrcode.react';
+import { Button, message, Modal, Statistic } from 'antd';
 import { CheckCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
-import { overdueKHXSDD, deleteKHXSDD, payKHXSDD } from '@/services/after-class/khxsdd';
+import { overdueKHXSDD, deleteKHXSDD, payKHXSDD, getKHXSDD } from '@/services/after-class/khxsdd';
 import moment from 'moment';
 import styles from './index.less';
-import { enHenceMsg } from '@/utils/utils';
+import { enHenceMsg, envjudge } from '@/utils/utils';
 import GoBack from '@/components/GoBack';
 import MobileCon from '@/components/MobileCon';
 
@@ -21,11 +22,19 @@ const OrderDetails: React.FC = (props: any) => {
   const { currentUser } = initialState || {};
   const { title, detail, payOrder, user, KKRQ, JKRQ, fwdetail } = props.location.state;
   const name = user?.subscriber_info?.remark || user?.username;
+  const [visible, setVisible] = useState<boolean>(false);
+  const isWepay = envjudge() === 'wx-mobile' || envjudge() === 'com-wx-mobile';
   useEffect(() => {
     setOrderInfo(payOrder);
   }, [payOrder]);
   useEffect(() => {
-    linkRef.current?.click();
+    if (urlPath) {
+      if (isWepay) {
+        linkRef.current?.click();
+      } else {
+        setVisible(true);
+      }
+    }
   }, [urlPath]);
 
   const handlePay = async () => {
@@ -69,6 +78,22 @@ const OrderDetails: React.FC = (props: any) => {
       history.go(-1);
     } else {
       enHenceMsg(res.message);
+    }
+  };
+
+  // // 付款完成接口
+  const onClickFK = async () => {
+    if (orderInfo?.id) {
+      const res = await getKHXSDD({
+        id: orderInfo.id,
+      });
+      if (res.status === 'ok') {
+        if (res.data?.DDZT === '待付款') {
+          message.warning('您暂未付款，请先扫码支付');
+        } else if (res.data?.DDZT === '已付款') {
+          history.push('/parent/home?index=index');
+        }
+      }
     }
   };
   const handleFinish = async () => {
@@ -243,12 +268,53 @@ const OrderDetails: React.FC = (props: any) => {
                   去支付
                 </button>
               )}
+
               <a style={{ visibility: 'hidden' }} ref={linkRef} href={urlPath} />
             </div>
           ) : (
             ''
           )}
         </div>
+
+        {/* 弹出支付二维码 */}
+        <Modal
+          visible={visible}
+          // onOk={handleOk}
+          onCancel={() => {
+            setVisible(false);
+          }}
+          bodyStyle={{
+            height: '250px',
+            textAlign: 'center',
+            display: 'flex',
+            justifyContent: 'space-evenly',
+            alignItems: 'center',
+            flexDirection: 'column',
+          }}
+          closable={false}
+          className={styles.showagreement}
+          footer={[
+            <Button
+              shape="round"
+              key="submit"
+              onClick={() => {
+                setVisible(false);
+              }}
+            >
+              取消支付
+            </Button>,
+            <Button shape="round" key="submit" type="primary" onClick={onClickFK}>
+              支付完成
+            </Button>,
+          ]}
+        >
+          <h3> 用微信扫码支付，逾期订单将自动取消</h3>
+          {urlPath && (
+            <div>
+              <QRCode className={styles.QRCodeQrCode} value={urlPath} size={140} />
+            </div>
+          )}
+        </Modal>
       </MobileCon>
     );
   }
@@ -256,4 +322,3 @@ const OrderDetails: React.FC = (props: any) => {
 };
 
 export default OrderDetails;
-

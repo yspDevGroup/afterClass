@@ -10,6 +10,7 @@ import IconFont from '@/components/CustomIcon';
 import { getXXTZGG } from '@/services/after-class/xxtzgg';
 import moment from 'moment';
 import GroupS from '@/assets/GroupS.png';
+import MobileCon from '@/components/MobileCon';
 
 const EmptyArticle = (props: any) => {
   const { BJMC, ParentalIdentity } = props.location.state;
@@ -137,99 +138,102 @@ const EmptyArticle = (props: any) => {
   };
 
   return (
-    <div className={styles.AfterClassCoach}>
-      <div className={styles.goBack}>
-        <div
-          className={styles.tp}
-          onClick={() => {
-            history.push('/parent/home?index=index');
-          }}
-        >
-          <IconFont type="icon-gengduo" />
-        </div>{' '}
-        <div className={styles.wz}>课后服务</div>
-      </div>
-      <header className={styles.cusHeader} style={{ backgroundImage: `url(${index_header})` }}>
-        <div className={styles.headerText}>
-          <h4>
-            <span>{ParentalIdentity || '家长'}</span>
-            ，你好！
-          </h4>
-          <div className={styles.NjBj}>
-            <div>{currentUser?.QYMC || ''}</div>
-            <div>{BJMC || ''}</div>
-          </div>
-        </div>
-      </header>
-      <div className={styles.EmptyPage}>
-        {FWKCData ? (
-          <div className={styles.text}>
-            <p>课后服务协议书</p>
-            <Divider />
-
-            <div dangerouslySetInnerHTML={{ __html: KHFUXY }} className={styles.content} />
-            {/* <div className={styles.box} style={{ backgroundImage: `url(${EmptyBGC})` }} /> */}
-          </div>
-        ) : (
-          <div className={styles.noData}>
-            <img src={noCourses} alt="" />
-            <p>本班级暂未开设课后服务</p>
-          </div>
-        )}
-      </div>
-
-      {FWKCData ? (
-        <div className={styles.footer}>
-          <div className={styles.agreement}>
-            <Checkbox onChange={onFxChange} checked={Xystate}>
-              <span>我已阅读并同意《课后服务协议书》</span>
-            </Checkbox>
-          </div>
-          <button
-            disabled={!Xystate}
+    <MobileCon>
+      <div className={styles.AfterClassCoach}>
+        <div className={styles.goBack}>
+          <div
+            className={styles.tp}
             onClick={() => {
-              setModalVisible(true);
+              history.push('/parent/home?index=index');
             }}
           >
-            我要报名
-          </button>
+            <IconFont type="icon-gengduo" />
+          </div>{' '}
+          <div className={styles.wz}>课后服务</div>
         </div>
-      ) : (
-        <></>
-      )}
-
-      <Modal
-        title="确认报名"
-        visible={ModalVisible}
-        onOk={handleOks}
-        onCancel={() => {
-          setModalVisible(false);
-        }}
-        closable={false}
-        className={styles.signUpModal}
-        okText="确认"
-        cancelText="取消"
-      >
-        <div>
-          <p>系统将为您报名所有未报名时段，您也可以指定部分时段进行报名。</p>
-          <div style={{ marginBottom: 16 }} className={styles?.TimeInterval}>
-            {tagChild}
+        <header className={styles.cusHeader} style={{ backgroundImage: `url(${index_header})` }}>
+          <div className={styles.headerText}>
+            <h4>
+              <span>{ParentalIdentity || '家长'}</span>
+              ，你好！
+            </h4>
+            <div className={styles.NjBj}>
+              <div>{currentUser?.QYMC || ''}</div>
+              <div>{BJMC || ''}</div>
+            </div>
           </div>
+        </header>
+        <div className={styles.EmptyPage}>
+          {FWKCData ? (
+            <div className={styles.text}>
+              <p>课后服务协议书</p>
+              <Divider />
+
+              <div dangerouslySetInnerHTML={{ __html: KHFUXY }} className={styles.content} />
+              {/* <div className={styles.box} style={{ backgroundImage: `url(${EmptyBGC})` }} /> */}
+            </div>
+          ) : (
+            <div className={styles.noData}>
+              <img src={noCourses} alt="" />
+              <p>本班级暂未开设课后服务</p>
+            </div>
+          )}
         </div>
-      </Modal>
-      <Modal className={styles.SignIn} visible={IsModalVisible} footer={null} closable={false}>
-        <img src={GroupS} alt="" />
-        <h3>报名成功</h3>
-        <Button
-          type="primary"
-          onClick={() => {
-            setIsModalVisible(false);
-            history.push('/parent/home/afterClassCoach/interestClassroom');
-          }}>
-          我知道了
-        </Button>
-      </Modal>
-    </div>
+
+        {FWKCData ? (
+          <div className={styles.footer}>
+            <div className={styles.agreement}>
+              <Checkbox onChange={onFxChange} checked={Xystate}>
+                <span>我已阅读并同意《课后服务协议书》</span>
+              </Checkbox>
+            </div>
+            <button
+              disabled={!Xystate}
+              onClick={() => {
+                setModalVisible(true);
+              }}
+            >
+              我要报名
+            </button>
+          </div>
+        ) : (
+          <></>
+        )}
+
+        <Modal
+          title="确认报名"
+          visible={ModalVisible}
+          onOk={handleOks}
+          onCancel={() => {
+            setModalVisible(false);
+          }}
+          closable={false}
+          className={styles.signUpModal}
+          okText="确认"
+          cancelText="取消"
+        >
+          <div>
+            <p>系统将为您报名所有未报名时段，您也可以指定部分时段进行报名。</p>
+            <div style={{ marginBottom: 16 }} className={styles?.TimeInterval}>
+              {tagChild}
+            </div>
+          </div>
+        </Modal>
+        <Modal className={styles.SignIn} visible={IsModalVisible} footer={null} closable={false}>
+          <img src={GroupS} alt="" />
+          <h3>报名成功</h3>
+          <Button
+            type="primary"
+            onClick={() => {
+              setIsModalVisible(false);
+              history.push('/parent/home/afterClassCoach/interestClassroom');
+            }}
+          >
+            我知道了
+          </Button>
+        </Modal>
+      </div>
+    </MobileCon>
   );
 };
 export default EmptyArticle;

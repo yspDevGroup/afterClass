@@ -57,7 +57,7 @@
       background-color: #fff;
       border-radius: 8px;
 
-      .xx>* {
+      .xx > * {
         height: 16px !important;
         font-size: 14px !important;
         line-height: 22px !important;
@@ -199,7 +199,7 @@
     height: 100%;
     background: rgba(0, 0, 0, 0.4);
 
-    >div {
+    > div {
       position: fixed;
       top: calc(~'50% - 170px');
       left: 5vw;
@@ -230,6 +230,88 @@
         background-color: #15b628;
         border: none;
         border-radius: 19px;
+      }
+    }
+  }
+}
+
+.showagreement {
+  top: 0 !important;
+  width: 80% !important;
+  max-width: calc(@mobileMaxWidth - 120px);
+  margin: 0 auto;
+  margin-top: calc(50vh - 260px) !important;
+  padding: 0 !important;
+
+  .ZWSJ {
+    color: #999;
+    font-size: 12px;
+    text-align: center;
+
+    img {
+      display: block;
+      width: 180px;
+      margin: 0 auto;
+      margin-top: 30px;
+    }
+  }
+
+  .title {
+    font-weight: bold;
+  }
+
+  :global {
+    .ant-modal-content {
+      min-width: 100% !important;
+      border-radius: 22px;
+      .ant-modal-footer {
+        .ant-btn {
+          margin-left: 0 !important;
+        }
+      }
+    }
+
+    .ant-modal-body {
+      width: 100% !important;
+      padding: 16px;
+
+      > p:nth-child(1) {
+        font-size: 16px;
+        text-align: center;
+      }
+
+      > div {
+        // height: 400px;
+        overflow: auto;
+      }
+
+      > div::-webkit-scrollbar {
+        display: none;
+      }
+    }
+
+    .ant-modal-footer {
+      display: flex;
+      justify-content: space-around;
+      height: 60px !important;
+      border-top: none;
+
+      .ant-btn-primary {
+        color: #fff !important;
+        background-color: #15b628;
+        border: none;
+        border-radius: 22px !important;
+      }
+
+      .ant-btn {
+        // flex: 30%;
+        width: 40% !important;
+        height: 38px !important;
+        color: #15b628;
+        font-size: 16px !important;
+        border: none;
+        border: 1px solid #15b628;
+        border-radius: 22px !important;
       }
     }
   }

@@ -8,4 +8,10 @@ module.exports = {
     'no-restricted-syntax': 0,
     'react-hooks/exhaustive-deps': 0,
   },
+  env: {
+    es6: true,
+    browser: true,
+    node: true,
+    commonjs: true,
+  },
 };
