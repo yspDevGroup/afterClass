@@ -91,7 +91,10 @@ const SignIn = () => {
   return (
     <div className={styles.SignIn}>
       <p className={styles.title}>教师实时签到</p>
-      <div className={styles.wrap} style={{ backgroundImage: `url(${TeacherQD})` }}>
+      <div
+        className={styles.wrap}
+        style={{ backgroundImage: `url(${TeacherQD})`, backgroundSize: 'cover' }}
+      >
         <p>
           <span className={styles.titles}>应到教师数</span>
           <span>

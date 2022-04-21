@@ -276,11 +276,9 @@
 
   .payment {
     position: fixed;
-    top: 0;
-    right: 0;
     bottom: 0;
-    left: 0;
     width: 100%;
+    max-width: @mobileMaxWidth;
     height: 100%;
     background: rgba(0, 0, 0, 0.4);
 
@@ -434,6 +432,7 @@
       bottom: 14px;
       display: block;
       width: calc(~'100% - 28px');
+      max-width: calc(@mobileMaxWidth - 28px);
       height: 38px;
       color: #fff;
       background: #15b628;
@@ -562,6 +561,7 @@
 .showagreement {
   top: 0 !important;
   width: 92% !important;
+  max-width: calc(@mobileMaxWidth - 40px);
   margin: 0 auto;
   margin-top: calc(50vh - 260px) !important;
   padding: 0 !important;
