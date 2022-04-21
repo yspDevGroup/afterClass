@@ -36,7 +36,7 @@ const Mine = () => {
       <header className={styles.cusHeader}>
         <div className={styles.headerPop} style={{ backgroundImage: `url(${imgPop})` }} />
         <div className={styles.header}>
-          <Image width={46} height={46} src={currentUser?.avatar} fallback={defUserImg} />
+          <Image width={46} height={46} src={currentUser?.avatar || defUserImg} />
           <div className={styles.headerName}>
             <h4>
               <span ref={userRef}>
