@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-15 11:14:11
- * @LastEditTime: 2022-04-21 14:55:16
+ * @LastEditTime: 2022-04-22 16:41:32
  * @LastEditors: Wu Zhan
  */
 import { useEffect, useState } from 'react';
@@ -142,7 +142,8 @@ const DkApply = () => {
       <div className={styles.fixedBtn}>
         <Button
           onClick={() => {
-            history.push('/teacher/education/courseAdjustment');
+            history.go(-1);
+            // history.push('/teacher/education/courseAdjustment');
           }}
         >
           取消

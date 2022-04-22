@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-26 10:30:36
- * @LastEditTime: 2022-04-22 14:40:42
+ * @LastEditTime: 2022-04-22 17:46:18
  * @LastEditors: Wu Zhan
  */
 import { useEffect, useState } from 'react';
@@ -312,20 +312,20 @@ const NewPatrol = (props: any) => {
                 />
               )}
             </div>
-            <div className={styles.footer}>
-              <button className={styles.btn} onClick={() => history.go(-1)}>
-                {check ? '返回' : '取消'}
-              </button>
-              {check ? (
-                ''
-              ) : (
-                <button className={styles.btnes} onClick={handleSubmit}>
-                  提交
-                </button>
-              )}
-            </div>
           </div>
         </div>
+      </div>
+      <div className={styles.footer}>
+        <button className={styles.btn} onClick={() => history.go(-1)}>
+          {check ? '返回' : '取消'}
+        </button>
+        {check ? (
+          ''
+        ) : (
+          <button className={styles.btnes} onClick={handleSubmit}>
+            提交
+          </button>
+        )}
       </div>
     </MobileCon>
   );
