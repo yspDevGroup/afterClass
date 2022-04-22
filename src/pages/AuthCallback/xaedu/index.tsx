@@ -2,7 +2,7 @@
  * @description: 西安教育信息化综合服务平台登录
  * @author: zpl
  * @Date: 2022-03-15 15:30:49
- * @LastEditTime: 2022-04-21 15:03:21
+ * @LastEditTime: 2022-04-22 15:23:04
  * @LastEditors: zpl
  */
 import { useEffect, useState } from 'react';
@@ -57,6 +57,7 @@ const Index = () => {
     const res = await validateUrl({
       ticket: query.ticket as string,
       service: callbackUrl,
+      plat: 'school',
     });
     const { status, data } = res;
     if (status === 'ok') {
