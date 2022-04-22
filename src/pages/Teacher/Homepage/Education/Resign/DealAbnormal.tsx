@@ -2,8 +2,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-12-06 15:46:41
- * @LastEditTime: 2021-12-09 10:49:58
- * @LastEditors: Sissle Lynn
+ * @LastEditTime: 2022-04-22 10:20:21
+ * @LastEditors: Wu Zhan
  */
 import React, { useEffect, useState } from 'react';
 import { Link, useModel } from 'umi';
@@ -16,6 +16,7 @@ import { CreateJSCQBQ } from '@/services/after-class/jscqbq';
 import { getAllJSCQBQ } from '@/services/after-class/jscqbq';
 import moment from 'moment';
 import { queryXNXQList } from '@/services/local-services/xnxq';
+import MobileCon from '@/components/MobileCon';
 
 const { TextArea } = Input;
 const getCountDays = (curMonth: number) => {
@@ -127,7 +128,7 @@ const DealAbnormal = (props: any) => {
   }, [data]);
 
   return (
-    <>
+    <MobileCon>
       <GoBack title={'教师补签'} teacher onclick="/teacher/education/resign" />
       <div className={styles.dealWrapper}>
         <div className={styles.card}>
@@ -254,7 +255,7 @@ const DealAbnormal = (props: any) => {
           )}
         </Modal>
       </div>
-    </>
+    </MobileCon>
   );
 };
 

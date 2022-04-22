@@ -2,8 +2,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-12-06 09:46:54
- * @LastEditTime: 2022-02-09 14:17:54
- * @LastEditors: zpl
+ * @LastEditTime: 2022-04-22 10:14:56
+ * @LastEditors: Wu Zhan
  */
 import React, { useEffect, useState } from 'react';
 import { List } from 'antd';
@@ -15,6 +15,7 @@ import noOrder from '@/assets/noOrder1.png';
 import icon_resign from '@/assets/icon_resign.png';
 import styles from './index.less';
 import { getAllJSCQBQ } from '@/services/after-class/jscqbq';
+import MobileCon from '@/components/MobileCon';
 
 const Resign: React.FC = () => {
   const { initialState } = useModel('@@initialState');
@@ -47,7 +48,7 @@ const Resign: React.FC = () => {
   }, [XNXQId]);
 
   return (
-    <>
+    <MobileCon>
       <GoBack title={'补签记录'} teacher onclick="/teacher/home?index=education" />
       <div className={styles.resignList} style={{ background: '#fff' }}>
         <div className={styles.listWrapper}>
@@ -95,19 +96,21 @@ const Resign: React.FC = () => {
             </div>
           )}
         </div>
-        <div
-          className={styles.apply}
-          onClick={() => {
-            history.push('/teacher/education/resign/dealList');
-          }}
-        >
-          <div>
-            <img src={icon_resign} />
+        <div className={styles.footer}>
+          <div
+            className={styles.apply}
+            onClick={() => {
+              history.push('/teacher/education/resign/dealList');
+            }}
+          >
+            <div>
+              <img src={icon_resign} />
+            </div>
+            我要补签
           </div>
-          我要补签
         </div>
       </div>
-    </>
+    </MobileCon>
   );
 };
 

@@ -2,8 +2,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-12-06 09:46:54
- * @LastEditTime: 2021-12-07 17:22:20
- * @LastEditors: Sissle Lynn
+ * @LastEditTime: 2022-04-22 10:19:35
+ * @LastEditors: Wu Zhan
  */
 import React, { useEffect, useState } from 'react';
 import { Button } from 'antd';
@@ -15,6 +15,7 @@ import GoBack from '@/components/GoBack';
 
 import noOrder from '@/assets/noOrder1.png';
 import styles from './index.less';
+import MobileCon from '@/components/MobileCon';
 
 const DealList: React.FC = () => {
   const { initialState } = useModel('@@initialState');
@@ -53,7 +54,7 @@ const DealList: React.FC = () => {
   }, []);
   // const newDay = moment.HTML5_FMT(new Date()).format('YYYY')
   return (
-    <>
+    <MobileCon>
       <GoBack title={'我要补签'} teacher onclick="/teacher/education/resign" />
       <div className={styles.resignList}>
         <div className={styles.listWrapper}>
@@ -103,7 +104,7 @@ const DealList: React.FC = () => {
           )}
         </div>
       </div>
-    </>
+    </MobileCon>
   );
 };
 
