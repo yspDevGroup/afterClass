@@ -49,7 +49,8 @@ const EvaluationDetails = (props: any) => {
         <div className={styles.header}>
           <img src={state?.KHKCSJ?.KCTP || noPic} alt="" />
           <div>
-            <p>{state?.KHBJSJ?.KHKCSJ?.KCMC}</p>
+            {/* value?.KHKCSJ?.KCMC */}
+            <p>{state?.KHKCSJ?.KCMC}</p>
             <p>班级：{state?.BJMC}</p>
             <p>任课教师：{state?.KHBJJs?.[0].JZGJBSJ?.XM}</p>
           </div>
