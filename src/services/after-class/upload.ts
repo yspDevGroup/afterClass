@@ -4,7 +4,7 @@ import { request } from 'umi';
 
 /** 上传文件 POST /upload/uploadFile */
 export async function uploadFile(options?: { [key: string]: any }) {
-  return request<{ status?: 'ok' | 'error'; data?: string; message?: string }>(
+  return request<{ status: 'ok' | 'error'; data?: string; message?: string }>(
     '/upload/uploadFile',
     {
       method: 'POST',
@@ -15,14 +15,11 @@ export async function uploadFile(options?: { [key: string]: any }) {
 
 /** 导入教师信息 POST /upload/importTeachers */
 export async function importTeachers(
-  params: {
-    // query
-    /** 登录平台类型 */
-    plat?: string;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.importTeachersParams,
   options?: { [key: string]: any },
 ) {
-  return request<{ status?: 'ok' | 'error'; data?: string; message?: string }>(
+  return request<{ status: 'ok' | 'error'; data?: string; message?: string }>(
     '/upload/importTeachers',
     {
       method: 'POST',
@@ -36,7 +33,7 @@ export async function importTeachers(
 
 /** 导入场地信息 POST /upload/importSites */
 export async function importSites(options?: { [key: string]: any }) {
-  return request<{ status?: 'ok' | 'error'; data?: string; message?: string }>(
+  return request<{ status: 'ok' | 'error'; data?: string; message?: string }>(
     '/upload/importSites',
     {
       method: 'POST',
@@ -47,7 +44,7 @@ export async function importSites(options?: { [key: string]: any }) {
 
 /** 导入学生信息 POST /upload/importStudents */
 export async function importStudents(options?: { [key: string]: any }) {
-  return request<{ status?: 'ok' | 'error'; data?: string; message?: string }>(
+  return request<{ status: 'ok' | 'error'; data?: string; message?: string }>(
     '/upload/importStudents',
     {
       method: 'POST',
@@ -58,11 +55,8 @@ export async function importStudents(options?: { [key: string]: any }) {
 
 /** 企业微信教师导入 POST /upload/importWechatTeachers */
 export async function importWechatTeachers(
-  params: {
-    // query
-    /** 登录平台类型 */
-    plat?: string;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.importWechatTeachersParams,
   options?: { [key: string]: any },
 ) {
   return request<any>('/upload/importWechatTeachers', {
@@ -88,7 +82,7 @@ export async function syncWechatTeachers(
   },
   options?: { [key: string]: any },
 ) {
-  return request<{ status?: 'ok' | 'error'; data?: string; message?: string }>(
+  return request<{ status: 'ok' | 'error'; data?: string; message?: string }>(
     '/upload/syncWechatTeachers',
     {
       method: 'POST',
@@ -113,7 +107,7 @@ export async function syncWechatStudents(
   },
   options?: { [key: string]: any },
 ) {
-  return request<{ status?: 'ok' | 'error'; data?: string; message?: string }>(
+  return request<{ status: 'ok' | 'error'; data?: string; message?: string }>(
     '/upload/syncWechatStudents',
     {
       method: 'POST',
@@ -128,7 +122,7 @@ export async function syncWechatStudents(
 
 /** 导入行政班学生列表进行报名 POST /upload/importStudentSignUp */
 export async function importStudentSignUp(options?: { [key: string]: any }) {
-  return request<{ status?: 'ok' | 'error'; data?: any[]; message?: string }>(
+  return request<{ status: 'ok' | 'error'; data?: any[]; message?: string }>(
     '/upload/importStudentSignUp',
     {
       method: 'POST',
@@ -139,7 +133,7 @@ export async function importStudentSignUp(options?: { [key: string]: any }) {
 
 /** 导入教师巡课安排 POST /upload/importTeacherXKAP */
 export async function importTeacherXKAP(options?: { [key: string]: any }) {
-  return request<{ status?: 'ok' | 'error'; data?: any[]; message?: string }>(
+  return request<{ status: 'ok' | 'error'; data?: any[]; message?: string }>(
     '/upload/importTeacherXKAP',
     {
       method: 'POST',
