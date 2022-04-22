@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-26 10:30:36
- * @LastEditTime: 2022-04-20 10:35:01
+ * @LastEditTime: 2022-04-22 14:40:42
  * @LastEditors: Wu Zhan
  */
 import { useEffect, useState } from 'react';
@@ -10,7 +10,6 @@ import { Input, InputNumber, message, Switch } from 'antd';
 import { useModel, history } from 'umi';
 import GoBack from '@/components/GoBack';
 import ShowName from '@/components/ShowName';
-
 import styles from '../index.less';
 import moment from 'moment';
 import { getAllKHXSCQ } from '@/services/after-class/khxscq';

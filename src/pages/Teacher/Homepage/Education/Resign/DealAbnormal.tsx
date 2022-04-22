@@ -2,12 +2,12 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-12-06 15:46:41
- * @LastEditTime: 2022-04-22 10:20:21
+ * @LastEditTime: 2022-04-22 16:47:58
  * @LastEditors: Wu Zhan
  */
 import React, { useEffect, useState } from 'react';
 import { Link, useModel } from 'umi';
-import { Button, Divider, Input, List, message, Modal } from 'antd';
+import { Button, Input, List, message, Modal } from 'antd';
 import { getAllKHJSCQ } from '@/services/after-class/khjscq';
 import { ParentHomeData } from '@/services/local-services/mobileHome';
 import GoBack from '@/components/GoBack';
@@ -204,11 +204,18 @@ const DealAbnormal = (props: any) => {
                   </Button>,
                 ]
               : [
-                  <Button key="back" onClick={() => setVisible(false)}>
+                  <Button
+                    key="back"
+                    style={{
+                      color: '#3874c5',
+                      border: '1px solid #3874c5',
+                    }}
+                    onClick={() => setVisible(false)}
+                  >
                     取消
                   </Button>,
-                  <Divider type="vertical" />,
-                  <Button key="submit" type="link" onClick={() => handleResign()}>
+
+                  <Button key="submit" type="primary" onClick={() => handleResign()}>
                     确认
                   </Button>,
                 ]

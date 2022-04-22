@@ -125,33 +125,48 @@
     }
 
     .ant-modal-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
+      margin-top: 20px;
+      text-align: center !important;
 
-      .ant-divider {
-        border-left: 1px solid #dde2e8;
-      }
-
-      button {
-        padding: 0;
-        border: none;
+      .ant-btn {
+        width: 45% !important;
+        border-radius: 22px !important;
       }
     }
+    // .ant-modal-footer {
+    //   display: flex;
+    //   align-items: center;
+    //   justify-content: space-around;
+
+    //   .ant-divider {
+    //     border-left: 1px solid #dde2e8;
+    //   }
+
+    //   button {
+    //     padding: 0;
+    //     border: none;
+    //   }
+    // }
   }
 }
 
 .operationModal {
-  width: 70% !important;
-  max-width: calc(@mobileMaxWidth - 40px) !important;
+  width: 260px !important;
+  max-width: @mobileMaxWidth;
   :global {
     .ant-modal-title {
       font-weight: normal !important;
       line-height: 16px !important;
       text-align: center;
     }
+    .ant-modal-content {
+      width: 260px !important;
+      // max-width: calc(@mobileMaxWidth - 30%);
+      min-width: 0 !important;
+    }
 
     .ant-modal-body {
+      width: 100%;
       padding: 16px 24px;
 
       li {
