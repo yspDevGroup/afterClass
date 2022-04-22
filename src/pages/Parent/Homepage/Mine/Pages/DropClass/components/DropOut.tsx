@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-10-09 10:48:20
- * @LastEditTime: 2022-03-28 17:08:29
+ * @LastEditTime: 2022-04-22 10:46:03
  * @LastEditors: Wu Zhan
  */
 /* eslint-disable no-nested-ternary */
@@ -65,8 +65,8 @@ const DropOut = () => {
         const finnalList = [].map.call(newArr, (val: any) => {
           const curCourse = data.find((v: any) => v.id === val.id);
           return {
-            YXKS: curCourse.YXKS,
-            ZKS: curCourse.ZKS,
+            YXKS: curCourse?.YXKS,
+            ZKS: curCourse?.ZKS,
             ...val,
           };
         });
