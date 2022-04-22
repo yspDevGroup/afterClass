@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/self-closing-comp */
 import React, { useEffect, useRef, useState } from 'react';
-import { Link, useModel, history } from 'umi';
+import { Link, useModel, history, useAccess } from 'umi';
 import index_header from '@/assets/index_header.png';
 import notice_icon from '@/assets/notice_icon.png';
 import AfterClass_icon from '@/assets/AfterClass_icon.png';
@@ -31,6 +31,7 @@ const Home = () => {
   }, []);
 
   const { initialState } = useModel('@@initialState');
+  const { isSso } = useAccess();
   const { currentUser } = initialState || {};
   const { student, external_contact } = currentUser || {};
   const [notification, setNotification] = useState<any>([]);
@@ -113,7 +114,11 @@ const Home = () => {
   useEffect(() => {
     const identity = external_contact?.subscriber_info?.remark?.split('/')?.[0].split('-')[1];
     const ParentalIdentitys = `${StorageXSName}${identity || ''}`;
-    setParentalIdentity(ParentalIdentitys);
+    if (isSso) {
+      setParentalIdentity(ParentalIdentitys + '家长');
+    } else {
+      setParentalIdentity(ParentalIdentitys);
+    }
   }, [StorageXSName]);
 
   useEffect(() => {
@@ -204,7 +209,7 @@ const Home = () => {
       <header className={styles.cusHeader} style={{ backgroundImage: `url(${index_header})` }}>
         <div className={styles.headerText}>
           <h4>
-            <span>{`${ParentalIdentity}家长，你好！`}</span>
+            <span>{`${ParentalIdentity}，你好！`}</span>
           </h4>
           <div className={styles.NjBj}>
             <div>{currentUser?.QYMC || ''}</div>

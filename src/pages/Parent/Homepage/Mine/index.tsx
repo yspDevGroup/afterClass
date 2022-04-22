@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Select } from 'antd';
-import { Link, useModel, history } from 'umi';
+import { Link, useModel, history, useAccess } from 'umi';
 import DisplayColumn from '@/components/DisplayColumn';
 import Statistical from './components/Statistical';
 import IconFont from '@/components/CustomIcon';
@@ -26,6 +26,7 @@ const Mine = (props: {
   const { initialState, setInitialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const { student, external_contact } = currentUser || {};
+  const { isSso } = useAccess();
   const { status } = props;
   const [totail, setTotail] = useState<boolean>(false);
   const [reload, setReload] = useState<boolean>(false);
@@ -47,6 +48,11 @@ const Mine = (props: {
     const identity = external_contact?.subscriber_info?.remark?.split('/')?.[0].split('-')[1];
     const ParentalIdentitys = `${StorageXSName}${identity || ''}`;
     setParentalIdentity(ParentalIdentitys);
+    if (isSso) {
+      setParentalIdentity(ParentalIdentitys + '家长');
+    } else {
+      setParentalIdentity(ParentalIdentitys);
+    }
   }, []);
 
   // 切换孩子
@@ -114,7 +120,7 @@ const Mine = (props: {
         <div className={styles.header}>
           {currentUser?.avatar ? <img src={currentUser?.avatar} /> : ''}
           <div className={styles.headerName}>
-            <h4>{ParentalIdentity || '家长'}</h4>
+            <h4>{ParentalIdentity}</h4>
             {currentUser?.authType === 'wechat' ? (
               <span>微信名：{currentUser?.username || currentUser?.name}</span>
             ) : (
