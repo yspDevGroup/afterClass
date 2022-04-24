@@ -2,7 +2,7 @@
 /* eslint-disable no-console */
 import React, { useRef, useState, useEffect } from 'react';
 import { useModel } from 'umi';
-import { Tag } from 'antd';
+import { Select, Tag } from 'antd';
 import { Input } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
@@ -13,27 +13,39 @@ import styles from './index.less';
 import { getAllXSJBSJ } from '@/services/after-class/xsjbsj';
 import EllipsisHint from '@/components/EllipsisHint';
 import SelectParent from './SelectParent';
+import { getAllBJSJ } from '@/services/after-class/bjsj';
+import { getGradesByCampus } from '@/services/after-class/njsj';
+import { getAllXQSJ } from '@/services/after-class/xqsj';
 
+type selectType = { label: string; value: string };
 const { Search } = Input;
 const StudentMaintenance = () => {
   // 列表对象引用，可主动执行刷新等操作
   const actionRef = useRef<ActionType>();
+  const [NjId, setNjId] = useState<any>();
+  const [NjData, setNjData] = useState<any>();
+  const [BJId, setBJId] = useState<string | undefined>(undefined);
+  const [bjData, setBJData] = useState<selectType[] | undefined>([]);
   const [dataSource, setDataSource] = useState<API.XSJBSJ[]>([]);
+  // 校区
+  const [campusId, setCampusId] = useState<string>();
+  const [campusData, setCampusData] = useState<any[]>();
   // 模态框的新增或编辑form定义
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [name, setName] = useState<string>();
   // const [Telephone, setTelephone] = useState<string>();
   const getData = async () => {
-    const obj = {
+    // const res = await getParent({});
+    const resAll = await getAllXSJBSJ({
       XXJBSJId: currentUser?.xxId,
       keyWord: name,
-      // LXDH: Telephone,
+      XQId: campusId,
+      BJId: BJId ? [BJId] : undefined,
+      NJId: NjId ? [NjId] : undefined,
       page: 0,
       pageSize: 0,
-    };
-    // const res = await getParent({});
-    const resAll = await getAllXSJBSJ(obj);
+    });
     if (resAll.status === 'ok' && resAll.data?.rows) {
       setDataSource(resAll.data.rows);
     } else {
@@ -134,10 +146,82 @@ const StudentMaintenance = () => {
     },
   ];
 
+  const getCampusData = async () => {
+    const res = await getAllXQSJ({
+      XXJBSJId: currentUser?.xxId,
+    });
+    if (res?.status === 'ok') {
+      const arr = res?.data?.map((item: any) => {
+        return {
+          label: item.XQMC,
+          value: item.id,
+        };
+      });
+      if (arr?.length) {
+        let id = arr?.find((item: any) => item.label === '本校')?.value;
+        if (!id) {
+          id = arr[0].value;
+        }
+        setCampusId(id);
+      }
+      setCampusData(arr);
+    }
+  };
+
+  const getBJSJ = async () => {
+    const res = await getAllBJSJ({ XQSJId: campusId, njId: NjId, page: 0, pageSize: 0 });
+    if (res.status === 'ok') {
+      const data = res.data?.rows?.map((item: any) => {
+        return { label: item.BJ, value: item.id };
+      });
+      setBJData(data);
+    }
+  };
+  const onBjChange = async (value: any) => {
+    setBJId(value);
+  };
+  const onNjChange = async (value: any) => {
+    setNjId(value);
+  };
+
+  const getNJSJ = async () => {
+    if (campusId) {
+      const res = await getGradesByCampus({
+        XQSJId: campusId,
+      });
+      if (res.status === 'ok') {
+        // console.log('res', res);
+        setNjData(res.data);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (campusId) {
+      getNJSJ();
+      setBJId(undefined);
+      setNjId(undefined);
+    }
+  }, [campusId]);
+
+  useEffect(() => {
+    getCampusData();
+  }, []);
+
   useEffect(() => {
     getData();
-  }, [name]);
+  }, [name, BJId, NjId]);
 
+  useEffect(() => {
+    if (NjId) {
+      getBJSJ();
+      setBJId(undefined);
+    }
+  }, [NjId]);
+
+  const onCampusChange = (value: any) => {
+    setCampusId(value);
+  };
   return (
     <PageContainer cls={styles.roomWrapper}>
       <ProTable<any>
@@ -162,6 +246,38 @@ const StudentMaintenance = () => {
                   setName(value);
                 }}
               />
+            </div>
+            <div>
+              <label htmlFor="grade">校区名称：</label>
+              <Select value={campusId} placeholder="请选择" onChange={onCampusChange}>
+                {campusData?.map((item: any) => {
+                  return (
+                    <Option key={item.value} value={item.value}>
+                      {item.label}
+                    </Option>
+                  );
+                })}
+              </Select>
+            </div>
+            <div>
+              <label htmlFor="grade">年级名称：</label>
+              <Select value={NjId} allowClear placeholder="请选择" onChange={onNjChange}>
+                {NjData?.map((item: any) => {
+                  return <Option key={item.id} value={item.id}>{`${item.XD}${item.NJMC}`}</Option>;
+                })}
+              </Select>
+            </div>
+            <div>
+              <label htmlFor="kcly">班级名称：</label>
+              <Select value={BJId} allowClear placeholder="班级名称" onChange={onBjChange}>
+                {bjData?.map((item: any) => {
+                  return (
+                    <Option value={item.value} key={item.value}>
+                      {item.label}
+                    </Option>
+                  );
+                })}
+              </Select>
             </div>
             {/* <div>
               <label htmlFor="type">联系电话：</label>
