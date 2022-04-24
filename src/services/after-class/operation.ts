@@ -6,9 +6,9 @@ import { request } from 'umi';
 export async function homePage(
   body: {
     /** 学年 */
-    XN: string;
+    XN?: string;
     /** 学期 */
-    XQ: string;
+    XQ?: string;
   },
   options?: { [key: string]: any },
 ) {
@@ -26,9 +26,9 @@ export async function homePage(
 export async function educations(
   body: {
     /** 学年 */
-    XN: string;
+    XN?: string;
     /** 学期 */
-    XQ: string;
+    XQ?: string;
     /** 页数 */
     page?: number;
     /** 每页记录数 */
@@ -50,9 +50,9 @@ export async function educations(
 export async function schools(
   body: {
     /** 学年 */
-    XN: string;
+    XN?: string;
     /** 学期 */
-    XQ: string;
+    XQ?: string;
     /** 页数 */
     page?: number;
     /** 每页记录数 */
@@ -74,9 +74,9 @@ export async function schools(
 export async function agencies(
   body: {
     /** 学年 */
-    XN: string;
+    XN?: string;
     /** 学期 */
-    XQ: string;
+    XQ?: string;
     /** 页数 */
     page?: number;
     /** 每页记录数 */

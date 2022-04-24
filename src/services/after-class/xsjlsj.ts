@@ -5,8 +5,8 @@ import { request } from 'umi';
 /** 创建学生奖励数据 PUT /xsjlsj/create */
 export async function createXSJLSJ(body: API.CreateXSJLSJ, options?: { [key: string]: any }) {
   return request<{
-    status: 'ok' | 'error';
-    data?: {
+    status?: 'ok' | 'error';
+    data: {
       id?: string;
       JLMC?: string;
       JLJBM?: string;
@@ -39,14 +39,14 @@ export async function getXSJLSJ(
     /** 学生ID */
     XSJBSJId?: string;
     /** 页数 */
-    page: number;
+    page?: number;
     /** 每页记录数 */
-    pageSize: number;
+    pageSize?: number;
   },
   options?: { [key: string]: any },
 ) {
   return request<{
-    status: 'ok' | 'error';
+    status?: 'ok' | 'error';
     data?: { count?: number; rows?: API.XSJLSJ[] };
     message?: string;
   }>('/xsjlsj/getAll', {
@@ -61,12 +61,15 @@ export async function getXSJLSJ(
 
 /** 删除学生奖励数据 DELETE /xsjlsj/${param0} */
 export async function deleteXSJLSJ(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.deleteXSJLSJParams,
+  params: {
+    // path
+    /** 学生奖励ID */
+    id: string;
+  },
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status: 'ok' | 'error'; message?: string }>(`/xsjlsj/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/xsjlsj/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
     ...(options || {}),
@@ -75,13 +78,16 @@ export async function deleteXSJLSJ(
 
 /** 更新学生奖励 PUT /xsjlsj/update/${param0} */
 export async function updateXSJLSJ(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.updateXSJLSJParams,
+  params: {
+    // path
+    /** 学生奖励数据ID */
+    id: string;
+  },
   body: API.UpdateXSJLSJ,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status: 'ok' | 'error'; message?: string }>(`/xsjlsj/update/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/xsjlsj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

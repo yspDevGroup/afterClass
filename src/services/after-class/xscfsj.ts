@@ -5,8 +5,8 @@ import { request } from 'umi';
 /** 创建学生处分数据 PUT /xscfsj/create */
 export async function createXSCFSJ(body: API.CreateXSCFSJ, options?: { [key: string]: any }) {
   return request<{
-    status: 'ok' | 'error';
-    data?: {
+    status?: 'ok' | 'error';
+    data: {
       id?: string;
       CFMCM?: string;
       CFYY?: string;
@@ -32,14 +32,14 @@ export async function getXSCFSJ(
     /** 学生ID */
     XSJBSJId?: string;
     /** 页数 */
-    page: number;
+    page?: number;
     /** 每页记录数 */
-    pageSize: number;
+    pageSize?: number;
   },
   options?: { [key: string]: any },
 ) {
   return request<{
-    status: 'ok' | 'error';
+    status?: 'ok' | 'error';
     data?: { count?: number; rows?: API.XSCFSJ[] };
     message?: string;
   }>('/xscfsj/getAll', {
@@ -54,12 +54,15 @@ export async function getXSCFSJ(
 
 /** 删除学生处分数据 DELETE /xscfsj/${param0} */
 export async function deleteXSCFSJ(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.deleteXSCFSJParams,
+  params: {
+    // path
+    /** 学生处分ID */
+    id: string;
+  },
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status: 'ok' | 'error'; message?: string }>(`/xscfsj/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/xscfsj/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
     ...(options || {}),
@@ -68,13 +71,16 @@ export async function deleteXSCFSJ(
 
 /** 更新学生处分 PUT /xscfsj/update/${param0} */
 export async function updateXSCFSJ(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.updateXSCFSJParams,
+  params: {
+    // path
+    /** 学生处分数据ID */
+    id: string;
+  },
   body: API.UpdateXSCFSJ,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status: 'ok' | 'error'; message?: string }>(`/xscfsj/update/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/xscfsj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

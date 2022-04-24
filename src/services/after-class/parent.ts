@@ -4,14 +4,17 @@ import { request } from 'umi';
 
 /** 获取家长信息 GET /parent/${param0} */
 export async function getDetail(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.getDetailParams,
+  params: {
+    // path
+    /** 家长ID */
+    id: string;
+  },
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
   return request<{
-    status: 'ok' | 'error';
-    data?: {
+    status?: 'ok' | 'error';
+    data: {
       id?: string;
       XM?: string;
       LXDH?: string;
@@ -39,12 +42,15 @@ export async function getDetail(
 
 /** 删除家长信息 DELETE /parent/${param0} */
 export async function deleteParent(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.deleteParentParams,
+  params: {
+    // path
+    /** 家长ID */
+    id: string;
+  },
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status: 'ok' | 'error'; message?: string }>(`/parent/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/parent/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
     ...(options || {}),
@@ -54,8 +60,8 @@ export async function deleteParent(
 /** 创建家长信息 PUT /parent/create */
 export async function createParent(body: API.CreateParent, options?: { [key: string]: any }) {
   return request<{
-    status: 'ok' | 'error';
-    data?: {
+    status?: 'ok' | 'error';
+    data: {
       id?: string;
       XM?: string;
       LXDH?: string;
@@ -96,7 +102,7 @@ export async function getParent(
   },
   options?: { [key: string]: any },
 ) {
-  return request<{ status: 'ok' | 'error'; data?: API.Parent[]; message?: string }>(
+  return request<{ status?: 'ok' | 'error'; data?: API.Parent[]; message?: string }>(
     '/parent/getAll',
     {
       method: 'POST',
@@ -111,13 +117,16 @@ export async function getParent(
 
 /** 更新家长信息 PUT /parent/update/${param0} */
 export async function updateParent(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.updateParentParams,
+  params: {
+    // path
+    /** 家长ID */
+    id: string;
+  },
   body: API.UpdateParent,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status: 'ok' | 'error'; message?: string }>(`/parent/update/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/parent/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -130,7 +139,7 @@ export async function updateParent(
 
 /** 家长导入 POST /parent/import */
 export async function importParent(options?: { [key: string]: any }) {
-  return request<{ status: 'ok' | 'error'; data?: string; message?: string }>('/parent/import', {
+  return request<{ status?: 'ok' | 'error'; data?: string; message?: string }>('/parent/import', {
     method: 'POST',
     ...(options || {}),
   });
@@ -140,15 +149,15 @@ export async function importParent(options?: { [key: string]: any }) {
 export async function bindParent(
   body: {
     /** 学校ID */
-    XXJBSJId: string;
+    XXJBSJId?: string;
     /** 学生ID */
-    XSJBSJId: string;
+    XSJBSJId?: string;
     /** 家长ID */
-    ParentIds: string[];
+    ParentIds?: string[];
   },
   options?: { [key: string]: any },
 ) {
-  return request<{ status: 'ok' | 'error'; data?: string; message?: string }>(
+  return request<{ status?: 'ok' | 'error'; data?: string; message?: string }>(
     '/parent/bindParent',
     {
       method: 'POST',

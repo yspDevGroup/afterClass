@@ -4,14 +4,17 @@ import { request } from 'umi';
 
 /** 根据ID获取教育局通知公告 GET /jyjgtzgg/${param0} */
 export async function JYJGTZGG(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.JYJGTZGGParams,
+  params: {
+    // path
+    /** 教育局通知公告ID */
+    id: string;
+  },
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
   return request<{
-    status: 'ok' | 'error';
-    data?: {
+    status?: 'ok' | 'error';
+    data: {
       id?: string;
       BT?: string;
       FBT?: string;
@@ -39,12 +42,15 @@ export async function JYJGTZGG(
 
 /** 删除教育局通知公告 DELETE /jyjgtzgg/${param0} */
 export async function deleteJYJGTZGG(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.deleteJYJGTZGGParams,
+  params: {
+    // path
+    /** 教育局通知公告ID */
+    id: string;
+  },
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status: 'ok' | 'error'; message?: string }>(`/jyjgtzgg/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/jyjgtzgg/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
     ...(options || {}),
@@ -54,8 +60,8 @@ export async function deleteJYJGTZGG(
 /** 创建教育局通知公告 PUT /jyjgtzgg/create */
 export async function createJYJGTZGG(body: API.CreateJYJGTZGG, options?: { [key: string]: any }) {
   return request<{
-    status: 'ok' | 'error';
-    data?: {
+    status?: 'ok' | 'error';
+    data: {
       id?: string;
       BT?: string;
       FBT?: string;
@@ -92,18 +98,18 @@ export async function getJYJGTZGG(
     /** 类型 */
     LX?: number;
     /** 行政区划码 */
-    XZQHM: string;
+    XZQHM?: string;
     /** 状态 */
-    ZT: string[];
+    ZT?: string[];
     /** 页数 */
-    page: number;
+    page?: number;
     /** 每页记录数 */
-    pageSize: number;
+    pageSize?: number;
   },
   options?: { [key: string]: any },
 ) {
   return request<{
-    status: 'ok' | 'error';
+    status?: 'ok' | 'error';
     data?: { count?: number; rows?: API.JYJGTZGG[] };
     message?: string;
   }>('/jyjgtzgg/getAll', {
@@ -118,13 +124,16 @@ export async function getJYJGTZGG(
 
 /** 更新教育局通知公告 PUT /jyjgtzgg/update/${param0} */
 export async function updateJYJGTZGG(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.updateJYJGTZGGParams,
+  params: {
+    // path
+    /** 教育局通知公告ID */
+    id: string;
+  },
   body: API.UpdateJYJGTZGG,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status: 'ok' | 'error'; message?: string }>(`/jyjgtzgg/update/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/jyjgtzgg/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
