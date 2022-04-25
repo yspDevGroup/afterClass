@@ -35,12 +35,12 @@ class MonthView extends PureComponent {
         ...formatMonthData(dayjsDate),
         ...formatWeekData(dayjsDate),
         currentDate,
-      }
+      };
     }
     return null;
   }
 
-  handleTouchMove = throttle(e => {
+  handleTouchMove = throttle((e) => {
     e.stopPropagation();
     const { disableWeekView } = this.props;
     const moveX = e.touches[0].clientX - this.touchStartPositionX;
@@ -54,20 +54,20 @@ class MonthView extends PureComponent {
       this.setState({ touch: { x: 0, y: moveY / calendarHeight } });
     }
     this.props.onTouchMove(e);
-  }, 25)
+  }, 25);
 
-  handleTouchStart = e => {
+  handleTouchStart = (e) => {
     e.stopPropagation();
     this.touchStartPositionX = e.touches[0].clientX;
     this.touchStartPositionY = e.touches[0].clientY;
     this.isTouching = true;
     this.props.onTouchStart(e);
-  }
+  };
 
-  handleTouchEnd = e => {
+  handleTouchEnd = (e) => {
     e.stopPropagation();
     const { showType } = this.state;
-    const { disableWeekView,disableMonthView } = this.props;
+    const { disableWeekView, disableMonthView } = this.props;
     const calendarHeight = this.calendarRef.current.offsetHeight;
     const { touch, translateIndex, currentMonthFirstDay, currenWeekFirstDay } = this.state;
     this.f = false;
@@ -80,7 +80,10 @@ class MonthView extends PureComponent {
 
       if (isMonthView) {
         // 月视图
-        const nextMonthFirstDay = currentMonthFirstDay[touch.x > 0 ? 'subtract' : 'add'](1, 'month');
+        const nextMonthFirstDay = currentMonthFirstDay[touch.x > 0 ? 'subtract' : 'add'](
+          1,
+          'month',
+        );
         const nextMonthStartDay = nextMonthFirstDay.startOf('week');
         const nextMonthEndDay = nextMonthStartDay.add(42, 'day');
         this.setState(
@@ -105,52 +108,52 @@ class MonthView extends PureComponent {
     } else if (absTouchY > absTouchX && Math.abs(touch.y * calendarHeight) > 50) {
       if (disableWeekView) {
         // 禁用周视图
-      } else if(disableMonthView){
+      } else if (disableMonthView) {
         // 禁用月视图
-      }else if (touch.y > 0 && showType === 'week') {
+      } else if (touch.y > 0 && showType === 'week') {
         this.setState({ showType: 'month' }, () => {
-          const dataArray = this.state.monthDates[1]
+          const dataArray = this.state.monthDates[1];
           this.props.onToggleShowType({
             showType: this.state.showType,
             startTime: dataArray[0].valueOf(),
             endTime: dataArray[dataArray.length - 1].add(1, 'day').valueOf(),
-          })
-        })
+          });
+        });
       } else if (touch.y < 0 && showType === 'month') {
         this.setState({ showType: 'week' }, () => {
-          const dataArray = this.state.weekDates[1]
+          const dataArray = this.state.weekDates[1];
           this.props.onToggleShowType({
             showType: this.state.showType,
             startTime: dataArray[0].valueOf(),
             endTime: dataArray[dataArray.length - 1].add(1, 'day').valueOf(),
-          })
-        })
+          });
+        });
       }
     }
-    this.setState({ touch: { x: 0, y: 0 } })
-  }
+    this.setState({ touch: { x: 0, y: 0 } });
+  };
 
-  handleMonthToggle = type => {
-    const { currentMonthFirstDay, currenWeekFirstDay, showType } = this.state
-    const isMonthView = showType === 'month'
-    const isPrev = type === 'prev'
-    const formatFun = isMonthView ? formatMonthData : formatWeekData
-    const operateDate = isMonthView ? currentMonthFirstDay : currenWeekFirstDay
+  handleMonthToggle = (type) => {
+    const { currentMonthFirstDay, currenWeekFirstDay, showType } = this.state;
+    const isMonthView = showType === 'month';
+    const isPrev = type === 'prev';
+    const formatFun = isMonthView ? formatMonthData : formatWeekData;
+    const operateDate = isMonthView ? currentMonthFirstDay : currenWeekFirstDay;
     const updateStateData = formatFun(
       operateDate[isPrev ? 'subtract' : 'add'](1, isMonthView ? 'month' : 'week'),
-    )
+    );
     this.setState(updateStateData, () => {
-      const dataArray = updateStateData[isMonthView ? 'monthDates' : 'weekDates'][1]
+      const dataArray = updateStateData[isMonthView ? 'monthDates' : 'weekDates'][1];
       this.props.onTouchEnd(
         dataArray[0].valueOf(),
         dataArray[dataArray.length - 1].add(1, 'day').valueOf(),
-      )
-    })
-  }
+      );
+    });
+  };
 
-  handleDayClick = date => {
-    this.props.onDateClick(date)
-  }
+  handleDayClick = (date) => {
+    this.props.onDateClick(date);
+  };
 
   handleBottomOperate() {}
 
@@ -164,23 +167,64 @@ class MonthView extends PureComponent {
       currentMonthFirstDay,
       currenWeekFirstDay,
       showType,
-    } = this.state
-    const { currentDate, transitionDuration, markDates, markType, disableWeekView, disableMonthView} = this.props
+    } = this.state;
+    const {
+      currentDate,
+      transitionDuration,
+      markDates,
+      markType,
+      exchangeType,
+      disableWeekView,
+      disableMonthView,
+    } = this.props;
     const isMonthView = showType === 'month';
     // console.log(markDates);
     return (
       <div className="react-h5-calendar">
-        <div className="calendar-operate">
-          <div className="icon left-icon" onClick={this.handleMonthToggle.bind(this, 'prev')}>
-            <img src={arrow} />
+        {exchangeType ? (
+          <div className="calendar-operate">
+            <div>{currentDate}</div>
+            <div className="calendar-change">
+              <div className="icon left-icon" onClick={this.handleMonthToggle.bind(this, 'prev')}>
+                <img src={arrow} />
+              </div>
+              <span
+                onClick={() => {
+                  this.props.onTodayClick?.();
+                  const dayjsDate = dayjs(currentDate);
+                  this.setState({
+                    ...formatMonthData(dayjsDate),
+                    ...formatWeekData(dayjsDate),
+                    currentDate,
+                  });
+                  // return {
+                  //   ...formatMonthData(dayjsDate),
+                  //   ...formatWeekData(dayjsDate),
+                  //   currentDate,
+                  // };
+                }}
+              >
+                本周
+              </span>
+              <div className="icon right-icon" onClick={this.handleMonthToggle.bind(this, 'next')}>
+                <img src={arrow} />
+              </div>
+            </div>
           </div>
-          <div>{(isMonthView ? currentMonthFirstDay : currenWeekFirstDay).format('YYYY-MM')}</div>
-          <div className="icon right-icon" onClick={this.handleMonthToggle.bind(this, 'next')}>
-            <img src={arrow} />
+        ) : (
+          <div className="calendar-operate">
+            <div className="icon left-icon" onClick={this.handleMonthToggle.bind(this, 'prev')}>
+              <img src={arrow} />
+            </div>
+            <div>{(isMonthView ? currentMonthFirstDay : currenWeekFirstDay).format('YYYY-MM')}</div>
+            <div className="icon right-icon" onClick={this.handleMonthToggle.bind(this, 'next')}>
+              <img src={arrow} />
+            </div>
           </div>
-        </div>
+        )}
+
         <div className="calendar-head">
-          {head.map(i => (
+          {head.map((i) => (
             <div className="head-cell" key={i}>
               {i}
             </div>
@@ -190,9 +234,9 @@ class MonthView extends PureComponent {
         <div
           className={`calendar-body ${isMonthView ? '' : 'week-mode'}`}
           ref={this.calendarRef}
-          onTouchStart={this.handleTouchStart}
-          onTouchMove={this.handleTouchMove}
-          onTouchEnd={this.handleTouchEnd}
+          // onTouchStart={this.handleTouchStart}
+          // onTouchMove={this.handleTouchMove}
+          // onTouchEnd={this.handleTouchEnd}
         >
           <div
             style={{
@@ -212,15 +256,17 @@ class MonthView extends PureComponent {
                   }}
                 >
                   {item.map((date, itemIndex) => {
-                    const isCurrentDay = date.isSame(currentDate, 'day')
+                    const isCurrentDay = date.isSame(currentDate, 'day');
                     const isOtherMonthDay =
-                      showType === 'week' ? false : !date.isSame(currentMonthFirstDay, 'month')
-                    const isMarkDate = markDates.find(i => date.isSame(i.date, 'day'))
-                    const resetMarkType = (isMarkDate && isMarkDate.markType) || markType
-                    const showDotMark = isCurrentDay ? false : isMarkDate && resetMarkType === 'dot'
+                      showType === 'week' ? false : !date.isSame(currentMonthFirstDay, 'month');
+                    const isMarkDate = markDates.find((i) => date.isSame(i.date, 'day'));
+                    const resetMarkType = (isMarkDate && isMarkDate.markType) || markType;
+                    const showDotMark = isCurrentDay
+                      ? false
+                      : isMarkDate && resetMarkType === 'dot';
                     const showCircleMark = isCurrentDay
                       ? false
-                      : isMarkDate && resetMarkType === 'circle'
+                      : isMarkDate && resetMarkType === 'circle';
                     return (
                       <div
                         key={itemIndex}
@@ -244,10 +290,10 @@ class MonthView extends PureComponent {
                           />
                         )}
                       </div>
-                    )
+                    );
                   })}
                 </div>
-              )
+              );
             })}
           </div>
         </div>
@@ -257,15 +303,17 @@ class MonthView extends PureComponent {
           </div>
         )}
       </div>
-    )
+    );
   }
 }
 
 MonthView.propTypes = {
   currentDate: PropTypes.string,
   showType: PropTypes.oneOf(['week', 'month']),
+  exchangeType: PropTypes.bool,
   transitionDuration: PropTypes.number,
   onDateClick: PropTypes.func,
+  onTodayClick: PropTypes.func,
   onTouchStart: PropTypes.func,
   onTouchMove: PropTypes.func,
   onTouchEnd: PropTypes.func,
@@ -274,13 +322,15 @@ MonthView.propTypes = {
   markDates: PropTypes.array,
   disableWeekView: PropTypes.bool,
   disableMonthView: PropTypes.bool,
-}
+};
 
 MonthView.defaultProps = {
   currentDate: dayjs().format('YYYY-MM-DD'),
   showType: 'month',
+  exchangeType: true,
   transitionDuration: 0.3,
   onDateClick: () => {},
+  onTodayClick: () => {},
   onTouchStart: () => {},
   onTouchMove: () => {},
   onTouchEnd: () => {},
@@ -289,6 +339,6 @@ MonthView.defaultProps = {
   markDates: [],
   disableWeekView: false,
   disableMonthView: true,
-}
+};
 
-export default MonthView
+export default MonthView;

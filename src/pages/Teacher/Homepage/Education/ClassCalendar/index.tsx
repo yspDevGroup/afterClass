@@ -58,7 +58,7 @@ const ClassCalendar = (props: propstype) => {
   const [modalContent, setModalContent] = useState<string>();
   const formRef = React.createRef<any>();
   const [choosenCourses, setChoosenCourses] = useState<any>([]);
-  const userId = currentUser.JSId || testTeacherId;
+  const userId = currentUser?.JSId || testTeacherId;
   const iconTextData: DisplayColumnItem[] =
     day === dayjs().format('YYYY-MM-DD')
       ? [
@@ -123,7 +123,7 @@ const ClassCalendar = (props: propstype) => {
               };
               history.push(`/teacher/education/putRecord`, {
                 bjid,
-                jsid: currentUser.JSId || '1a510d94-8980-4b8b-8150-f4c0ce5e7025',
+                jsid: currentUser?.JSId || '1a510d94-8980-4b8b-8150-f4c0ce5e7025',
                 data,
               });
             },
@@ -273,22 +273,17 @@ const ClassCalendar = (props: propstype) => {
   };
   return (
     <div className={styles.schedule}>
-      <span
-        className={styles.today}
-        onClick={() => {
+      <MobileCalendar
+        showType={'week'}
+        disableMonthView={true}
+        markDates={dates}
+        onTodayClick={() => {
           if ((type && type === 'edit') || type === 'dksq' || type === 'tksq') {
             form?.resetFields();
             setChoosenCourses([]);
           }
           changeDateList();
         }}
-      >
-        今
-      </span>
-      <MobileCalendar
-        showType={'week'}
-        disableMonthView={true}
-        markDates={dates}
         onDateClick={(date: { format: (arg: string) => any }) => {
           if ((type && type === 'edit') || type === 'dksq' || type === 'tksq') {
             if (!compareNow(date.format('YYYY-MM-DD'))) {

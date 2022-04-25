@@ -3,8 +3,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-25 09:20:56
- * @LastEditTime: 2022-04-20 10:33:06
- * @LastEditors: Wu Zhan
+ * @LastEditTime: 2022-04-25 10:53:36
+ * @LastEditors: Sissle Lynn
  */
 import { useEffect, useState } from 'react';
 import { Link, useModel } from 'umi';
@@ -35,7 +35,7 @@ const PatrolArrange = () => {
     const result = await queryXNXQList(currentUser?.xxId);
     if (result) {
       const res = await getScheduleByDate({
-        JZGJBSJId: currentUser.JSId || testTeacherId,
+        JZGJBSJId: currentUser?.JSId || testTeacherId,
         RQ: days,
         XNXQId: result?.current?.id,
         XXJBSJId: currentUser?.xxId,
@@ -52,7 +52,7 @@ const PatrolArrange = () => {
   };
   const getDateData = async (start?: string, end?: string) => {
     const res = await getXKrecordBydate({
-      JZGJBSJId: currentUser.JSId || testTeacherId,
+      JZGJBSJId: currentUser?.JSId || testTeacherId,
       StarDate: start || getWeekday(new Date(day)),
       EndDate: end || getWeekday(new Date(day), 'Saturday'),
       XXJBSJId: currentUser?.xxId,
@@ -77,6 +77,7 @@ const PatrolArrange = () => {
       <div className={styles.patrolWrapper}>
         <MobileCalendar
           showType={'week'}
+          exchangeType={false}
           disableMonthView={true}
           markDates={dates}
           markType="dot"

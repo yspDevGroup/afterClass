@@ -2,8 +2,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-26 10:30:36
- * @LastEditTime: 2022-04-22 17:46:18
- * @LastEditors: Wu Zhan
+ * @LastEditTime: 2022-04-25 10:53:55
+ * @LastEditors: Sissle Lynn
  */
 import { useEffect, useState } from 'react';
 import { Input, InputNumber, message, Switch } from 'antd';
@@ -59,7 +59,7 @@ const NewPatrol = (props: any) => {
     YDRS: signNum || bjxx?.xs_count,
     SDRS: checkNum,
     /** 巡课教师ID */
-    XKJSId: currentUser.JSId || testTeacherId,
+    XKJSId: currentUser?.JSId || testTeacherId,
     /** 授课教师ID */
     SKJSId: teacherInfo?.JZGJBSJId,
     /** 教室ID */

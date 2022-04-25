@@ -88,7 +88,6 @@ const ClassCalendar = (props: propstype) => {
     );
     const { markDays, data } = oriData;
     if (!type) {
-
       const weekDys = await getWeekCalendar('student', StorageXSId, start || day, data.bjIds);
       setDates(markDays.concat(weekDys));
     } else {
@@ -143,22 +142,17 @@ const ClassCalendar = (props: propstype) => {
   };
   return (
     <div className={styles.schedule}>
-      <span
-        className={styles.today}
-        onClick={() => {
+      <MobileCalendar
+        showType={'week'}
+        disableMonthView={true}
+        markDates={dates}
+        onTodayClick={() => {
           if (type && type === 'edit') {
             form?.resetFields();
             setChoosenCourses([]);
           }
           changeDateList();
         }}
-      >
-        今
-      </span>
-      <MobileCalendar
-        showType={'week'}
-        disableMonthView={true}
-        markDates={dates}
         onDateClick={(date: { format: (arg: string) => any }) => {
           if (type && type === 'edit') {
             if (!compareNow(date.format('YYYY-MM-DD'))) {
