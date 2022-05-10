@@ -42,6 +42,7 @@ import * as khkclx from './khkclx';
 import * as khkcpj from './khkcpj';
 import * as khkcsj from './khkcsj';
 import * as khkcsq from './khkcsq';
+import * as khkqxg from './khkqxg';
 import * as khktfc from './khktfc';
 import * as khpksj from './khpksj';
 import * as khtksj from './khtksj';
@@ -128,6 +129,7 @@ export default {
   khkcpj,
   khkcsj,
   khkcsq,
+  khkqxg,
   khktfc,
   khpksj,
   khtksj,

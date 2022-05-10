@@ -4,17 +4,14 @@ import { request } from 'umi';
 
 /** 获取课后服务数据 GET /khfwsj/${param0} */
 export async function getKHFWSJ(
-  params: {
-    // path
-    /** 课后服务ID */
-    id: string;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.getKHFWSJParams,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
   return request<{
-    status?: 'ok' | 'error';
-    data: {
+    status: 'ok' | 'error';
+    data?: {
       id?: string;
       FWMC?: string;
       FWMS?: string;
@@ -39,11 +36,8 @@ export async function getKHFWSJ(
 
 /** 更新课后服务数据 PUT /khfwsj/${param0} */
 export async function updateKHFWSJ(
-  params: {
-    // path
-    /** 课后服务ID */
-    id: string;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.updateKHFWSJParams,
   body: API.UpdateKHFWSJ,
   options?: { [key: string]: any },
 ) {
@@ -61,15 +55,12 @@ export async function updateKHFWSJ(
 
 /** 删除课后服务数据 DELETE /khfwsj/${param0} */
 export async function deleteKHFWSJ(
-  params: {
-    // path
-    /** 课后服务数据id */
-    id: string;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.deleteKHFWSJParams,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status?: 'ok' | 'error'; message?: string }>(`/khfwsj/${param0}`, {
+  return request<{ status: 'ok' | 'error'; message?: string }>(`/khfwsj/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
     ...(options || {}),
@@ -79,8 +70,8 @@ export async function deleteKHFWSJ(
 /** 新增课后服务数据 PUT /khfwsj/create */
 export async function createKHFWSJ(body: API.CreateKHFWSJ, options?: { [key: string]: any }) {
   return request<{
-    status?: 'ok' | 'error';
-    data: {
+    status: 'ok' | 'error';
+    data?: {
       id?: string;
       FWMC?: string;
       FWMS?: string;
@@ -119,7 +110,7 @@ export async function getAllKHFWSJ(
   options?: { [key: string]: any },
 ) {
   return request<{
-    status?: 'ok' | 'error';
+    status: 'ok' | 'error';
     data?: { count?: number; rows?: API.KHFWSJ[] };
     message?: string;
   }>('/khfwsj/getAll', {

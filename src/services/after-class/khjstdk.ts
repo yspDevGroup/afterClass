@@ -4,11 +4,8 @@ import { request } from 'umi';
 
 /** 获取课后服务教师调代课详情 GET /khjstdk/${param0} */
 export async function getKHJSTDK(
-  params: {
-    // path
-    /** 课后服务教师调代课ID */
-    id: string;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.getKHJSTDKParams,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
@@ -21,15 +18,12 @@ export async function getKHJSTDK(
 
 /** 删除课后服务教师调代课 DELETE /khjstdk/${param0} */
 export async function deleteKHJSTDK(
-  params: {
-    // path
-    /** 类型ID */
-    id: string;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.deleteKHJSTDKParams,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status?: 'ok' | 'error'; message?: string }>(`/khjstdk/${param0}`, {
+  return request<{ status: 'ok' | 'error'; message?: string }>(`/khjstdk/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
     ...(options || {}),
@@ -54,7 +48,7 @@ export async function getAllKHJSTDK(
     /** 换课班级ID */
     DESKHBJSJId?: string;
     /** 学校ID */
-    XXJBSJId?: string;
+    XXJBSJId: string;
     /** 页数 */
     page?: number;
     /** 每页记录数 */
@@ -63,7 +57,7 @@ export async function getAllKHJSTDK(
   options?: { [key: string]: any },
 ) {
   return request<{
-    status?: 'ok' | 'error';
+    status: 'ok' | 'error';
     data?: { count?: number; rows?: API.KHJSTDK[] };
     message?: string;
   }>('/khjstdk/getAll', {
@@ -79,8 +73,8 @@ export async function getAllKHJSTDK(
 /** 创建课后服务教师调代课 PUT /khjstdk/create */
 export async function createKHJSTDK(body: API.CreateKHJSTDK, options?: { [key: string]: any }) {
   return request<{
-    status?: 'ok' | 'error';
-    data: {
+    status: 'ok' | 'error';
+    data?: {
       id?: string;
       LX?: number;
       ZT?: number;
@@ -126,16 +120,13 @@ export async function createKHJSTDK(body: API.CreateKHJSTDK, options?: { [key: s
 
 /** 更新课后服务教师调代课 PUT /khjstdk/update/${param0} */
 export async function updateKHJSTDK(
-  params: {
-    // path
-    /** 课后服务教师调代课ID */
-    id: string;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.updateKHJSTDKParams,
   body: API.UpdateKHJSTDK,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status?: 'ok' | 'error'; message?: string }>(`/khjstdk/update/${param0}`, {
+  return request<{ status: 'ok' | 'error'; message?: string }>(`/khjstdk/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -159,7 +150,7 @@ export async function getTodaySubstitute(
   options?: { [key: string]: any },
 ) {
   return request<{
-    status?: 'ok' | 'error';
+    status: 'ok' | 'error';
     data?: { count?: number; rows?: API.KHJSTDK[] };
     message?: string;
   }>('/khjstdk/getTodaySubstitute', {
@@ -180,9 +171,9 @@ export async function getAllByAgency(
     /** 状态 */
     ZT?: number[];
     /** 学年 */
-    XN?: string;
+    XN: string;
     /** 学期 */
-    XQ?: string;
+    XQ: string;
     /** 授课教师ID */
     SKJSId?: string;
     /** 代课教师ID */
@@ -192,7 +183,7 @@ export async function getAllByAgency(
     /** 换课班级ID */
     DESKHBJSJId?: string;
     /** 机构ID */
-    KHJYJGId?: string;
+    KHJYJGId: string;
     /** 页数 */
     page?: number;
     /** 每页记录数 */
@@ -234,7 +225,7 @@ export async function createByAgency(
     /** 调课后场地ID */
     TKFJId?: string | any;
     /** 班级ID */
-    KHBJSJId?: string;
+    KHBJSJId: string;
     /** 换课班级ID */
     DESKHBJSJId?: string | any;
     /** 原定节次ID */
@@ -247,8 +238,8 @@ export async function createByAgency(
   options?: { [key: string]: any },
 ) {
   return request<{
-    status?: 'ok' | 'error';
-    data: {
+    status: 'ok' | 'error';
+    data?: {
       id?: string;
       LX?: number;
       ZT?: number;
@@ -294,11 +285,8 @@ export async function createByAgency(
 
 /** 根据ID更新课后服务机构教师调代课记录 PUT /khjstdk/updateAgency/${param0} */
 export async function updateAgency(
-  params: {
-    // path
-    /** 课后服务教师调代课ID */
-    id: string;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.updateAgencyParams,
   body: {
     /** 类型 */
     LX?: number;
@@ -331,12 +319,12 @@ export async function updateAgency(
     /** 换课班级ID */
     DESKHBJSJId?: string | any;
     /** 机构ID */
-    KHJYJGId?: string;
+    KHJYJGId: string;
   },
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status?: 'ok' | 'error'; message?: string }>(`/khjstdk/updateAgency/${param0}`, {
+  return request<{ status: 'ok' | 'error'; message?: string }>(`/khjstdk/updateAgency/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -351,11 +339,11 @@ export async function updateAgency(
 export async function getSubClassByTeacher(
   body: {
     /** 开始日期 */
-    startDate?: string;
+    startDate: string;
     /** 结束日期 */
-    endDate?: string;
+    endDate: string;
     /** 教师ID */
-    JZGJBSJId?: string;
+    JZGJBSJId: string;
   },
   options?: { [key: string]: any },
 ) {

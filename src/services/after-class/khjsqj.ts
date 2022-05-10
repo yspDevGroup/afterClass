@@ -4,17 +4,14 @@ import { request } from 'umi';
 
 /** 获取课后服务教师请假记录 GET /khjsqj/${param0} */
 export async function getKHJSQJ(
-  params: {
-    // path
-    /** 教师请假记录ID */
-    id: string;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.getKHJSQJParams,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
   return request<{
-    status?: 'ok' | 'error';
-    data: {
+    status: 'ok' | 'error';
+    data?: {
       id?: string;
       KSSJ?: string;
       JSSJ?: string;
@@ -41,15 +38,12 @@ export async function getKHJSQJ(
 
 /** 删除课后服务教师请假记录 DELETE /khjsqj/${param0} */
 export async function deleteKHJSQJ(
-  params: {
-    // path
-    /** 类型ID */
-    id: string;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.deleteKHJSQJParams,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status?: 'ok' | 'error'; message?: string }>(`/khjsqj/${param0}`, {
+  return request<{ status: 'ok' | 'error'; message?: string }>(`/khjsqj/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
     ...(options || {}),
@@ -60,7 +54,7 @@ export async function deleteKHJSQJ(
 export async function getAllKHJSQJ(
   body: {
     /** 学校ID */
-    XXJBSJId?: string;
+    XXJBSJId: string;
     /** 班级ID */
     KHBJSJId?: string;
     /** 教师ID */
@@ -93,8 +87,8 @@ export async function getAllKHJSQJ(
 /** 创建课后服务教师请假记录 PUT /khjsqj/create */
 export async function createKHJSQJ(body: API.CreateKHJSQJ, options?: { [key: string]: any }) {
   return request<{
-    status?: 'ok' | 'error';
-    data: {
+    status: 'ok' | 'error';
+    data?: {
       id?: string;
       KSSJ?: string;
       JSSJ?: string;
@@ -124,16 +118,13 @@ export async function createKHJSQJ(body: API.CreateKHJSQJ, options?: { [key: str
 
 /** 更新课后服务教师请假记录 PUT /khjsqj/update/${param0} */
 export async function updateKHJSQJ(
-  params: {
-    // path
-    /** 教师请假记录ID */
-    id: string;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.updateKHJSQJParams,
   body: API.UpdateKHJSQJ,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status?: 'ok' | 'error'; message?: string }>(`/khjsqj/update/${param0}`, {
+  return request<{ status: 'ok' | 'error'; message?: string }>(`/khjsqj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
