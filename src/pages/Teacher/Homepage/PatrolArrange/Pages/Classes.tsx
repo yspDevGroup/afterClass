@@ -2,38 +2,39 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-25 17:55:59
- * @LastEditTime: 2022-04-20 10:33:47
- * @LastEditors: Wu Zhan
+ * @LastEditTime: 2022-05-10 10:47:53
+ * @LastEditors: Sissle Lynn
  */
 import { useEffect, useState } from 'react';
-import { Divider } from 'antd';
+import { Divider, Input } from 'antd';
 import { Link } from 'umi';
 import { getCourseSchedule } from '@/services/after-class/khxksj';
-import GoBack from '@/components/GoBack';
-
-import styles from '../index.less';
 import { queryXNXQList } from '@/services/local-services/xnxq';
+import GoBack from '@/components/GoBack';
 import MobileCon from '@/components/MobileCon';
 
+import styles from '../index.less';
+
+const { Search } = Input;
 const PatrolArrange = (props: any) => {
   const { id, day, xxId, kcmc } = props?.location?.state;
   const [classData, setClassData] = useState<any>([]);
   // 是否可以巡课
   const [available, setAvailable] = useState<boolean>(true);
+  // 获取当前学年学期
+  const [termId, setTermId] = useState<string>();
   const today = new Date();
   const nowDay = new Date(day);
-  const getData = async () => {
-    const result = await queryXNXQList(xxId);
-    if (result) {
-      const res = await getCourseSchedule({
-        KHKCSJId: id,
-        RQ: day,
-        XNXQId: result?.current?.id,
-        XXJBSJId: xxId,
-      });
-      if (res.status === 'ok' && res.data) {
-        setClassData(res.data);
-      }
+  const getData = async (name?: string) => {
+    const res = await getCourseSchedule({
+      KHKCSJId: id,
+      RQ: day,
+      BJMC: name,
+      XNXQId: termId!,
+      XXJBSJId: xxId,
+    });
+    if (res.status === 'ok' && res.data) {
+      setClassData(res.data);
     }
   };
   useEffect(() => {
@@ -44,8 +45,18 @@ const PatrolArrange = (props: any) => {
     ) {
       setAvailable(false);
     }
-    getData();
+    (async () => {
+      const result = await queryXNXQList(xxId);
+      if (result) {
+        setTermId(result?.current?.id);
+      }
+    })();
   }, []);
+  useEffect(() => {
+    if (termId) {
+      getData();
+    }
+  }, [termId]);
 
   return (
     <MobileCon>
@@ -54,6 +65,15 @@ const PatrolArrange = (props: any) => {
         <div className={styles.patrolContent}>
           <div className={styles.patrolClass}>
             <h4>{kcmc}</h4>
+            <div style={{ marginBottom: 12 }}>
+              <Search
+                placeholder="请输入班级名称"
+                onSearch={(value) => {
+                  getData(value);
+                }}
+                enterButton
+              />
+            </div>
             <ul>
               {classData?.length
                 ? classData.map((item: any) => {
