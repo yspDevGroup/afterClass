@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-26 10:30:36
- * @LastEditTime: 2022-04-25 10:53:55
+ * @LastEditTime: 2022-05-10 12:19:58
  * @LastEditors: Sissle Lynn
  */
 import { useEffect, useState } from 'react';
@@ -42,6 +42,7 @@ const NewPatrol = (props: any) => {
   const [hisId, setHisId] = useState<string>();
 
   const teacherInfo = skxx?.KCBSKJSSJs?.find((item: any) => item?.JSLX === 1);
+  const subTeachers = skxx?.KCBSKJSSJs?.filter((item: any) => item?.JSLX === 0);
   const roominfo = skxx?.FJSJ;
   const recordDetail: API.CreateKHXKJL = {
     /** 巡课日期 */
@@ -135,7 +136,7 @@ const NewPatrol = (props: any) => {
       /** 实到人数是否准确 */
       RSSFZQ: checkIn ? accurate : false,
       SDRS: checkNum,
-      QRRS: realNum,
+      QRRS: accurate ? checkNum : realNum,
     };
     //修改
     if (hisId) {
@@ -184,7 +185,7 @@ const NewPatrol = (props: any) => {
                   <span>{bjxx?.BJMC}</span>
                 </li>
                 <li>
-                  <label>任课教师</label>
+                  <label>主教师</label>
                   <span>
                     <ShowName
                       XM={teacherInfo?.JZGJBSJ?.XM}
@@ -193,6 +194,39 @@ const NewPatrol = (props: any) => {
                     />
                   </span>
                 </li>
+                {subTeachers?.length ? (
+                  <li style={{ height: 'auto' }}>
+                    <label style={{ width: 60 }}>副教师</label>
+                    <span
+                      style={{
+                        flex: `0 0 calc(100% - 60px)`,
+                        textAlign: 'right',
+                      }}
+                    >
+                      {subTeachers?.map(
+                        (item: { JZGJBSJ: { XM: string; WechatUserId: string }; id: string }) => {
+                          return (
+                            <span
+                              key={item?.id}
+                              style={{
+                                marginLeft: 6,
+                                display: 'inline-block',
+                              }}
+                            >
+                              <ShowName
+                                XM={item?.JZGJBSJ?.XM}
+                                type="userName"
+                                openid={item?.JZGJBSJ?.WechatUserId}
+                              />
+                            </span>
+                          );
+                        },
+                      )}
+                    </span>
+                  </li>
+                ) : (
+                  ''
+                )}
                 <li>
                   <label>上课教室</label>
                   <span>{roominfo?.FJMC}</span>
