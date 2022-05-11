@@ -2850,12 +2850,12 @@ declare namespace API {
     CQRQ?: string;
     /** 申请人ID */
     SQRId?: string;
-    SQR?: { id?: string; XM?: string; WechatUserId?: string } | any;
+    SQR?: { id?: string; GH?: string; XM?: string; WechatUserId?: string } | any;
     /** 申请备注信息 */
     SQBZXX?: string;
     /** 审批人ID */
     SPRId?: string;
-    SPR?: { id?: string; XM?: string; WechatUserId?: string } | any;
+    SPR?: { id?: string; GH?: string; XM?: string; WechatUserId?: string } | any;
     /** 审批备注信息 */
     SPBZXX?: string;
     /** 节次ID */

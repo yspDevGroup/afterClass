@@ -43,6 +43,8 @@ export async function login(
     CorpId?: string;
     /** 应用ID */
     suiteID?: string;
+    /** 应用编码 */
+    appCode?: string;
     /** 企微用户ID */
     UserId?: string;
     /** 企微票据 */

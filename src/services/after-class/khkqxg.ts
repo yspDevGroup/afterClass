@@ -16,10 +16,10 @@ export async function getKHKQXG(
       ZT?: number;
       CQRQ?: string;
       SQRId?: string;
-      SQR?: { id?: string; XM?: string; WechatUserId?: string } | any;
+      SQR?: { id?: string; GH?: string; XM?: string; WechatUserId?: string } | any;
       SQBZXX?: string;
       SPRId?: string;
-      SPR?: { id?: string; XM?: string; WechatUserId?: string } | any;
+      SPR?: { id?: string; GH?: string; XM?: string; WechatUserId?: string } | any;
       SPBZXX?: string;
       XXSJPZId?: string;
       XXSJPZ?: {
@@ -101,10 +101,10 @@ export async function createKHKQXG(body: API.CreateKHKQXG, options?: { [key: str
       ZT?: number;
       CQRQ?: string;
       SQRId?: string;
-      SQR?: { id?: string; XM?: string; WechatUserId?: string } | any;
+      SQR?: { id?: string; GH?: string; XM?: string; WechatUserId?: string } | any;
       SQBZXX?: string;
       SPRId?: string;
-      SPR?: { id?: string; XM?: string; WechatUserId?: string } | any;
+      SPR?: { id?: string; GH?: string; XM?: string; WechatUserId?: string } | any;
       SPBZXX?: string;
       XXSJPZId?: string;
       XXSJPZ?: {
