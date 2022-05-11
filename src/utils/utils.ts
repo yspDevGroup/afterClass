@@ -55,7 +55,6 @@ export const getBuildOptions = async (): Promise<BuildOptions> => {
         ssoHost: 'http://sso.prod.xianyunshipei.com',
         xaeduSsoHost: 'http://www.xaedu.cloud',
         crpHost: 'http://crpweb.prod.xianyunshipei.com',
-        clientId: '00002',
       };
     case 'chanming':
       // 禅鸣环境
@@ -65,7 +64,6 @@ export const getBuildOptions = async (): Promise<BuildOptions> => {
         ENV_host: 'http://afterclass.wuyu.imzhiliao.com',
         ssoHost: 'http://sso.wuyu.imzhiliao.com',
         crpHost: 'http://crpweb.wuyu.imzhiliao.com',
-        clientId: '00002',
       };
     case '9dy':
       // 9朵云环境
@@ -75,7 +73,6 @@ export const getBuildOptions = async (): Promise<BuildOptions> => {
         ENV_host: 'http://afterclass.9cloudstech.com',
         ssoHost: 'http://sso.9cloudstech.com',
         crpHost: 'http://crpweb.9cloudstech.com',
-        clientId: '00002',
       };
     case 'development':
       // 开发测试环境
@@ -85,7 +82,6 @@ export const getBuildOptions = async (): Promise<BuildOptions> => {
         ENV_host: 'http://afterclass.test.xianyunshipei.com',
         ssoHost: 'http://sso.test.xianyunshipei.com',
         crpHost: 'http://crpweb.test.xianyunshipei.com',
-        clientId: '00002',
       };
     default:
       // 默认为local，本地开发模式下请在此处修改配置，但不要提交此处修改
@@ -96,7 +92,6 @@ export const getBuildOptions = async (): Promise<BuildOptions> => {
         ssoHost: 'http://platform.test.xianyunshipei.com',
         crpHost: 'http://crpweb.test.xianyunshipei.com',
         // crpHost: 'http://localhost:8001',
-        clientId: '00002',
       };
   }
 };
@@ -250,7 +245,7 @@ type GetLoginPathProps = {
  * @return {*}  {string}
  */
 export const getLoginPath = ({ suiteID, buildOptions, reLogin }: GetLoginPathProps): string => {
-  const { ssoHost, ENV_host, xaeduSsoHost, clientId } = buildOptions || {};
+  const { ssoHost, ENV_host, xaeduSsoHost } = buildOptions || {};
   const authType: AuthType = (localStorage.getItem('authType') as AuthType) || 'local';
   let loginPath: string;
   switch (authType) {
@@ -270,7 +265,7 @@ export const getLoginPath = ({ suiteID, buildOptions, reLogin }: GetLoginPathPro
         const callback = encodeURIComponent(`${ENV_host}/auth_callback/password`);
         const url = new URL(`${ssoHost}/oauth2/password`);
         url.searchParams.append('response_type', authType);
-        url.searchParams.append('client_id', clientId || '');
+        url.searchParams.append('client_id', ENV_clientId);
         url.searchParams.append('logo', `${ENV_host}/logo.png`);
         url.searchParams.append('title', `${ENV_title}`);
         url.searchParams.append('subtitle', `${ENV_subTitle}`);
@@ -291,7 +286,7 @@ export const getLoginPath = ({ suiteID, buildOptions, reLogin }: GetLoginPathPro
  * @return {*}
  */
 export const getCrpUrl = (buildOptions: BuildOptions, isAdmin: '0' | '1') => {
-  const { crpHost, clientId, ENV_host } = buildOptions;
+  const { crpHost, ENV_host } = buildOptions;
   const url = new URL(crpHost);
   url.pathname = '/auth_callback/thirdPart';
 
@@ -301,7 +296,7 @@ export const getCrpUrl = (buildOptions: BuildOptions, isAdmin: '0' | '1') => {
   const params = JSON.stringify({ plat: 'school' });
 
   url.searchParams.append('url_api', url_api);
-  url.searchParams.append('clientId', clientId || '');
+  url.searchParams.append('clientId', ENV_clientId);
   url.searchParams.append('token_type', ysp_token_type || 'Bearer');
   url.searchParams.append('access_token', ysp_access_token || '');
   url.searchParams.append('params', params);

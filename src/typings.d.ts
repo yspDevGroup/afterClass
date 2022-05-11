@@ -161,6 +161,7 @@ declare const REACT_APP_ENV: 'test' | 'dev' | 'pre' | false;
 
 declare const ENV_title: string;
 declare const ENV_subTitle: string;
+declare const ENV_clientId: '00002';
 declare const ENV_debug: boolean;
 declare const testStudentId: string;
 declare const testStudentNJId: string;
@@ -200,8 +201,6 @@ type BuildOptions = {
   ssoHost: string;
   /** 西安教育平台认证地址 */
   xaeduSsoHost?: string;
-  /** 注册的应用id，学校端固定为00002 */
-  clientId: '00002';
   /** 素质教育资源地址 */
   crpHost: string;
 };

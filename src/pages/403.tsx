@@ -2,8 +2,8 @@
  * @description: 鉴权失败界面
  * @author: zpl
  * @Date: 2021-07-14 17:11:16
- * @LastEditTime: 2022-04-15 18:24:34
- * @LastEditors: Wu Zhan
+ * @LastEditTime: 2022-05-11 11:43:39
+ * @LastEditors: Sissle Lynn
  */
 import { history, useModel } from 'umi';
 import { Button, Result } from 'antd';
@@ -49,7 +49,7 @@ const NotFind = () => {
             onClick={() => {
               if (isFalg) {
                 const loginPath = getLoginPath({
-                  suiteID: initialState?.buildOptions?.clientId || '',
+                  suiteID: ENV_clientId,
                   buildOptions: initialState?.buildOptions,
                   reLogin: 'true',
                 });
