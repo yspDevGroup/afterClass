@@ -2,7 +2,7 @@
  * @description: OAuth认证回调页面，password模式，本页面会先写入本地token缓存并触发身份信息获取，然后跳转向权限对应的页面
  * @author: zpl
  * @Date: 2021-07-14 16:54:06
- * @LastEditTime: 2022-05-11 11:56:28
+ * @LastEditTime: 2022-05-11 11:58:11
  * @LastEditors: Sissle Lynn
  */
 import { useEffect } from 'react';
