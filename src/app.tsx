@@ -48,7 +48,7 @@ export async function getInitialState(): Promise<InitialState> {
       case 'password':
       default:
         res = await queryCurrentUser({ plat: 'school' });
-        console.log('res', res);
+        // console.log('res', res);
 
         if (res.status === 'ok') {
           const data = res?.data;

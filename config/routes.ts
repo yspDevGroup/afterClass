@@ -299,6 +299,12 @@
         name: 'resignManagement',
         component: './Manager/ResignManagement',
       },
+      // 学生考勤更改审批管理
+      {
+        path: '/audit/recheckManagement',
+        name: 'recheckManagement',
+        component: './Manager/RecheckManagement',
+      },
     ],
   },
   {
@@ -700,6 +706,31 @@
         name: 'newPatrol',
         icon: 'smile',
         component: './Teacher/Homepage/PatrolArrange/Pages/NewPatrol',
+      },
+      // 学生考勤
+      {
+        path: '/teacher/education/studentRecord',
+        name: 'studentRecord',
+        hideInMenu: 'true',
+        component: './Teacher/Homepage/Education/StudentRecord',
+      },
+      {
+        path: '/teacher/education/studentRecord/apply',
+        name: 'studentRecord',
+        hideInMenu: 'true',
+        component: './Teacher/Homepage/Education/StudentRecord/Apply',
+      },
+      {
+        path: '/teacher/education/studentRecord/detail',
+        name: 'studentRecord',
+        hideInMenu: 'true',
+        component: './Teacher/Homepage/Education/StudentRecord/Detail',
+      },
+      {
+        path: '/teacher/education/studentRecord/edit',
+        name: 'studentRecord',
+        hideInMenu: 'true',
+        component: './Teacher/Homepage/Education/StudentRecord/Edit',
       },
     ],
   },

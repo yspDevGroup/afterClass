@@ -332,6 +332,7 @@ const ClassCalendar = (props: propstype) => {
                 key={`${day}+${item?.bjid}+${item.jcId}`}
                 actions={[
                   <Checkbox
+                    key={item.id}
                     disabled={!!dealClassId}
                     defaultChecked={
                       dealClassId ? item?.bjid === dealClassId && item.jcId === dealJcId : false
@@ -359,7 +360,7 @@ const ClassCalendar = (props: propstype) => {
               <Space direction="vertical">
                 {editCourses?.map((item: any) => {
                   return (
-                    <Radio value={item}>
+                    <Radio value={item} key={item.id}>
                       <p> {item?.title}</p>
                       <p> {item.desc?.[0].left}</p>
                     </Radio>

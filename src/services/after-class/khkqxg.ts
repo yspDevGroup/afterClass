@@ -73,8 +73,10 @@ export async function getAllKHKQXG(
   body: {
     /** 申请状态 */
     ZT?: number[];
-    /** 出勤日期 */
-    CQRQ?: string;
+    startDate?: string;
+    endDate?: string;
+    /** 申请教师ID */
+    SQRId?: string;
     /** 班级ID */
     KHBJSJId?: string;
     /** 学校ID */

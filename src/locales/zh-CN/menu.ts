@@ -45,6 +45,7 @@ export default {
   'menu.audit.leaveManagement': '请假管理',
   'menu.audit.substituteCourse': '调/代课管理',
   'menu.audit.resignManagement': '补签管理',
+  'menu.audit.recheckManagement': '学生考勤管理',
   'menu.orderInquiry': '订单管理',
   'menu.orderInquiry.courseorder': '缤纷课堂订单',
   'menu.orderInquiry.afterService': '课后服务订单',

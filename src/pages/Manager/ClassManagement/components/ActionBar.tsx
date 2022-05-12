@@ -344,41 +344,41 @@ const ActionBar = (props: propstype) => {
 
           <Divider type="vertical" />
           <a onClick={() => handleEdit(record, 'copy')}>复制</a>
-          {record.ISFW === 0 && (
-            <>
-              <Divider type="vertical" />
-              <a
-                onClick={() => {
-                  setJKVisible(true);
-                }}
-              >
-                结课
-              </a>
-              <Modal
-                title="是否结课"
-                visible={JKVisible}
-                onOk={() => {
-                  JKSubmit();
-                }}
-                onCancel={() => {
-                  setJKVisible(false);
-                }}
-                okText="确认"
-                cancelText="取消"
-                width={300}
-              >
-                <p style={{ color: '#333', fontSize: '16px', marginBottom: '8px' }}>
-                  课程名称：{record?.KHKCSJ?.KCMC}{' '}
-                </p>
-                <p style={{ color: '#333', fontSize: '16px', marginBottom: '8px' }}>
-                  课程班名称: {record?.BJMC}
-                </p>
-                <p style={{ color: '#333', fontSize: '16px', marginBottom: '8px' }}>
-                  确定<span style={{ color: '#FF6F6F' }}>结课</span>？
-                </p>
-              </Modal>
-            </>
-          )}
+          {/* {record.ISFW === 0 && ( */}
+          <>
+            <Divider type="vertical" />
+            <a
+              onClick={() => {
+                setJKVisible(true);
+              }}
+            >
+              结课
+            </a>
+            <Modal
+              title="是否结课"
+              visible={JKVisible}
+              onOk={() => {
+                JKSubmit();
+              }}
+              onCancel={() => {
+                setJKVisible(false);
+              }}
+              okText="确认"
+              cancelText="取消"
+              width={300}
+            >
+              <p style={{ color: '#333', fontSize: '16px', marginBottom: '8px' }}>
+                课程名称：{record?.KHKCSJ?.KCMC}{' '}
+              </p>
+              <p style={{ color: '#333', fontSize: '16px', marginBottom: '8px' }}>
+                课程班名称: {record?.BJMC}
+              </p>
+              <p style={{ color: '#333', fontSize: '16px', marginBottom: '8px' }}>
+                确定<span style={{ color: '#FF6F6F' }}>结课</span>？
+              </p>
+            </Modal>
+          </>
+          {/* )} */}
           <Divider type="vertical" />
           <>
             <a

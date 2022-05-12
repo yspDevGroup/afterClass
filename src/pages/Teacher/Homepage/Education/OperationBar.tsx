@@ -3,8 +3,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-11-29 15:20:16
- * @LastEditTime: 2022-04-20 18:00:34
- * @LastEditors: Wu Zhan
+ * @LastEditTime: 2022-05-10 16:01:44
+ * @LastEditors: Sissle Lynn
  */
 import React, { useEffect, useState } from 'react';
 import { Link, useModel } from 'umi';
@@ -17,6 +17,7 @@ import icon_leave from '@/assets/icon-teacherLeave.png';
 import icon_select from '@/assets/icon_classroom.png';
 import icon_resign from '@/assets/icon_resign.png';
 import icon_CourseAdjustment from '@/assets/icon-CourseAdjustment.png';
+import icon_record from '@/assets/icon_record.png';
 import { getXXSPPZ } from '@/services/after-class/xxsppz';
 import { Modal } from 'antd';
 
@@ -32,7 +33,7 @@ const OperationBar = (props: { courseData: any }) => {
   useEffect(() => {
     (async () => {
       const res = await getXXSPPZ({
-        xxId: currentUser.xxId,
+        xxId: currentUser?.xxId,
       });
       if (res.status === 'ok' && res.data) {
         const { JSBQ_KSRQ, JSBQ_JSRQ } = res.data;
@@ -158,6 +159,21 @@ const OperationBar = (props: { courseData: any }) => {
           </p>
         </p>
         <p className={styles.text}>家长反馈</p>
+      </Link>
+      <Link
+        key="xskq"
+        to={{
+          pathname: '/teacher/education/studentRecord',
+          state: courseData,
+        }}
+        className={styles.wrapper}
+      >
+        <p className={styles.container}>
+          <p className={styles.content}>
+            <img src={icon_record} alt="" />
+          </p>
+        </p>
+        <p className={styles.text}>学生考勤</p>
       </Link>
     </div>
   );
