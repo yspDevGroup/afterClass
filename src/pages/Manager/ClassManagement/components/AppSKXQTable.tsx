@@ -2,8 +2,8 @@
  * @description: 授课安排列表
  * @author: wsl
  * @Date: 2021-12-07 10:57:15
- * @LastEditTime: 2022-03-11 18:27:56
- * @LastEditors: zpl
+ * @LastEditTime: 2022-05-13 18:10:37
+ * @LastEditors: Sissle Lynn
  */
 import type { FC } from 'react';
 import { useEffect, useState } from 'react';
@@ -95,99 +95,144 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = ({ SKXQData }) => {
       if (res.status === 'ok') {
         /** 所有出勤信息 */
         const CQDataList = res?.data || [];
-        const result = await getKCBSKSJ({
-          KHBJSJId: [SKXQData?.id],
-        });
-        if (result.status === 'ok') {
-          /** 所有排课信息 */
-          const allSKData = result.data!.rows!;
-          // 遍历所有排课节次组装数据
-          const newDataSource: SKXQProps[] = allSKData.map(
-            (skData: {
-              SKRQ: string | undefined;
-              XXSJPZId: string | undefined;
-              KCBSKJSSJs: any;
-              XXSJPZ: any;
-            }) => {
-              // 当前课时已出勤的所有老师
-              const cqTeacherList = CQDataList.filter((data) => {
-                const sameDay = data.CQRQ === skData.SKRQ;
-                const sameJC = data.XXSJPZId === skData.XXSJPZId;
-                return sameDay && sameJC;
-              });
-              // 当前课时排课的所有老师
-              const pkTeacherList = skData.KCBSKJSSJs;
-
-              let teachers: {
-                /** 微信用户ID */
-                WechatUserId?: string;
-                /** 姓名 */
-                XM?: string;
-                /** 任教类型，1 主教，0 副教 */
-                type: number;
-                /** 出勤信息 */
-                status?: string;
-              }[] = [];
-              if (cqTeacherList.length) {
-                if (cqTeacherList.length !== pkTeacherList?.length) {
-                  cqTeacherList.forEach((item1: any) => {
-                    pkTeacherList.forEach((item2: any) => {
-                      if (item1?.JZGJBSJId === item2?.JZGJBSJId) {
-                        // eslint-disable-next-line no-param-reassign
-                        item2.CQZT = item1?.CQZT;
-                      }
-                    });
-                  });
-                  teachers = pkTeacherList.map(
-                    (teacher: {
-                      JZGJBSJ: { WechatUserId: any; XM: any };
-                      JSLX: null;
-                      CQZT: any;
-                    }) => {
-                      return {
-                        WechatUserId: teacher.JZGJBSJ.WechatUserId,
-                        XM: teacher.JZGJBSJ.XM,
-                        type:
-                          typeof teacher.JSLX === 'undefined' || teacher.JSLX === null
-                            ? 1
-                            : teacher.JSLX,
-                        status: teacher.CQZT,
-                      };
-                    },
-                  );
-                } else {
-                  teachers = cqTeacherList.map((teacher) => {
-                    return {
-                      WechatUserId: teacher.JZGJBSJ.WechatUserId,
-                      XM: teacher.JZGJBSJ.XM,
-                      type:
-                        typeof teacher.JSLX === 'undefined' || teacher.JSLX === null
-                          ? 1
-                          : teacher.JSLX,
-                      status: teacher.CQZT,
-                    };
-                  });
-                }
-              } else if (pkTeacherList?.length) {
-                teachers = pkTeacherList.map(
-                  (teacher: { JZGJBSJ: { WechatUserId: any; XM: any }; JSLX: any }) => ({
-                    WechatUserId: teacher.JZGJBSJ?.WechatUserId,
-                    XM: teacher.JZGJBSJ?.XM,
-                    type: teacher.JSLX!,
-                  }),
-                );
+        if (SKXQData?.BJZT === '已结课') {
+          const mainTeacher = CQDataList.filter(
+            (v) => v.JSLX === 1 || typeof v.JSLX === 'undefined' || v.JSLX === null,
+          );
+          const subTeacher = CQDataList.filter((v) => v.JSLX === 0);
+          const newJudge = mainTeacher?.length ? mainTeacher : subTeacher;
+          if (newJudge?.length) {
+            const newArr: any = [].map.call(newJudge, (item: any, ind: number) => {
+              const main = mainTeacher?.[ind];
+              const sub = subTeacher?.[ind];
+              const teachers = [];
+              if (main) {
+                teachers.push({
+                  WechatUserId: main.JZGJBSJ?.WechatUserId,
+                  XM: main.JZGJBSJ?.XM,
+                  type: typeof main.JSLX === 'undefined' || main.JSLX === null ? 1 : main.JSLX,
+                  status: main.CQZT,
+                });
+              }
+              if (sub) {
+                teachers.push({
+                  WechatUserId: sub.JZGJBSJ?.WechatUserId,
+                  XM: sub.JZGJBSJ?.XM,
+                  type: typeof sub.JSLX === 'undefined' || sub.JSLX === null ? 1 : sub.JSLX,
+                  status: sub.CQZT,
+                });
               }
               return {
-                SKRQ: skData.SKRQ!,
+                SKRQ: item.CQRQ!,
                 XXSJPZ: {
-                  KSSJ: skData.XXSJPZ!.KSSJ!,
-                  JSSJ: skData.XXSJPZ!.JSSJ!,
+                  KSSJ: item.XXSJPZ!.KSSJ!,
+                  JSSJ: item.XXSJPZ!.JSSJ!,
                 },
                 teachers,
               };
-            },
-          );
-          setDataSource(newDataSource);
+            });
+            newArr?.sort(
+              (a: any, b: any) =>
+                new Date(a?.SKRQ?.replace(/-/g, '/')).getTime() -
+                new Date(b?.SKRQ?.replace(/-/g, '/')).getTime(),
+            );
+            setDataSource(newArr);
+          }
+        } else {
+          const result = await getKCBSKSJ({
+            KHBJSJId: [SKXQData?.id],
+          });
+          if (result.status === 'ok') {
+            /** 所有排课信息 */
+            const allSKData = result.data!.rows!;
+            // 遍历所有排课节次组装数据
+            const newDataSource: SKXQProps[] = allSKData.map(
+              (skData: {
+                SKRQ: string | undefined;
+                XXSJPZId: string | undefined;
+                KCBSKJSSJs: any;
+                XXSJPZ: any;
+              }) => {
+                // 当前课时已出勤的所有老师
+                const cqTeacherList = CQDataList.filter((data) => {
+                  const sameDay = data.CQRQ === skData.SKRQ;
+                  const sameJC = data.XXSJPZId === skData.XXSJPZId;
+                  return sameDay && sameJC;
+                });
+                // 当前课时排课的所有老师
+                const pkTeacherList = skData.KCBSKJSSJs;
+
+                let teachers: {
+                  /** 微信用户ID */
+                  WechatUserId?: string;
+                  /** 姓名 */
+                  XM?: string;
+                  /** 任教类型，1 主教，0 副教 */
+                  type: number;
+                  /** 出勤信息 */
+                  status?: string;
+                }[] = [];
+                if (cqTeacherList.length) {
+                  if (cqTeacherList.length !== pkTeacherList?.length) {
+                    cqTeacherList.forEach((item1: any) => {
+                      pkTeacherList.forEach((item2: any) => {
+                        if (item1?.JZGJBSJId === item2?.JZGJBSJId) {
+                          // eslint-disable-next-line no-param-reassign
+                          item2.CQZT = item1?.CQZT;
+                        }
+                      });
+                    });
+                    teachers = pkTeacherList.map(
+                      (teacher: {
+                        JZGJBSJ: { WechatUserId: any; XM: any };
+                        JSLX: null;
+                        CQZT: any;
+                      }) => {
+                        return {
+                          WechatUserId: teacher.JZGJBSJ.WechatUserId,
+                          XM: teacher.JZGJBSJ.XM,
+                          type:
+                            typeof teacher.JSLX === 'undefined' || teacher.JSLX === null
+                              ? 1
+                              : teacher.JSLX,
+                          status: teacher.CQZT,
+                        };
+                      },
+                    );
+                  } else {
+                    teachers = cqTeacherList.map((teacher) => {
+                      return {
+                        WechatUserId: teacher?.JZGJBSJ?.WechatUserId,
+                        XM: teacher?.JZGJBSJ?.XM,
+                        type:
+                          typeof teacher?.JSLX === 'undefined' || teacher?.JSLX === null
+                            ? 1
+                            : teacher?.JSLX,
+                        status: teacher?.CQZT,
+                      };
+                    });
+                  }
+                } else if (pkTeacherList?.length) {
+                  teachers = pkTeacherList.map(
+                    (teacher: { JZGJBSJ: { WechatUserId: any; XM: any }; JSLX: any }) => ({
+                      WechatUserId: teacher.JZGJBSJ?.WechatUserId,
+                      XM: teacher.JZGJBSJ?.XM,
+                      type: teacher.JSLX!,
+                    }),
+                  );
+                }
+                return {
+                  SKRQ: skData.SKRQ!,
+                  XXSJPZ: {
+                    KSSJ: skData.XXSJPZ!.KSSJ!,
+                    JSSJ: skData.XXSJPZ!.JSSJ!,
+                  },
+                  teachers,
+                };
+              },
+            );
+            setDataSource(newDataSource);
+          }
         }
       }
     })();

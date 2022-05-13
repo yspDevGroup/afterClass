@@ -152,6 +152,7 @@ const ServiceClass = (props: { location: { state: any } }) => {
     setSKXQData({
       id: record.id,
       BJMC: record.BJMC,
+      BJZT: record.BJZT,
     });
   };
   // 关闭报名列表弹框/授课详情弹框
