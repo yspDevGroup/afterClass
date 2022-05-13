@@ -4,18 +4,19 @@ export const convertData = (data: API.XNXQ[]) => {
     return [].map.call(data, (item: API.XNXQ) => {
       return {
         value: item.id,
-        text: `${item.XN} ${item.XQ}`
-      }
-    })
+        text: `${item.XN} ${item.XQ}`,
+        KSRQ: item.KSRQ,
+        JSRQ: item.JSRQ,
+      };
+    });
   }
   return [];
-}
+};
 // 选择数据结构
 export const convertSelectData = (data: API.NJSJ[]) => {
-  const selectData: { key: string; title: string; }[] = []
+  const selectData: { key: string; title: string }[] = [];
   data.forEach((item) => {
-
-    selectData.push({ key: item.id, title: item.NJMC })
-  })
+    selectData.push({ key: item.id, title: item.NJMC });
+  });
   return selectData;
-}
+};

@@ -1,9 +1,9 @@
 /*
  * @description:
  * @author: Sissle Lynn
- * @Date: 2021-12-06 11:15:21
- * @LastEditTime: 2022-04-13 11:00:32
- * @LastEditors: Wu Zhan
+ * @Date: 2022-05-12 15:05:21
+ * @LastEditTime: 2022-05-13 17:19:01
+ * @LastEditors: Sissle Lynn
  */
 import React from 'react';
 import PageContainer from '@/components/PageContainer';
@@ -16,43 +16,45 @@ import ShowName from '@/components/ShowName';
 import { getTableWidth } from '@/utils/utils';
 import SearchLayout from '@/components/Search/Layout';
 import SemesterSelect from '@/components/Search/SemesterSelect';
-import { getAllJSCQBQ, updateJSCQBQ } from '@/services/after-class/jscqbq';
 import { JSInforMation } from '@/components/JSInforMation';
+import { getAllKHKQXG, updateKHKQXG } from '@/services/after-class/khkqxg';
+import NewAdd from './NewAdd';
 
-const { TextArea, Search } = Input;
+const { TextArea } = Input;
 const { Option } = Select;
 
 /**
- * 补签管理
+ * 学生考勤更改管理
  * @returns
  */
-const ResignManagement = () => {
+const RecheckManagement = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const actionRef = useRef<ActionType>();
   const [dataSource, setDataSource] = useState<any[]>([]);
   // 选择学年学期
-  const [curXNXQId, setCurXNXQId] = useState<string>();
+  const [curXNXQ, setCurXNXQ] = useState<Record<string, string>>();
   // 状态
   const [BQZT, setBQZT] = useState<number[]>();
   const [form] = Form.useForm();
   const [visible, setVisible] = useState<boolean>(false);
   const [current, setCurrent] = useState<any>();
   const [name, setName] = useState<string>();
-  const termChange = (val: string) => {
+  const termChange = (val: string, key?: string, start?: string, end?: string) => {
     setName(undefined);
-    setCurXNXQId(val);
+    setCurXNXQ({
+      KSRQ: start || '',
+      JSRQ: end || '',
+    });
   };
   const getData = async () => {
-    const obj = {
+    const resAll = await getAllKHKQXG({
       XXJBSJId: currentUser?.xxId,
-      XNXQId: curXNXQId,
-      BQRXM: name,
-      SPZT: BQZT,
-      page: 0,
-      pageSize: 0,
-    };
-    const resAll = await getAllJSCQBQ(obj);
+      // SQRId: name,
+      ZT: BQZT,
+      startDate: curXNXQ?.KSRQ,
+      endDate: curXNXQ?.JSRQ,
+    });
     if (resAll.status === 'ok' && resAll.data) {
       setDataSource(resAll.data);
     }
@@ -60,11 +62,11 @@ const ResignManagement = () => {
   const handleSubmit = async (param: any) => {
     const { ZT, BZ } = param;
     try {
-      const res = await updateJSCQBQ(
+      const res = await updateKHKQXG(
         { id: current?.id },
         {
-          SPZT: ZT,
-          SPSM: BZ,
+          ZT: ZT,
+          SPBZXX: BZ,
           SPRId: currentUser?.JSId || testTeacherId,
         },
       );
@@ -76,14 +78,14 @@ const ResignManagement = () => {
         getData();
       }
     } catch (err) {
-      message.error('补签流程出现错误，请联系管理员或稍后重试。');
+      message.error('审批流程出现错误，请联系管理员或稍后重试。');
     }
   };
   useEffect(() => {
-    if (curXNXQId) {
+    if (curXNXQ) {
       getData();
     }
-  }, [curXNXQId, BQZT, name]);
+  }, [curXNXQ, BQZT, name]);
   // table表格数据
   const columns: ProColumns<any>[] = [
     {
@@ -95,14 +97,14 @@ const ResignManagement = () => {
       fixed: 'left',
     },
     {
-      title: '教师姓名',
+      title: '申请人',
       dataIndex: 'XSXM',
       key: 'XSXM',
       align: 'center',
       width: 80,
       fixed: 'left',
       render: (_text: any, record: any) => (
-        <ShowName type="userName" openid={record?.BQR?.WechatUserId} XM={record?.BQR?.XM} />
+        <ShowName type="userName" openid={record?.SQR?.WechatUserId} XM={record?.SQR?.XM} />
       ),
     },
     {
@@ -124,33 +126,18 @@ const ResignManagement = () => {
       width: 120,
     },
     {
-      title: '补签类型',
-      dataIndex: 'SQNR',
-      key: 'SQNR',
-      align: 'center',
-      width: 90,
-    },
-    {
-      title: '补签日期',
-      dataIndex: 'BQRQ',
-      key: 'BQRQ',
+      title: '考勤日期',
+      dataIndex: 'CQRQ',
+      key: 'CQRQ',
       align: 'center',
       width: 120,
     },
     {
-      title: '缺卡原因',
-      dataIndex: 'QKYY',
-      key: 'QKYY',
-      align: 'center',
-      ellipsis: true,
-      width: 180,
-    },
-    {
       title: '审批状态',
-      dataIndex: 'SPZT',
-      key: 'SPZT',
+      dataIndex: 'ZT',
+      key: 'ZT',
       valueType: 'select',
-      width: 80,
+      width: 140,
       align: 'center',
       valueEnum: {
         0: { text: '待审批', status: 'Processing' },
@@ -161,6 +148,11 @@ const ResignManagement = () => {
         2: {
           text: '已驳回',
           status: 'Error',
+          disabled: true,
+        },
+        3: {
+          text: '申请人撤销',
+          status: 'Warning',
           disabled: true,
         },
       },
@@ -178,28 +170,11 @@ const ResignManagement = () => {
     },
     {
       title: '审批说明',
-      dataIndex: 'SPSM',
-      key: 'SPSM',
+      dataIndex: 'SPBZXX',
+      key: 'SPBZXX',
       align: 'center',
       ellipsis: true,
       width: 180,
-    },
-    {
-      title: '申请时间',
-      dataIndex: 'createdAt',
-      key: 'createdAt',
-      align: 'center',
-      ellipsis: true,
-      width: 160,
-    },
-    {
-      title: '审批时间',
-      dataIndex: 'updatedAt',
-      key: 'updatedAt',
-      align: 'center',
-      ellipsis: true,
-      width: 160,
-      render: (text: any, record: any) => (record.SPZT === 0 ? '' : record.updatedAt),
     },
     {
       title: '操作',
@@ -211,7 +186,7 @@ const ResignManagement = () => {
       render: (_, record: any) => {
         return (
           <>
-            {record.SPZT === 0 ? (
+            {record.ZT === 0 ? (
               <a
                 onClick={() => {
                   if (JSInforMation(currentUser)) {
@@ -246,16 +221,16 @@ const ResignManagement = () => {
         headerTitle={
           <SearchLayout>
             <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={termChange} />
-            <div>
-              <label htmlFor="type">教师名称：</label>
+            {/* <div>
+              <label htmlFor="type">申请人名称：</label>
               <Search
-                placeholder="教师姓名"
+                placeholder="申请人姓名"
                 allowClear
                 onSearch={(value: string) => {
                   setName(value);
                 }}
               />
-            </div>
+            </div> */}
             <div>
               <label htmlFor="status">审批状态：</label>
               <Select
@@ -274,6 +249,9 @@ const ResignManagement = () => {
                 <Option key="已驳回" value={2}>
                   已驳回
                 </Option>
+                <Option key="申请人撤销" value={3}>
+                  申请人撤销
+                </Option>
               </Select>
             </div>
           </SearchLayout>
@@ -285,9 +263,12 @@ const ResignManagement = () => {
           reload: false,
         }}
         search={false}
+        toolbar={{
+          actions: [<NewAdd key="add" refresh={getData} />],
+        }}
       />
       <Modal
-        title="补签审批"
+        title="学生考勤变更审批"
         visible={visible}
         onOk={() => {
           form.submit();
@@ -323,4 +304,4 @@ const ResignManagement = () => {
   );
 };
 
-export default ResignManagement;
+export default RecheckManagement;

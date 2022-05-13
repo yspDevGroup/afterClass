@@ -3,7 +3,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-11-22 15:12:11
- * @LastEditTime: 2021-12-09 13:49:33
+ * @LastEditTime: 2022-05-12 18:02:29
  * @LastEditors: Sissle Lynn
  */
 import { useEffect, useState } from 'react';
@@ -25,6 +25,8 @@ const AuditSettings = () => {
   const [adjust, setAdjust] = useState<boolean>(true);
   /** 教师补签是否审批 */
   const [resign, setResign] = useState<boolean>(true);
+  /** 教师申请学生考勤修改是否审批 */
+  const [recheck, setRecheck] = useState<boolean>(true);
   /** 教师补签日期是否可编辑 */
   const [edit, setEdit] = useState<boolean>(false);
   const [start, setStart] = useState<number>(20);
@@ -42,16 +44,17 @@ const AuditSettings = () => {
       JSTK: type === 'Adjust' ? val! : adjust,
       XSTK: true,
       XSTF: true,
-      XXJBSJId: currentUser.xxId,
+      XXJBSJId: currentUser?.xxId,
       JSBQ: type === 'Resign' ? val! : resign,
       JSBQ_KSRQ: type === 'start' ? val.toString() : start.toString(),
       JSBQ_JSRQ: type === 'end' ? val.toString() : end.toString(),
+      XSKQ: type === 'Recheck' ? val! : recheck,
     });
   };
   useEffect(() => {
     (async () => {
       const res = await getXXSPPZ({
-        xxId: currentUser.xxId,
+        xxId: currentUser?.xxId,
       });
       if (res.status === 'ok' && res.data) {
         const { JSQJ, JSDK, JSTK, JSBQ, JSBQ_KSRQ, JSBQ_JSRQ } = res.data;
@@ -252,6 +255,33 @@ const AuditSettings = () => {
                       </p>
                     </div>
                     {end > 28 ? <p>如果当前月不足{end}天，则补签结束时间为当前月最后一天</p> : ''}
+                  </Card>
+                </Col>
+              </Row>
+            </div>
+          </Col>
+          <Col span={12}>
+            <div>
+              <h3>学生考勤更改流程</h3>
+              <Row gutter={24}>
+                <Col span={12}>
+                  <Card
+                    title="学生考勤"
+                    bordered={false}
+                    extra={
+                      <Switch
+                        checked={recheck}
+                        onChange={(checked) => {
+                          setRecheck(checked);
+                          updateSettings('Recheck', checked);
+                        }}
+                      />
+                    }
+                  >
+                    <p className={recheck ? 'active' : ''}>开启时：学生考勤更改需管理员审批</p>
+                    <p className={!recheck ? 'active' : ''}>
+                      关闭时：教师发起学生考勤更改流程，系统自动审批，无需管理员操作
+                    </p>
                   </Card>
                 </Col>
               </Row>
