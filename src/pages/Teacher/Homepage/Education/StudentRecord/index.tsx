@@ -147,7 +147,7 @@ const AskForLeave = () => {
             <div>
               <img src={icon_leave} />
             </div>
-            申请
+            考勤更改
           </div>
         </div>
       </div>

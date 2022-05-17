@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2022-05-12 15:05:21
- * @LastEditTime: 2022-05-13 17:09:18
+ * @LastEditTime: 2022-05-17 12:17:05
  * @LastEditors: Sissle Lynn
  */
 import React, { useState } from 'react';
@@ -23,6 +23,7 @@ import {
 } from 'antd';
 import type { Moment } from 'moment';
 import moment from 'moment';
+import dayjs from 'dayjs';
 import ProTable from '@ant-design/pro-table';
 import ShowName from '@/components/ShowName';
 import { createKHKQXG } from '@/services/after-class/khkqxg';
@@ -254,6 +255,9 @@ const NewAdd = (props: { refresh: () => Promise<void> }) => {
         visible={showDrawer}
         size="large"
       >
+        <p style={{ marginBottom: '8px', lineHeight: '35px', textIndent: '12px', color: '#888' }}>
+          注：有且仅能更改今日之前的学生考勤
+        </p>
         <Form
           form={form}
           labelCol={{ flex: '90px' }}
@@ -265,6 +269,11 @@ const NewAdd = (props: { refresh: () => Promise<void> }) => {
               <Form.Item name="date" label="考勤日期" rules={[{ required: true }]}>
                 <DatePicker
                   style={{ width: '100%' }}
+                  disabledDate={(current) => {
+                    const nowDate = new Date(moment(current).format('YYYY-MM-DD'));
+                    const curDate = new Date(dayjs().format('YYYY-MM-DD'));
+                    return nowDate >= curDate;
+                  }}
                   onChange={(value: Moment | null, dateString: string) => {
                     getData(dateString);
                   }}

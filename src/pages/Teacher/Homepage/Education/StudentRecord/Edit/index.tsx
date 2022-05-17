@@ -13,6 +13,7 @@ import styles from './index.less';
 import ShowName from '@/components/ShowName';
 import { ParentHomeData } from '@/services/local-services/mobileHome';
 import MobileCon from '@/components/MobileCon';
+import type { ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { createKHKQXG } from '@/services/after-class/khkqxg';
@@ -64,6 +65,7 @@ const Edit = (props: any) => {
   const userRef = useRef(null);
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
+  const actionRef = useRef<ActionType>();
   // 当前课节数
   const [curNum, setCurNum] = useState<number>(0);
   // '缺席'
@@ -83,6 +85,7 @@ const Edit = (props: any) => {
   const pkDate = date?.replace(/\//g, '-'); // 日期
 
   const getData = async (type?: string) => {
+    setDataScouse([]);
     // 查询学生所有课后服务出勤记录
     const resAll = await getAllKHXSCQ({
       bjId: bjId || undefined, // 班级ID
@@ -131,6 +134,7 @@ const Edit = (props: any) => {
       enHenceMsg(resAll.message);
     }
   };
+
   useEffect(() => {
     (async () => {
       if (/MicroMessenger/i.test(navigator.userAgent)) {
@@ -296,6 +300,7 @@ const Edit = (props: any) => {
           <ProTable<any>
             dataSource={dataSource}
             columns={columns}
+            actionRef={actionRef}
             rowKey="id"
             pagination={{
               defaultPageSize: 5,
@@ -352,9 +357,9 @@ const Edit = (props: any) => {
                         onOk: async () => {
                           const stu: any = [].map.call(selectedRows, (item: any) => {
                             return {
-                              SRCCQZT: item.CQZT,
+                              SRCCQZT: item?.CQZT,
                               NOWCQZT: swtChecked ? '出勤' : '缺席',
-                              XSJBSJId: item.XSJBSJ?.id,
+                              XSJBSJId: item?.XSJBSJ?.id,
                             };
                           });
                           const res = await createKHKQXG({

@@ -3,7 +3,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2022-05-10 15:02:56
- * @LastEditTime: 2022-05-12 12:08:53
+ * @LastEditTime: 2022-05-17 12:19:03
  * @LastEditors: Sissle Lynn
  */
 import { useEffect, useState } from 'react';
@@ -58,8 +58,11 @@ const StudentApply = () => {
 
   return (
     <MobileCon>
-      <GoBack title={'学生考勤'} onclick="/teacher/education/studentRecord" teacher />
+      <GoBack title={'考勤更改'} onclick="/teacher/education/studentRecord" teacher />
       <div className={styles.patrolWrapper}>
+        <p style={{ marginBottom: '8px', lineHeight: '35px', textIndent: '12px', color: '#888' }}>
+          注：有且仅能更改今日之前的学生考勤
+        </p>
         <MobileCalendar
           showType={'week'}
           exchangeType={false}
@@ -88,7 +91,7 @@ const StudentApply = () => {
               renderItem={(item: any) => (
                 <List.Item
                   actions={
-                    dayjs().isAfter(dayjs(day))
+                    dayjs().isAfter(dayjs(day)) && day !== dayjs().format('YYYY-MM-DD')
                       ? [
                           <Link
                             key={item.kcId}
