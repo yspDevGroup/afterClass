@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2022-05-12 15:05:21
- * @LastEditTime: 2022-05-17 12:17:05
+ * @LastEditTime: 2022-05-17 15:33:43
  * @LastEditors: Sissle Lynn
  */
 import React, { useState } from 'react';
@@ -175,6 +175,7 @@ const NewAdd = (props: { refresh: () => Promise<void> }) => {
             type="link"
             onClick={() => {
               getStuData(record.bjId, record.jcId);
+              setStuCols([]);
               setVisible(true);
             }}
           >
@@ -249,6 +250,7 @@ const NewAdd = (props: { refresh: () => Promise<void> }) => {
           setDay('');
           setCourse([]);
           setDataScouse([]);
+          setStuCols([]);
           setShowDrawer(false);
           form.resetFields();
         }}
@@ -276,6 +278,7 @@ const NewAdd = (props: { refresh: () => Promise<void> }) => {
                   }}
                   onChange={(value: Moment | null, dateString: string) => {
                     getData(dateString);
+                    form.setFieldsValue({ course: '' });
                   }}
                 />
               </Form.Item>
