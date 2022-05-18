@@ -54,7 +54,7 @@ const Resign: React.FC = () => {
         <div className={styles.listWrapper}>
           {dataSource?.length ? (
             <List
-              style={{ background: '#fff', paddingLeft: '10px' }}
+              style={{ background: '#fff' }}
               itemLayout="horizontal"
               dataSource={dataSource}
               renderItem={(item: any) => {

@@ -60,6 +60,17 @@ const DealList: React.FC = () => {
         <div className={styles.listWrapper}>
           {dataSource?.length ? (
             dataSource.map((item: any) => {
+              console.log(`${item.year}/${item.month}`, '=====================');
+              console.log(moment(`${item.year}/${item.month}`), '=========++++============');
+              console.log(
+                moment(`${item.year}/${item.month}`).endOf('month').format('YYYY.MM.DD'),
+                '=========______============',
+              );
+              console.log(moment(`${item.year}/0${item.month}`), '=========================');
+              console.log(
+                moment(`${item.year}/0${item.month}`).endOf('month').format('YYYY.MM.DD'),
+                '============-----=========',
+              );
               return (
                 <div className={styles.card} key={item.month}>
                   <div>
@@ -74,9 +85,7 @@ const DealList: React.FC = () => {
                       统计于：
                       {Number(moment().format('MM')) === Number(item.month)
                         ? moment().subtract(1, 'day').format('YYYY-MM-DD')
-                        : moment(`${item.year}/${item.month}`)
-                            .endOf('month')
-                            .format('YYYY-MM-DD')}{' '}
+                        : moment(`${item.year}/0${item.month}`).endOf('month').format('YYYY-MM-DD')}
                     </span>
                     {item.month < month - 1 ? (
                       <Button type="dashed" disabled>
@@ -109,3 +118,4 @@ const DealList: React.FC = () => {
 };
 
 export default DealList;
+
