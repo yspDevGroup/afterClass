@@ -2,14 +2,14 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2022-05-12 15:05:21
- * @LastEditTime: 2022-05-18 11:34:25
+ * @LastEditTime: 2022-05-18 12:21:07
  * @LastEditors: Sissle Lynn
  */
 import React from 'react';
 import PageContainer from '@/components/PageContainer';
 import { useEffect, useRef, useState } from 'react';
 import { useModel } from 'umi';
-import { Form, Modal, Radio, Select, Input, message, Divider } from 'antd';
+import { Form, Modal, Radio, Select, Input, message, Divider, Button } from 'antd';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import ShowName from '@/components/ShowName';
@@ -42,6 +42,7 @@ const RecheckManagement = () => {
   const [current, setCurrent] = useState<any>();
   const [name, setName] = useState<string>();
   const [course, setCourse] = useState<any>();
+  const [status, setStatus] = useState<boolean>(true);
   const termChange = (val: string, key?: string, start?: string, end?: string) => {
     setName(undefined);
     setCurXNXQ({
@@ -196,6 +197,7 @@ const RecheckManagement = () => {
                     if (res.status === 'ok') {
                       setCourse(res.data?.KHXSKQXGs);
                     }
+                    setStatus(true);
                     setCurrent(record);
                     setVisible(true);
                   }
@@ -204,7 +206,21 @@ const RecheckManagement = () => {
                 审批
               </a>
             ) : (
-              ''
+              <a
+                onClick={async () => {
+                  if (JSInforMation(currentUser)) {
+                    const res = await getKHKQXG({ id: record?.id });
+                    if (res.status === 'ok') {
+                      setCourse(res.data?.KHXSKQXGs);
+                    }
+                    setStatus(false);
+                    setCurrent(record);
+                    setVisible(true);
+                  }
+                }}
+              >
+                查看
+              </a>
             )}
           </>
         );
@@ -299,16 +315,52 @@ const RecheckManagement = () => {
         }}
       />
       <Modal
-        title="学生考勤变更审批"
+        title={`学生考勤变更${status ? '审批' : '查看'}`}
         visible={visible}
-        onOk={() => {
-          form.submit();
-        }}
         onCancel={() => {
           setVisible(false);
           form.resetFields();
           setCurrent(undefined);
         }}
+        footer={
+          status
+            ? [
+                <Button
+                  key="back"
+                  style={{ borderRadius: 4 }}
+                  onClick={() => {
+                    setVisible(false);
+                    form.resetFields();
+                    setCurrent(undefined);
+                  }}
+                >
+                  取消
+                </Button>,
+                <Button
+                  key="submit"
+                  type="primary"
+                  style={{ borderRadius: 4 }}
+                  onClick={() => {
+                    form.submit();
+                  }}
+                >
+                  确认
+                </Button>,
+              ]
+            : [
+                <Button
+                  key="close"
+                  type="primary"
+                  style={{ borderRadius: 4 }}
+                  onClick={() => {
+                    setVisible(false);
+                    setCurrent(undefined);
+                  }}
+                >
+                  关闭
+                </Button>,
+              ]
+        }
         className={styles.modalEdit}
         okText="确认"
         cancelText="取消"
@@ -316,7 +368,7 @@ const RecheckManagement = () => {
         <ProTable<any>
           dataSource={course}
           columns={stuColumns}
-          headerTitle={'考勤更改明细'}
+          headerTitle={'考勤变更明细'}
           rowKey="id"
           pagination={{
             defaultPageSize: 5,
@@ -334,25 +386,31 @@ const RecheckManagement = () => {
             reload: false,
           }}
         />
-        <Divider style={{ margin: '0 0 12px' }} />
-        <Form
-          labelCol={{ span: 6 }}
-          wrapperCol={{ span: 15 }}
-          form={form}
-          initialValues={{ ZT: 1 }}
-          onFinish={handleSubmit}
-          layout="horizontal"
-        >
-          <Form.Item label="审批意见" name="ZT">
-            <Radio.Group>
-              <Radio value={1}>同意</Radio>
-              <Radio value={2}>不同意</Radio>
-            </Radio.Group>
-          </Form.Item>
-          <Form.Item label="审批说明" name="BZ">
-            <TextArea rows={4} maxLength={100} />
-          </Form.Item>
-        </Form>
+        {status ? (
+          <>
+            <Divider style={{ margin: '0 0 12px' }} />
+            <Form
+              labelCol={{ span: 6 }}
+              wrapperCol={{ span: 15 }}
+              form={form}
+              initialValues={{ ZT: 1 }}
+              onFinish={handleSubmit}
+              layout="horizontal"
+            >
+              <Form.Item label="审批意见" name="ZT">
+                <Radio.Group>
+                  <Radio value={1}>同意</Radio>
+                  <Radio value={2}>不同意</Radio>
+                </Radio.Group>
+              </Form.Item>
+              <Form.Item label="审批说明" name="BZ">
+                <TextArea rows={4} maxLength={100} />
+              </Form.Item>
+            </Form>
+          </>
+        ) : (
+          <></>
+        )}
       </Modal>
     </PageContainer>
   );
