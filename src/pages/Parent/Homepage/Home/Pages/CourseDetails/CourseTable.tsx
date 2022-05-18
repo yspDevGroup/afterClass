@@ -160,12 +160,12 @@ const CourseTable: React.FC = () => {
       if (val.tag === '假') {
         content = {
           title: '请假说明',
-          content: ` ${val.reason ? `由于${val.reason},` : ''}本节课程安排取消,请知悉。`,
+          content: ` 教师请假，本节课程安排取消，请知悉。`,
         };
       } else {
         content = {
           title: '调课说明',
-          content: `由于${val.reason},本节课临时调整到${val.realDate}日 ${val.start?.substring(
+          content: `本节课临时调整到${val.realDate}日 ${val.start?.substring(
             0,
             5,
           )}-${val.end?.substring(0, 5)} ,请知悉。`,
