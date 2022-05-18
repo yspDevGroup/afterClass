@@ -2,14 +2,14 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2022-05-12 15:05:21
- * @LastEditTime: 2022-05-13 17:19:01
+ * @LastEditTime: 2022-05-18 11:34:25
  * @LastEditors: Sissle Lynn
  */
 import React from 'react';
 import PageContainer from '@/components/PageContainer';
 import { useEffect, useRef, useState } from 'react';
 import { useModel } from 'umi';
-import { Form, Modal, Radio, Select, Input, message } from 'antd';
+import { Form, Modal, Radio, Select, Input, message, Divider } from 'antd';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import ShowName from '@/components/ShowName';
@@ -17,9 +17,10 @@ import { getTableWidth } from '@/utils/utils';
 import SearchLayout from '@/components/Search/Layout';
 import SemesterSelect from '@/components/Search/SemesterSelect';
 import { JSInforMation } from '@/components/JSInforMation';
-import { getAllKHKQXG, updateKHKQXG } from '@/services/after-class/khkqxg';
+import { getAllKHKQXG, getKHKQXG, updateKHKQXG } from '@/services/after-class/khkqxg';
 import NewAdd from './NewAdd';
 
+import styles from './index.less';
 const { TextArea } = Input;
 const { Option } = Select;
 
@@ -40,6 +41,7 @@ const RecheckManagement = () => {
   const [visible, setVisible] = useState<boolean>(false);
   const [current, setCurrent] = useState<any>();
   const [name, setName] = useState<string>();
+  const [course, setCourse] = useState<any>();
   const termChange = (val: string, key?: string, start?: string, end?: string) => {
     setName(undefined);
     setCurXNXQ({
@@ -188,8 +190,12 @@ const RecheckManagement = () => {
           <>
             {record.ZT === 0 ? (
               <a
-                onClick={() => {
+                onClick={async () => {
                   if (JSInforMation(currentUser)) {
+                    const res = await getKHKQXG({ id: record?.id });
+                    if (res.status === 'ok') {
+                      setCourse(res.data?.KHXSKQXGs);
+                    }
                     setCurrent(record);
                     setVisible(true);
                   }
@@ -203,6 +209,31 @@ const RecheckManagement = () => {
           </>
         );
       },
+    },
+  ];
+  const stuColumns: any = [
+    {
+      title: '姓名',
+      dataIndex: 'XSXM',
+      key: 'XSXM',
+      align: 'center',
+      render: (test: any, record: any) => {
+        return (
+          <ShowName type="userName" openid={record?.XSJBSJ?.WechatUserId} XM={record?.XSJBSJ?.XM} />
+        );
+      },
+    },
+    {
+      title: '原考勤情况',
+      dataIndex: 'SRCCQZT',
+      key: 'SRCCQZT',
+      align: 'center',
+    },
+    {
+      title: '现考勤情况',
+      dataIndex: 'NOWCQZT',
+      key: 'NOWCQZT',
+      align: 'center',
     },
   ];
   return (
@@ -278,9 +309,32 @@ const RecheckManagement = () => {
           form.resetFields();
           setCurrent(undefined);
         }}
+        className={styles.modalEdit}
         okText="确认"
         cancelText="取消"
       >
+        <ProTable<any>
+          dataSource={course}
+          columns={stuColumns}
+          headerTitle={'考勤更改明细'}
+          rowKey="id"
+          pagination={{
+            defaultPageSize: 5,
+            defaultCurrent: 1,
+            pageSizeOptions: ['5'],
+            showQuickJumper: false,
+            showSizeChanger: false,
+            showTotal: undefined,
+          }}
+          search={false}
+          options={{
+            setting: false,
+            fullScreen: false,
+            density: false,
+            reload: false,
+          }}
+        />
+        <Divider style={{ margin: '0 0 12px' }} />
         <Form
           labelCol={{ span: 6 }}
           wrapperCol={{ span: 15 }}

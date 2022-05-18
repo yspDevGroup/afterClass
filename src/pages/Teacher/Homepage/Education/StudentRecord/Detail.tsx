@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2022-05-12 12:08:53
- * @LastEditTime: 2022-05-12 14:44:11
+ * @LastEditTime: 2022-05-18 11:18:11
  * @LastEditors: Sissle Lynn
  */
 import { useEffect, useState } from 'react';
@@ -24,8 +24,6 @@ const StudentDetail = (props: any) => {
   useEffect(() => {
     (async () => {
       if (recordId) {
-        console.log(recordId);
-
         const res = await getKHKQXG({ id: recordId });
         if (res.status === 'ok') {
           setCourse(res.data);
