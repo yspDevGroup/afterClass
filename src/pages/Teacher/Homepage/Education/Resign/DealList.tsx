@@ -60,17 +60,14 @@ const DealList: React.FC = () => {
         <div className={styles.listWrapper}>
           {dataSource?.length ? (
             dataSource.map((item: any) => {
-              console.log(`${item.year}/${item.month}`, '=====================');
-              console.log(moment(`${item.year}/${item.month}`), '=========++++============');
-              console.log(
-                moment(`${item.year}/${item.month}`).endOf('month').format('YYYY.MM.DD'),
-                '=========______============',
-              );
-              console.log(moment(`${item.year}/0${item.month}`), '=========================');
-              console.log(
-                moment(`${item.year}/0${item.month}`).endOf('month').format('YYYY.MM.DD'),
-                '============-----=========',
-              );
+              let date;
+              if (item.month < 10) {
+                date = moment(`${item.year}/0${item.month}/01`).endOf('month').format('YYYY-MM-DD');
+              } else {
+                date = moment(`${item.year}/${item.month}/01`).endOf('month').format('YYYY-MM-DD');
+              }
+              alert(moment(`${item.year}/${item.month}/01`).endOf('month'));
+              console.log(moment(`${item.year}/${item.month}/01`).endOf('month'));
               return (
                 <div className={styles.card} key={item.month}>
                   <div>
@@ -85,7 +82,7 @@ const DealList: React.FC = () => {
                       统计于：
                       {Number(moment().format('MM')) === Number(item.month)
                         ? moment().subtract(1, 'day').format('YYYY-MM-DD')
-                        : moment(`${item.year}/0${item.month}`).endOf('month').format('YYYY-MM-DD')}
+                        : date}
                     </span>
                     {item.month < month - 1 ? (
                       <Button type="dashed" disabled>
@@ -118,4 +115,3 @@ const DealList: React.FC = () => {
 };
 
 export default DealList;
-
