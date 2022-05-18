@@ -50,7 +50,7 @@ export const getBuildOptions = async (): Promise<BuildOptions> => {
       // 生产环境
       return {
         ENV_type: 'prod',
-        ENV_copyRight: '2021 版权所有：陕西五育汇智信息技术有限公司',
+        ENV_copyRight: '2022 版权所有：陕西五育汇智信息技术有限公司',
         ENV_host: 'http://afterclass.prod.xianyunshipei.com',
         ssoHost: 'http://sso.prod.xianyunshipei.com',
         xaeduSsoHost: 'http://www.xaedu.cloud',
@@ -60,7 +60,7 @@ export const getBuildOptions = async (): Promise<BuildOptions> => {
       // 禅鸣环境
       return {
         ENV_type: 'chanming',
-        ENV_copyRight: '2021 版权所有：蝉鸣科技（西安）有限公司',
+        ENV_copyRight: '2022 版权所有：蝉鸣科技（西安）有限公司',
         ENV_host: 'http://afterclass.wuyu.imzhiliao.com',
         ssoHost: 'http://sso.wuyu.imzhiliao.com',
         crpHost: 'http://crpweb.wuyu.imzhiliao.com',
@@ -69,7 +69,7 @@ export const getBuildOptions = async (): Promise<BuildOptions> => {
       // 9朵云环境
       return {
         ENV_type: '9dy',
-        ENV_copyRight: '2021 版权所有：广东九朵云科技有限公司',
+        ENV_copyRight: '2022 版权所有：广东九朵云科技有限公司',
         ENV_host: 'http://afterclass.9cloudstech.com',
         ssoHost: 'http://sso.9cloudstech.com',
         crpHost: 'http://crpweb.9cloudstech.com',
@@ -78,7 +78,7 @@ export const getBuildOptions = async (): Promise<BuildOptions> => {
       // 开发测试环境
       return {
         ENV_type: 'dev',
-        ENV_copyRight: '2021 版权所有：陕西五育汇智信息技术有限公司',
+        ENV_copyRight: '2022 版权所有：陕西五育汇智信息技术有限公司',
         ENV_host: 'http://afterclass.test.xianyunshipei.com',
         ssoHost: 'http://sso.test.xianyunshipei.com',
         crpHost: 'http://crpweb.test.xianyunshipei.com',
@@ -87,7 +87,7 @@ export const getBuildOptions = async (): Promise<BuildOptions> => {
       // 默认为local，本地开发模式下请在此处修改配置，但不要提交此处修改
       return {
         ENV_type: 'dev',
-        ENV_copyRight: '2021 版权所有：陕西五育汇智信息技术有限公司',
+        ENV_copyRight: '2022 版权所有：陕西五育汇智信息技术有限公司',
         ENV_host: 'http:/localhost:8000',
         ssoHost: 'http://platform.test.xianyunshipei.com',
         crpHost: 'http://crpweb.test.xianyunshipei.com',
