@@ -3,7 +3,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-11-22 15:12:11
- * @LastEditTime: 2022-05-12 18:02:29
+ * @LastEditTime: 2022-05-18 10:31:15
  * @LastEditors: Sissle Lynn
  */
 import { useEffect, useState } from 'react';
@@ -57,11 +57,12 @@ const AuditSettings = () => {
         xxId: currentUser?.xxId,
       });
       if (res.status === 'ok' && res.data) {
-        const { JSQJ, JSDK, JSTK, JSBQ, JSBQ_KSRQ, JSBQ_JSRQ } = res.data;
+        const { JSQJ, JSDK, JSTK, JSBQ, XSKQ, JSBQ_KSRQ, JSBQ_JSRQ } = res.data;
         setTLeave(JSQJ!);
         setSupply(JSDK!);
         setAdjust(JSTK!);
         setResign(JSBQ!);
+        setRecheck(XSKQ!);
         JSBQ_KSRQ ? setStart(Number(JSBQ_KSRQ)) : '';
         JSBQ_JSRQ ? setEnd(Number(JSBQ_JSRQ)) : '';
       } else {

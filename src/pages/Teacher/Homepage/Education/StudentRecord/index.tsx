@@ -69,7 +69,7 @@ const AskForLeave = () => {
                 <div className={styles.Information} key={item.id}>
                   <div>
                     <h4>
-                      {item.KHBJSJ?.BJMC}
+                      {item.SQBZXX ? item.SQBZXX : item.KHBJSJ?.BJMC}
                       {item.ZT === 3 ? (
                         <span>已撤销</span>
                       ) : item.ZT === 0 ? (
@@ -85,12 +85,13 @@ const AskForLeave = () => {
                   </div>
                   <p>
                     课程：
-                    {item.KHBJSJ?.KHKCSJ?.KCMC}
+                    {item.KHBJSJ?.KHKCSJ?.KCMC} — {item.KHBJSJ?.BJMC}
                   </p>
                   <p>
-                    考勤时间：{moment(item?.CQRQ).format('MM月DD日')} {item.XXSJPZ?.TITLE}{' '}
+                    变更时间：{moment(item?.CQRQ).format('MM月DD日')} {item.XXSJPZ?.TITLE}{' '}
                     {item.XXSJPZ?.KSSJ?.substring(0, 5)}-{item.XXSJPZ?.JSSJ?.substring(0, 5)}
                   </p>
+                  <p>申请时间：{moment(item?.createdAt).format('YYYY年MM月DD日 HH:mm')}</p>
                   {item?.SPBZXX ? (
                     <>
                       {' '}

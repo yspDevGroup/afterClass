@@ -3,7 +3,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2022-05-10 15:02:56
- * @LastEditTime: 2022-05-17 12:19:03
+ * @LastEditTime: 2022-05-18 10:22:25
  * @LastEditors: Sissle Lynn
  */
 import { useEffect, useState } from 'react';
@@ -61,7 +61,7 @@ const StudentApply = () => {
       <GoBack title={'考勤更改'} onclick="/teacher/education/studentRecord" teacher />
       <div className={styles.patrolWrapper}>
         <p style={{ marginBottom: '8px', lineHeight: '35px', textIndent: '12px', color: '#888' }}>
-          注：有且仅能更改今日之前的学生考勤
+          有且仅能更改今日之前的学生考勤
         </p>
         <MobileCalendar
           showType={'week'}

@@ -138,15 +138,17 @@
     p {
       margin-bottom: 0;
       color: #666;
-      line-height: 22px;
+      line-height: 26px;
     }
 
     button {
       float: right;
       height: 30px;
-      padding: 0 12px;
+      padding: 0 6px;
       color: #06f;
       border: none;
+      box-shadow: none;
+
       & + button {
         margin-left: 12px;
       }
@@ -157,10 +159,32 @@
 .detailWrapper {
   .Information {
     margin: 0;
+    padding: 16px 6px;
+    h4 {
+      font-size: 16px;
+    }
+
+    p {
+      line-height: 30px;
+    }
   }
+
   :global {
+    .ant-divider {
+      margin: 0;
+    }
+
     .ant-pro-card-body {
-      padding: 10px;
+      padding: 6px;
+
+      .ant-pro-table-list-toolbar-container {
+        padding: 16px 0;
+
+        div {
+          margin: 0;
+          line-height: 30px;
+        }
+      }
     }
   }
 }

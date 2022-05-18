@@ -355,17 +355,26 @@ const Edit = (props: any) => {
                         okText: '确认',
                         cancelText: '取消',
                         onOk: async () => {
-                          const stu: any = [].map.call(selectedRows, (item: any) => {
+                          let stuName = '';
+                          const stu: any = [].map.call(selectedRows, (item: any, index: number) => {
+                            if (index < 2) {
+                              stuName +=
+                                (index === 1 ? '、' : '') +
+                                item?.XSJBSJ?.XM +
+                                (index === 1 ? '等' : '');
+                            }
                             return {
                               SRCCQZT: item?.CQZT,
                               NOWCQZT: swtChecked ? '出勤' : '缺席',
                               XSJBSJId: item?.XSJBSJ?.id,
                             };
                           });
+
                           const res = await createKHKQXG({
                             CQRQ: date,
                             /** 申请人ID */
                             SQRId: userId,
+                            SQBZXX: stuName + '的考勤变更申请',
                             /** 节次ID */
                             XXSJPZId: jcId,
                             /** 班级ID */
