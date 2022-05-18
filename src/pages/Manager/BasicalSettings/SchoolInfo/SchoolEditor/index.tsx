@@ -62,10 +62,12 @@ const SchoolEditor = (props: any) => {
       code,
     });
     if (response?.status === 'ok') {
-      console.log('response', response);
-      return response?.data?.rows;
+      return response?.data?.list?.map((item: { name: string; code: string }) => ({
+        mc: item.name,
+        dm: item.code,
+      }));
     }
-      message.error(response.message);
+    message.error(response.message);
 
     return [];
   };
