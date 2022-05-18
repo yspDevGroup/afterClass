@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2022-05-12 15:05:21
- * @LastEditTime: 2022-05-17 15:33:43
+ * @LastEditTime: 2022-05-18 14:45:07
  * @LastEditors: Sissle Lynn
  */
 import React, { useState } from 'react';
@@ -374,7 +374,6 @@ const NewAdd = (props: { refresh: () => Promise<void> }) => {
                     Modal.confirm({
                       title: '考勤更改确认',
                       icon: <ExclamationCircleOutlined />,
-                      width: 200,
                       centered: true,
                       wrapClassName: 'ces',
                       content: (
