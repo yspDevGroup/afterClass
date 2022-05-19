@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React from 'react';
 import { Link, useModel, history } from 'umi';
 import { useRef, useState, useEffect } from 'react';
@@ -444,7 +445,11 @@ const ServiceClass = (props: { location: { state: any } }) => {
       filters: true,
       onFilter: false,
       render: (_, record) => {
-        return <>{record?.BJZT === '未开班' ? '已关闭' : '已开启'}</>;
+        return (
+          <>
+            {record?.BJZT === '未开班' ? '已关闭' : record?.BJZT === '已结课' ? '已结课' : '已开启'}
+          </>
+        );
       },
     },
     {

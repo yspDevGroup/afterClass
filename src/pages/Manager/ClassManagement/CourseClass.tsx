@@ -612,11 +612,14 @@ const CourseManagement = (props: { location: { state: any } }) => {
                       return item?.BJZT === '未开班' && item?.pk_count !== 0;
                     });
                     const ids: any[] = [];
+                    const KcTds: any[] = [];
                     list.forEach((value) => {
                       ids.push(value?.id);
+                      KcTds.push(value?.KHKCSJ?.id);
                     });
                     const res = await bulkUpdate({
                       KHBJSJIds: ids,
+                      KHKCSJIds: KcTds,
                       BJZT: '已开班',
                     });
                     if (res?.status === 'ok') {

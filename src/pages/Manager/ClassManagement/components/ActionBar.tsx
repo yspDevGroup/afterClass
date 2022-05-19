@@ -66,6 +66,9 @@ const ActionBar = (props: propstype) => {
           getData();
           // 取消课程发布
           const { KHKCSJ } = recorde;
+          if (KHKCSJ?.SSJGLX === '校内课程') {
+            await updateKHKCSJ({ id: KHKCSJ?.id }, { KCZT: 0 });
+          }
           await updateKHKCSJ({ id: KHKCSJ?.id }, { KCZT: 0 });
         } else if (data?.message === '该班级现在有学生数据，不能取消开班') {
           message.warning('该班级存在关联数据，不可关闭');
@@ -93,6 +96,7 @@ const ActionBar = (props: propstype) => {
   };
 
   const release = (records: any) => {
+    console.log(records, '---------');
     const res = updateKHBJSJ({ id: records.id }, { BJZT: '已开班' });
     new Promise((resolve) => {
       resolve(res);
@@ -107,7 +111,9 @@ const ActionBar = (props: propstype) => {
         }
         // 开班成功后发布课程
         const { KHKCSJ } = records;
-        await updateKHKCSJ({ id: KHKCSJ?.id }, { KCZT: 1 });
+        if (KHKCSJ?.SSJGLX === '校内课程') {
+          await updateKHKCSJ({ id: KHKCSJ?.id }, { KCZT: 1 });
+        }
       } else {
         message.error(`${type ? '开启' : '开班'}失败，请联系管理员或稍后重试`);
         getData();
@@ -211,7 +217,9 @@ const ActionBar = (props: propstype) => {
                           getData();
                           // 取消课程发布
                           const { KHKCSJ } = record;
-                          await updateKHKCSJ({ id: KHKCSJ?.id }, { KCZT: 0 });
+                          if (KHKCSJ?.SSJGLX === '校内课程') {
+                            await updateKHKCSJ({ id: KHKCSJ?.id }, { KCZT: 0 });
+                          }
                         } else {
                           enHenceMsg(data.message);
                         }

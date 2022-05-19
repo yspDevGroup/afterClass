@@ -5,8 +5,8 @@ import { request } from 'umi';
 /** 创建课程数据 PUT /kcsj/create */
 export async function createKCSJ(body: API.CreateKCSJ, options?: { [key: string]: any }) {
   return request<{
-    status: 'ok' | 'error';
-    data?: {
+    status?: 'ok' | 'error';
+    data: {
       id?: string;
       KCMC?: string;
       KCM?: string;
@@ -36,12 +36,15 @@ export async function createKCSJ(body: API.CreateKCSJ, options?: { [key: string]
 
 /** 删除课程数据 DELETE /kcsj/${param0} */
 export async function deleteKCSJ(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.deleteKCSJParams,
+  params: {
+    // path
+    /** 课程ID */
+    id: string;
+  },
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status: 'ok' | 'error'; message?: string }>(`/kcsj/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/kcsj/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
     ...(options || {}),
@@ -63,7 +66,7 @@ export async function getKCSJ(
   options?: { [key: string]: any },
 ) {
   return request<{
-    status: 'ok' | 'error';
+    status?: 'ok' | 'error';
     data?: { count?: number; rows?: API.KCSJ[] };
     message?: string;
   }>('/kcsj/getAll', {
@@ -78,13 +81,16 @@ export async function getKCSJ(
 
 /** 更新课程数据 PUT /kcsj/update/${param0} */
 export async function updateKCSJ(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.updateKCSJParams,
+  params: {
+    // path
+    /** 课程ID */
+    id: string;
+  },
   body: API.UpdateKCSJ,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status: 'ok' | 'error'; message?: string }>(`/kcsj/update/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/kcsj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

@@ -6,18 +6,18 @@ import { request } from 'umi';
 export async function getAllSPJL(
   body: {
     /** 课后教育局Id */
-    KHJYJId: string;
+    KHJYJId?: string;
     /** 课后教育机构名称 */
     KHJYJGMC?: string;
     /** 页数 */
-    page: number;
+    page?: number;
     /** 每页记录数 */
-    pageSize: number;
+    pageSize?: number;
   },
   options?: { [key: string]: any },
 ) {
   return request<{
-    status: 'ok' | 'error';
+    status?: 'ok' | 'error';
     data?: { count?: number; rows?: API.KHJYJSPJL[] };
     message?: string;
   }>('/khjyjspjl/getAllSPJL', {
@@ -33,8 +33,8 @@ export async function getAllSPJL(
 /** 创建课后教育局审批记录 PUT /khjyjspjl/createKHJYJSPJL */
 export async function CreateKHJYJSPJL(body: API.CreateKHJYJSPJL, options?: { [key: string]: any }) {
   return request<{
-    status: 'ok' | 'error';
-    data?: {
+    status?: 'ok' | 'error';
+    data: {
       id?: string;
       ZT?: number;
       BZ?: string;

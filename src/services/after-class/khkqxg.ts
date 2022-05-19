@@ -4,13 +4,16 @@ import { request } from 'umi';
 
 /** 获取考勤修改申请记录 GET /khkqxg/${param0} */
 export async function getKHKQXG(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.getKHKQXGParams,
+  params: {
+    // path
+    /** 申请ID */
+    id: string;
+  },
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
   return request<{
-    status: 'ok' | 'error';
+    status?: 'ok' | 'error';
     data?: {
       id?: string;
       ZT?: number;
@@ -58,12 +61,15 @@ export async function getKHKQXG(
 
 /** 删除考勤修改申请记录 DELETE /khkqxg/${param0} */
 export async function deleteKHKQXG(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.deleteKHKQXGParams,
+  params: {
+    // path
+    /** 申请ID */
+    id: string;
+  },
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status: 'ok' | 'error'; message?: string }>(`/khkqxg/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/khkqxg/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
     ...(options || {}),
@@ -82,24 +88,27 @@ export async function getAllKHKQXG(
     /** 班级ID */
     KHBJSJId?: string;
     /** 学校ID */
-    XXJBSJId: string;
+    XXJBSJId?: string;
   },
   options?: { [key: string]: any },
 ) {
-  return request<{ status: 'ok' | 'error'; data?: API.KHKQXG[]; message?: string }>('/khkqxg/all', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
+  return request<{ status?: 'ok' | 'error'; data?: API.KHKQXG[]; message?: string }>(
+    '/khkqxg/all',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: body,
+      ...(options || {}),
     },
-    data: body,
-    ...(options || {}),
-  });
+  );
 }
 
 /** 创建考勤修改申请 PUT /khkqxg/create */
 export async function createKHKQXG(body: API.CreateKHKQXG, options?: { [key: string]: any }) {
   return request<{
-    status: 'ok' | 'error';
+    status?: 'ok' | 'error';
     data?: {
       id?: string;
       ZT?: number;
@@ -150,13 +159,16 @@ export async function createKHKQXG(body: API.CreateKHKQXG, options?: { [key: str
 
 /** 更新考勤修改申请 PUT /khkqxg/update/${param0} */
 export async function updateKHKQXG(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.updateKHKQXGParams,
+  params: {
+    // path
+    /** 申请ID */
+    id: string;
+  },
   body: API.UpdateKHKQXG,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status: 'ok' | 'error'; message?: string }>(`/khkqxg/update/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/khkqxg/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
