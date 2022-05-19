@@ -30,7 +30,7 @@ const CourseDetails = () => {
   const path = getQueryString('path');
   const date = getQueryString('date');
   const cdName = getQueryString('cdname');
-  const userId = currentUser.JSId || testTeacherId;
+  const userId = currentUser?.JSId || testTeacherId;
 
   useEffect(() => {
     async function fetchData() {
@@ -38,7 +38,7 @@ const CourseDetails = () => {
         const oriData = await ParentHomeData(
           'teacher',
           currentUser?.xxId,
-          currentUser.JSId || testTeacherId,
+          currentUser?.JSId || testTeacherId,
         );
         const { courseSchedule } = oriData;
         const classInfo = courseSchedule.find((item: { KHBJSJId: string }) => {
@@ -161,19 +161,19 @@ const CourseDetails = () => {
   const handleModal = (val: any) => {
     let content = {};
     if (val.otherInfo) {
-      const { LX, TKJC, TKRQ, SKJS, DKJS, BZ } = val.otherInfo;
+      const { LX, TKJC, TKRQ, DKJS } = val.otherInfo;
       if (LX === 1) {
         content = {
           title: '代课说明',
-          content: `由于${SKJS.XM}${BZ},本节课临时调整为${DKJS.XM}老师上课,请知悉.`,
+          content: `本节课临时调整为${DKJS.XM}老师上课,请知悉.`,
         };
       } else {
         content = {
           title: '调课说明',
-          content: `由于${BZ},本节课临时调整到${TKRQ}日${TKJC?.KSSJ?.substring(
+          content: `本节课临时调整到${TKRQ}日${TKJC?.KSSJ?.substring(0, 5)}-${TKJC?.JSSJ?.substring(
             0,
             5,
-          )}-${TKJC?.JSSJ?.substring(0, 5)}上课,请知悉.`,
+          )}上课,请知悉.`,
         };
       }
       Modal.info({
