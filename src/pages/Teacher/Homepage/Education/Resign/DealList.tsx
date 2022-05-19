@@ -66,8 +66,6 @@ const DealList: React.FC = () => {
               } else {
                 date = moment(`${item.year}/${item.month}/01`).endOf('month').format('YYYY-MM-DD');
               }
-              alert(moment(`${item.year}/${item.month}/01`).endOf('month'));
-              console.log(moment(`${item.year}/${item.month}/01`).endOf('month'));
               return (
                 <div className={styles.card} key={item.month}>
                   <div>
