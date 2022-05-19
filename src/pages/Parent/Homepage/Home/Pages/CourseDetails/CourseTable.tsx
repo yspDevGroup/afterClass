@@ -10,7 +10,11 @@ import Nodata from '@/components/Nodata';
 import GoBack from '@/components/GoBack';
 import { ParentHomeData } from '@/services/local-services/mobileHome';
 import { getAllKHXSCQ } from '@/services/after-class/khxscq';
-import { getAllKHBJKSSJ, getTeachersByBJId } from '@/services/after-class/khbjsj';
+import {
+  getAllKHBJKSSJ,
+  getMobileClassDetail,
+  getTeachersByBJId,
+} from '@/services/after-class/khbjsj';
 import ShowName from '@/components/ShowName';
 import MobileCon from '@/components/MobileCon';
 
@@ -69,6 +73,19 @@ const CourseTable: React.FC = () => {
         });
         if (classInfo) {
           setKcDetail(classInfo.detail?.[0]);
+        } else {
+          const resBJ = await getMobileClassDetail({
+            id: classid,
+          });
+          if (resBJ.status === 'ok') {
+            const { data } = resBJ;
+            setKcDetail({
+              title: data.KHKCSJ.KCMC,
+              xq: '本校',
+              address: data.KHPKSJs?.[0]?.FJSJ?.FJMC,
+              ...data,
+            });
+          }
         }
         if (res.status === 'ok' && res.data) {
           let totalDays = classInfo?.days || [];
@@ -154,6 +171,7 @@ const CourseTable: React.FC = () => {
     }
     fetchData();
   }, [classid]);
+
   const handleModal = (val: any) => {
     let content = {};
     if (val.tag) {
@@ -177,7 +195,6 @@ const CourseTable: React.FC = () => {
       });
     }
   };
-
   return (
     <MobileCon>
       <div className={styles.CourseDetails2}>
@@ -196,10 +213,15 @@ const CourseTable: React.FC = () => {
                 {moment(KcDetail?.KKRQ).format('YYYY.MM.DD')}~
                 {moment(KcDetail?.JKRQ).format('YYYY.MM.DD')}
               </li>
-              <li>
-                <span>上课地点：</span>
-                {KcDetail?.xq} | {KcDetail?.address}
-              </li>
+              {KcDetail?.BJZT !== '已结课' ? (
+                <li>
+                  <span>上课地点：</span>
+                  {KcDetail?.xq} | {KcDetail?.address}
+                </li>
+              ) : (
+                <></>
+              )}
+
               {KcDetail?.KSS === 0 || KcDetail?.KSS === null ? (
                 ''
               ) : (
@@ -212,6 +234,7 @@ const CourseTable: React.FC = () => {
                 <span>授课班级：</span>
                 {KcDetail?.BJMC}
               </li>
+
               {mainTeacher ? (
                 <li>
                   <span>主班：</span>
