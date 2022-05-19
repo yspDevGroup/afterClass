@@ -11,6 +11,7 @@ export async function createSSOToken(
     expires_in: number;
     /** 刷新token */
     refresh_token: string;
+    appCode: string;
     /** token类型 */
     token_type?: string;
   },
@@ -242,7 +243,10 @@ export async function getAdministrative(
 ) {
   return request<{
     status: 'ok' | 'error';
-    data?: { count?: number; rows?: { id?: string; lx?: string; dm?: string; mc?: string }[] };
+    data?: {
+      count?: number;
+      list?: { id?: string; type?: string; code?: string; name?: string }[];
+    };
     message?: string;
   }>('/sso/getAdministrative', {
     method: 'POST',

@@ -3,12 +3,12 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-25 09:20:56
- * @LastEditTime: 2022-04-25 10:53:36
+ * @LastEditTime: 2022-05-19 10:35:40
  * @LastEditors: Sissle Lynn
  */
 import { useEffect, useState } from 'react';
 import { Link, useModel } from 'umi';
-import { List } from 'antd';
+import { Input, List } from 'antd';
 import dayjs from 'dayjs';
 // 默认语言为 en-US，如果你需要设置其他语言，推荐在入口文件全局设置 locale
 import moment from 'moment';
@@ -24,6 +24,7 @@ import { getWeekday } from '@/services/local-services/mobileHome';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import MobileCon from '@/components/MobileCon';
 
+const { Search } = Input;
 const PatrolArrange = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
@@ -31,12 +32,13 @@ const PatrolArrange = () => {
   // 课表中选择课程后的数据回显
   const [dateData, setDateData] = useState<any>([]);
   const [dates, setDates] = useState<string[]>([]);
-  const getData = async (days: string) => {
+  const getData = async (days: string, name?: string) => {
     const result = await queryXNXQList(currentUser?.xxId);
     if (result) {
       const res = await getScheduleByDate({
         JZGJBSJId: currentUser?.JSId || testTeacherId,
         RQ: days,
+        KCMC: name,
         XNXQId: result?.current?.id,
         XXJBSJId: currentUser?.xxId,
       });
@@ -93,6 +95,15 @@ const PatrolArrange = () => {
           }}
         />
         <div className={styles.patrolContent}>
+          <div style={{ marginBottom: 12 }}>
+            <Search
+              placeholder="请输入课程名称"
+              onSearch={(value) => {
+                getData(day, value);
+              }}
+              enterButton
+            />
+          </div>
           {dateData?.length ? (
             <List
               className={styles.patrolList}

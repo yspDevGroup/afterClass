@@ -15,6 +15,8 @@ export async function getKHKQXG(
       id?: string;
       ZT?: number;
       CQRQ?: string;
+      createdAt?: string;
+      updatedAt?: string;
       SQRId?: string;
       SQR?: { id?: string; GH?: string; XM?: string; WechatUserId?: string } | any;
       SQBZXX?: string;
@@ -43,7 +45,7 @@ export async function getKHKQXG(
         id?: string;
         SRCCQZT?: string;
         NOWCQZT?: string;
-        XSJBSJ?: { id?: string; XH?: string; XM?: string; WechatUserId?: string };
+        XSJBSJ?: { id?: string; XH?: string; XM?: string; WechatUserId?: string } | any;
       }[];
     };
     message?: string;
@@ -102,6 +104,8 @@ export async function createKHKQXG(body: API.CreateKHKQXG, options?: { [key: str
       id?: string;
       ZT?: number;
       CQRQ?: string;
+      createdAt?: string;
+      updatedAt?: string;
       SQRId?: string;
       SQR?: { id?: string; GH?: string; XM?: string; WechatUserId?: string } | any;
       SQBZXX?: string;
@@ -130,7 +134,7 @@ export async function createKHKQXG(body: API.CreateKHKQXG, options?: { [key: str
         id?: string;
         SRCCQZT?: string;
         NOWCQZT?: string;
-        XSJBSJ?: { id?: string; XH?: string; XM?: string; WechatUserId?: string };
+        XSJBSJ?: { id?: string; XH?: string; XM?: string; WechatUserId?: string } | any;
       }[];
     };
     message?: string;

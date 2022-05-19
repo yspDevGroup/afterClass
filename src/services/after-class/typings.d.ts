@@ -2848,6 +2848,10 @@ declare namespace API {
     ZT?: number;
     /** 出勤日期 */
     CQRQ?: string;
+    /** 申请时间 */
+    createdAt?: string;
+    /** 更新时间 */
+    updatedAt?: string;
     /** 申请人ID */
     SQRId?: string;
     SQR?: { id?: string; GH?: string; XM?: string; WechatUserId?: string } | any;
@@ -2882,7 +2886,7 @@ declare namespace API {
       id?: string;
       SRCCQZT?: string;
       NOWCQZT?: string;
-      XSJBSJ?: { id?: string; XH?: string; XM?: string; WechatUserId?: string };
+      XSJBSJ?: { id?: string; XH?: string; XM?: string; WechatUserId?: string } | any;
     }[];
   };
 
