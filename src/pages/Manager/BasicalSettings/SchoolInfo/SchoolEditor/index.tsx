@@ -415,6 +415,7 @@ const SchoolEditor = (props: any) => {
           label: '邮政编码',
           name: 'XXYZBM',
           key: 'XXYZBM',
+          rules: [{ required: false, message: '邮政编码长度为6位', max: 6, len: 6 }],
         },
       ],
     },
