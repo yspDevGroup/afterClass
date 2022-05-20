@@ -61,8 +61,9 @@ const TeachCourses = (props: { dataResource: any }) => {
           全部 <IconFont type="icon-gengduo" />
         </Link>
       </div>
-
-      <ListComponent listData={dataSource} />
+      <div className={styles.RJKCB}>
+        <ListComponent listData={dataSource} />
+      </div>
     </div>
   );
 };
