@@ -286,6 +286,14 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
           </Descriptions.Item>
           <Descriptions.Item label="创建时间">{info.createdAt}</Descriptions.Item>
           <Descriptions.Item label="最后更新时间">{info.updatedAt}</Descriptions.Item>
+          {info?.SSJGLX === '机构课程' ? (
+            <Descriptions.Item label="引入时间">
+              {info.KHKCSQs?.[info?.KHKCSQs?.length - 1].updatedAt}
+            </Descriptions.Item>
+          ) : (
+            ''
+          )}
+
           <Descriptions.Item label="课程封面">
             <Image width={110} height={72} src={info?.KCTP} fallback={defImg} />
           </Descriptions.Item>

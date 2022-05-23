@@ -335,7 +335,6 @@ const CourseList = () => {
               <Tooltip
                 title="该课程已下架或取消授权，结课后无法再次合作。"
                 overlayClassName={styles.tishi}
-                mouseLeaveDelay={100}
               >
                 {record?.KCMC}
                 <ExclamationCircleOutlined style={{ color: '#FF5722', marginLeft: '5px' }} />
