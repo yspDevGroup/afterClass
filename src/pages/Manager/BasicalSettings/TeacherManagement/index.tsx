@@ -339,13 +339,9 @@ const TeacherManagement = () => {
                >
                  同步企业微信人员信息
                </Button> */}
-                {isComWx === true ? (
-                  <></>
-                ) : (
-                  <Button key="button" type="primary" onClick={() => setModalVisible(true)}>
-                    <VerticalAlignBottomOutlined /> 导入
-                  </Button>
-                )}
+                <Button key="button" type="primary" onClick={() => setModalVisible(true)}>
+                  <VerticalAlignBottomOutlined /> 导入
+                </Button>
               </>
             );
           }}
