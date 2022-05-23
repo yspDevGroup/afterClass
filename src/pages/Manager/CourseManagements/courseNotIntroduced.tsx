@@ -179,6 +179,16 @@ const courseNotIntroduced = () => {
       width: 100,
     },
     {
+      title: '引入时间',
+      align: 'center',
+      width: 200,
+      key: 'times',
+      // search: false,
+      render: (_, record) => {
+        return <>{record?.KHKCSQs?.[0]?.ZT === 1 ? record.KHKCSQs?.[0].updatedAt : '-'}</>;
+      },
+    },
+    {
       title: '备注',
       align: 'center',
       width: 150,
@@ -378,3 +388,5 @@ const courseNotIntroduced = () => {
 };
 
 export default courseNotIntroduced;
+
+

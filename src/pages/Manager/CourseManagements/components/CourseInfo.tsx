@@ -284,6 +284,8 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
               return <Tag key={item.id}>{`${item.XD}${item.NJMC}`}</Tag>;
             })}
           </Descriptions.Item>
+          <Descriptions.Item label="创建时间">{info.createdAt}</Descriptions.Item>
+          <Descriptions.Item label="最后更新时间">{info.updatedAt}</Descriptions.Item>
           <Descriptions.Item label="课程封面">
             <Image width={110} height={72} src={info?.KCTP} fallback={defImg} />
           </Descriptions.Item>

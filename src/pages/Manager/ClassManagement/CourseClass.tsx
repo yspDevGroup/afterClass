@@ -569,7 +569,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
       valueType: 'option',
       key: 'option',
       align: 'center',
-      width: 230,
+      width: 250,
       fixed: 'right',
       render: (_, record) => {
         return (

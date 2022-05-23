@@ -328,6 +328,24 @@ const CourseList = () => {
       width: 150,
       ellipsis: true,
       fixed: 'left',
+      render: (_, record) => {
+        return (
+          <>
+            {record?.SSJGLX === '机构课程' && record?.KCZT !== 2 ? (
+              <Tooltip
+                title="该课程已下架或取消授权，结课后无法再次合作。"
+                overlayClassName={styles.tishi}
+                mouseLeaveDelay={100}
+              >
+                {record?.KCMC}
+                <ExclamationCircleOutlined style={{ color: '#FF5722', marginLeft: '5px' }} />
+              </Tooltip>
+            ) : (
+              record?.KCMC
+            )}
+          </>
+        );
+      },
     },
     {
       title: '课程来源',
@@ -388,7 +406,7 @@ const CourseList = () => {
       },
     },
     {
-      title:  (
+      title: (
         <span>
           服务课堂&nbsp;
           <Tooltip overlayStyle={{ maxWidth: '30em' }} title={<>已开启班级数/班级总数</>}>
@@ -421,7 +439,7 @@ const CourseList = () => {
       },
     },
     {
-      title:   (
+      title: (
         <span>
           缤纷课堂&nbsp;
           <Tooltip overlayStyle={{ maxWidth: '30em' }} title={<>已开班班级数/班级总数</>}>
