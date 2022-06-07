@@ -244,11 +244,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
       setnames('copy');
     } else {
       setCopyType('undefined');
-      if (!(data.BJZT === '未开班') && !(data.BJZT === '未排课') && !(data.BJZT === '已排课')) {
-        setnames('chakan');
-      } else {
-        setnames('add');
-      }
+      setnames('chakan');
     }
   };
   // 显示新增课程班信息弹框
