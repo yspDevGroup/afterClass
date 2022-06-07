@@ -40,7 +40,7 @@ const Mine = () => {
           <div className={styles.headerName}>
             <h4>
               <span ref={userRef}>
-                <ShowName type="userName" openid={currentUser.wechatUserId} XM={currentUser.XM} />
+                <ShowName type="userName" openid={currentUser?.wechatUserId} XM={currentUser?.XM} />
               </span>
               <span>老师</span>
             </h4>

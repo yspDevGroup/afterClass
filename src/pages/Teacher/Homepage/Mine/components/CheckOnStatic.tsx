@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-10-26 16:18:21
- * @LastEditTime: 2022-04-06 17:34:48
+ * @LastEditTime: 2022-06-07 10:00:24
  * @LastEditors: Sissle Lynn
  */
 import React, { useEffect, useState } from 'react';
@@ -24,6 +24,7 @@ const CheckOnStatic = () => {
   const [satistics, setStatistics] = useState<any[]>();
   // 代课数据
   const [replace, setReplace] = useState<any[]>([]);
+  const [adoptData, setAdoptData] = useState<any[]>([]);
   // 转换考勤数据格式
   const convertData = (data: any, type: string) => {
     if (data && type === 'attendance') {
@@ -138,7 +139,7 @@ const CheckOnStatic = () => {
       if (result.current) {
         const res = await countKHJSCQ({
           XNXQId: result.current.id,
-          JZGJBSJId: currentUser.JSId || testTeacherId,
+          JZGJBSJId: currentUser?.JSId || testTeacherId,
         });
         if (res.status === 'ok') {
           const arr = [].map.call(res.data.SKBJs, (item) => {
@@ -147,11 +148,12 @@ const CheckOnStatic = () => {
           const arrs = [].map.call(res.data.RLBJs, (item) => {
             return convertData(item, 'rlbj');
           });
-          setStatistics([...arr, ...arrs] || []);
+          setStatistics(arr || []);
+          setAdoptData(arrs);
         }
         const response = await statisSubstitute({
           XNXQId: result.current.id,
-          JZGJBSJId: currentUser.JSId || testTeacherId,
+          JZGJBSJId: currentUser?.JSId || testTeacherId,
         });
         if (response.status === 'ok') {
           let newArr: any[] = [];
@@ -202,8 +204,29 @@ const CheckOnStatic = () => {
         )}
       </div>
       <div className={styles.funWrapper}>
+        <div className={styles.titleBar}>认领课程统计</div>
+        {adoptData?.length ? (
+          <Row gutter={8}>
+            {adoptData.map((item: any) => {
+              return (
+                <Col span={12} key={item.id}>
+                  <PieChart
+                    data={item.data}
+                    title={item.title}
+                    subTitle={item.subTitle}
+                    key={item.title}
+                  />
+                </Col>
+              );
+            })}
+          </Row>
+        ) : (
+          <Nodata imgSrc={noChart} desc="暂无数据" />
+        )}
+      </div>
+      <div className={styles.funWrapper}>
         <div className={styles.titleBar}>代课统计</div>
-        {replace && replace.length ? (
+        {replace?.length ? (
           <BarChart data={replace} />
         ) : (
           <Nodata imgSrc={noChart} desc="暂无数据" />
