@@ -5,7 +5,7 @@ import zhCN from 'antd/es/locale/zh_CN';
 import { ConfigProvider } from 'antd';
 import { Result, Tabs } from 'antd';
 import IconFont from '@/components/CustomIcon';
-import { getQueryString } from '@/utils/utils';
+import { getQueryObj } from '@/utils/utils';
 import Home from './Home';
 import Education from './Education';
 import Mine from './Mine';
@@ -22,7 +22,7 @@ const PersonalHomepage = () => {
   const homeRef = useRef(null);
   const eduRef = useRef(null);
   const mineRef = useRef(null);
-  const index = getQueryString('index');
+  const { index } = getQueryObj();
   useEffect(() => {
     (async () => {
       const oriData = await ParentHomeData(

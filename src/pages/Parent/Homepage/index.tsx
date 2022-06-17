@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Tabs } from 'antd';
 import { useModel } from 'umi';
-import { getQueryString } from '@/utils/utils';
+import { getQueryObj } from '@/utils/utils';
 import { ParentHomeData } from '@/services/local-services/mobileHome';
 import { history } from 'umi';
 import Home from './Home';
@@ -22,7 +22,7 @@ const PersonalHomepage = () => {
   const homeRef = useRef(null);
   const studyRef = useRef(null);
   const mineRef = useRef(null);
-  const index = getQueryString('index');
+  const { index } = getQueryObj();
   const StorageXSId =
     localStorage.getItem('studentId') || (student && student?.[0].XSJBSJId) || testStudentId;
   const StorageNjId =

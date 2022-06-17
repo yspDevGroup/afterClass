@@ -6,7 +6,7 @@ import { Button, Form, message, Spin, Modal, Tooltip, Empty, Select, Card, Row, 
 import ProForm, { ProFormSelect } from '@ant-design/pro-form';
 import ProCard from '@ant-design/pro-card';
 import { DownOutlined, QuestionCircleOutlined, UpOutlined, LeftOutlined } from '@ant-design/icons';
-import { getQueryString } from '@/utils/utils';
+import { getQueryObj } from '@/utils/utils';
 import ExcelTable from '@/components/ExcelTable';
 import ShowName from '@/components/ShowName';
 import { createKHPKSJ, deleteKHPKSJ, addKHPKSJ } from '@/services/after-class/khpksj';
@@ -268,7 +268,7 @@ const AddArranginClass: FC<PropsType> = (props) => {
   // 班级选择
 
   const onReset = () => {
-    const bjID = getQueryString('courseId');
+    const bjID = getQueryObj().courseId;
     if (bjID) {
       history.go(-1);
     } else {
@@ -279,7 +279,8 @@ const AddArranginClass: FC<PropsType> = (props) => {
   const getKCStyle = (id: string) => {
     if (id === Bj?.id) {
       return { borderColor: 'rgba(62,136,248,1)' };
-    } if (formValues?.BJId) {
+    }
+    if (formValues?.BJId) {
       return {};
     }
     return {};
@@ -607,6 +608,7 @@ const AddArranginClass: FC<PropsType> = (props) => {
                         value?.KHBJJs?.[0]?.JZGJBSJ;
                       return (
                         <ProCard
+                          key={value.id}
                           className="banjiItem"
                           layout="center"
                           bordered
@@ -638,6 +640,7 @@ const AddArranginClass: FC<PropsType> = (props) => {
                               const zb = value?.KHBJJs.find((item: any) => item.JSLX === '主教师');
                               return (
                                 <ProCard
+                                  key={value.id}
                                   layout="center"
                                   bordered
                                   className="banjiItem"
@@ -675,6 +678,7 @@ const AddArranginClass: FC<PropsType> = (props) => {
                               const zb = value?.KHBJJs.find((item: any) => item.JSLX === '主教师');
                               return (
                                 <ProCard
+                                  key={value.id}
                                   layout="center"
                                   bordered
                                   className="banjiItem"

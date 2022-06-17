@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import { Badge, Modal } from 'antd';
-import { getQueryString } from '@/utils/utils';
+import { getQueryObj } from '@/utils/utils';
 import moment from 'moment';
 import Nodata from '@/components/Nodata';
 import GoBack from '@/components/GoBack';
@@ -25,11 +25,8 @@ const CourseDetails = () => {
   const [mainTeacher, setMainTeacher] = useState<any>();
   const [teacherList, setTeacherList] = useState<any[]>([]);
   const [FJMC, setFJMC] = useState();
-  const classid = getQueryString('classid');
-  const claim = getQueryString('status');
-  const path = getQueryString('path');
-  const date = getQueryString('date');
-  const cdName = getQueryString('cdname');
+  const claim = getQueryObj().status;
+  const { classid, path, date, cdname } = getQueryObj('classid');
   const userId = currentUser?.JSId || testTeacherId;
 
   useEffect(() => {
@@ -221,7 +218,7 @@ const CourseDetails = () => {
               </li>
               <li>
                 <span>上课地点：</span>
-                {KcDetail?.xq} | {cdName === 'undefined' ? FJMC : cdName}
+                {KcDetail?.xq} | {cdname === 'undefined' ? FJMC : cdname}
               </li>
               {KcDetail?.KSS ? (
                 <li>
@@ -254,7 +251,7 @@ const CourseDetails = () => {
                   <span>副班：</span>
                   {teacherList.map((ele) => {
                     return (
-                      <span className={styles.teacherName}>
+                      <span key={ele.id} className={styles.teacherName}>
                         <ShowName
                           XM={ele?.JZGJBSJ?.XM}
                           type="userName"
@@ -331,7 +328,12 @@ const CourseDetails = () => {
                     break;
                 }
                 return (
-                  <div className={styles.card} style={style} onClick={() => handleModal(value)}>
+                  <div
+                    key={value.index}
+                    className={styles.card}
+                    style={style}
+                    onClick={() => handleModal(value)}
+                  >
                     <p>
                       {value.tag && value.tag === '假'
                         ? `【${value.tag}】`

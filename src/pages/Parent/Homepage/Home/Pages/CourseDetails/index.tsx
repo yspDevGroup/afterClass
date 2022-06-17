@@ -3,7 +3,7 @@
 import { Button, Checkbox, Collapse, Divider, message, Modal, Radio } from 'antd';
 import React, { useEffect, useState, useRef } from 'react';
 import { useModel, Link, history } from 'umi';
-import { enHenceMsg, getQueryString } from '@/utils/utils';
+import { enHenceMsg, getQueryObj } from '@/utils/utils';
 import moment from 'moment';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import noPic from '@/assets/noPic.png';
@@ -51,8 +51,7 @@ const CourseDetails: React.FC = () => {
   const [KHFUXY, setKHFUXY] = useState<any>();
   const [BjDetails, setBjDetails] = useState<any>();
   const [KBClass, setKBClass] = useState<any>([]);
-  const courseid = getQueryString('courseid');
-  const index = getQueryString('index');
+  const { courseid, index } = getQueryObj();
   // const curDate: Date = new Date();
   // const myDate: Date = new Date(moment(curDate).format('YYYY/MM/DD'));
 
@@ -569,7 +568,7 @@ const CourseDetails: React.FC = () => {
                           <>
                             {JFData?.map((value: any) => {
                               return (
-                                <div>
+                                <div key={value.JCMC}>
                                   <div>{value.JCMC}</div>
                                   {value.JCFY <= 0 ? <div>免费</div> : <div>￥{value.JCFY}</div>}
                                 </div>
@@ -580,7 +579,7 @@ const CourseDetails: React.FC = () => {
                           <>
                             {KBClass?.[0].KHKCJCs?.map((value: any) => {
                               return (
-                                <div>
+                                <div key={value.JCMC}>
                                   <div>{value.JCMC}</div>
                                   {value.JCFY <= 0 ? <div>免费</div> : <div>￥{value.JCFY}</div>}
                                 </div>

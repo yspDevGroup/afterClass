@@ -4,7 +4,7 @@ import PageContainer from '@/components/PageContainer';
 import ServiceClass from './ServiceClass';
 import CourseClass from './CourseClass';
 import { useEffect, useState } from 'react';
-import { getQueryString } from '@/utils/utils';
+import { getQueryObj } from '@/utils/utils';
 
 const { TabPane } = Tabs;
 
@@ -13,21 +13,21 @@ const Index = (props: { location: { state: any } }) => {
 
   const [keys, setKeys] = useState<string>();
   useEffect(() => {
-    const indexs = getQueryString('index');
+    const { indexs } = getQueryObj();
     if (indexs) {
-      setKeys(indexs)
+      setKeys(indexs);
     } else if (state) {
-      setKeys(state?.type)
+      setKeys(state?.type);
     } else {
-      setKeys('1')
+      setKeys('1');
     }
-  }, [])
+  }, []);
   return (
     <PageContainer>
       <Tabs
         activeKey={keys}
         onChange={(key) => {
-          setKeys(key)
+          setKeys(key);
         }}
       >
         <TabPane tab="服务课堂" key="1">

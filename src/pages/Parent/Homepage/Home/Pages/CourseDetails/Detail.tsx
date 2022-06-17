@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import moment from 'moment';
 import { Checkbox } from 'antd';
-import { enHenceMsg, getQueryString } from '@/utils/utils';
+import { enHenceMsg, getQueryObj } from '@/utils/utils';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import noPic from '@/assets/noPic.png';
 import GoBack from '@/components/GoBack';
@@ -26,8 +26,7 @@ const Detail: React.FC = () => {
   const [JFTotalost, setJFTotalost] = useState<number>(0);
   const [JFData, setJFData] = useState([]);
   const [JFstate, setJFstate] = useState(false);
-  const classid = getQueryString('classid');
-  const index = getQueryString('index');
+  const { classid, index } = getQueryObj();
   const StorageXSId =
     localStorage.getItem('studentId') || (student && student[0].XSJBSJId) || testStudentId;
   const fetchData = async (bjid: string) => {
@@ -241,7 +240,7 @@ const Detail: React.FC = () => {
                             <>
                               {JFData?.map((value: any) => {
                                 return (
-                                  <div>
+                                  <div key={value.JCMC}>
                                     <div className={styles.JCMC}>{value.JCMC}</div>
                                     {value.JCFY <= 0 ? <div>免费</div> : <div>￥{value.JCFY}</div>}
                                   </div>

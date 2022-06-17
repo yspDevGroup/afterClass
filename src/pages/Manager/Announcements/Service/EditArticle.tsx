@@ -10,7 +10,7 @@ import { history, useModel } from 'umi';
 import styles from '../index.module.less';
 import PageContainer from '@/components/PageContainer';
 import { createXXTZGG, updateXXTZGG } from '@/services/after-class/xxtzgg';
-import { getQueryString } from '@/utils/utils';
+import { getQueryObj } from '@/utils/utils';
 
 const formItemLayout = {
   labelCol: {
@@ -26,7 +26,7 @@ const formItemLayout = {
  */
 const EditArticle = (props: any) => {
   const { state } = props.location;
-  const type = getQueryString('type');
+  const { type } = getQueryObj();
   const [form] = Form.useForm();
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};

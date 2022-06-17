@@ -3,7 +3,7 @@ import { Button, Modal, Tabs } from 'antd';
 import PageContainer from '@/components/PageContainer';
 import { history, useModel } from 'umi';
 import CourseScheduling from './CourseScheduling';
-import { getQueryString } from '@/utils/utils';
+import { getQueryObj } from '@/utils/utils';
 import moment from 'moment';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
@@ -61,7 +61,7 @@ const Index = () => {
       return new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1 - day);
     };
     const end = new Date(moment(TimeData?.JSRQ).format('YYYY/MM/DD  23:59:59'));
-    setStateTime(getFirstDay(new Date(TimeData?.KSRQ)))
+    setStateTime(getFirstDay(new Date(TimeData?.KSRQ)));
     const times = end.getTime() - getFirstDay(new Date(TimeData?.KSRQ)).getTime();
     // 获取开始时间到结束时间中间有多少个自然周
     const zhoushu = Math.ceil(times / (7 * 24 * 60 * 60 * 1000));
@@ -76,12 +76,12 @@ const Index = () => {
   };
 
   /**
- * 把接口返回的数据处理成ExcelTable组件所需要的
- * @param data  接口返回的数据
- * @param timeData  课程时间段数据
- * @param bjId 班级id
- * @returns
- */
+   * 把接口返回的数据处理成ExcelTable组件所需要的
+   * @param data  接口返回的数据
+   * @param timeData  课程时间段数据
+   * @param bjId 班级id
+   * @returns
+   */
   const startWeek = Number(moment(TimeData?.KSRQ).format('E'));
   const endWeek = Number(moment(TimeData?.JSRQ).format('E'));
   const processingData = (data: any, timeData: any, bjId: string | undefined = undefined) => {
@@ -102,7 +102,11 @@ const Index = () => {
               jsId: '',
               FJLXId: '', // 场地类型ID
               rowspan: timeKey === 0 ? timeData?.length : 0,
-              SD: `${moment(stateTime).add(index * 7, 'days').format('MM.DD')}-${moment(stateTime).add(6 + (index * 7), 'days').format('MM.DD')} `
+              SD: `${moment(stateTime)
+                .add(index * 7, 'days')
+                .format('MM.DD')}-${moment(stateTime)
+                .add(6 + index * 7, 'days')
+                .format('MM.DD')} `,
             },
             course: {
               cla: timeItem?.TITLE,
@@ -132,9 +136,7 @@ const Index = () => {
                     fjmc: KHItem?.FJSJ?.FJMC || KHItem?.FJSJ?.label,
                     jcmc: KHItem?.XXSJPZ?.TITLE,
                   };
-                  if (
-                    bjId === KHItem?.KHBJSJ?.id
-                  ) {
+                  if (bjId === KHItem?.KHBJSJ?.id) {
                     sameClassData.push({
                       WEEKDAY: KHItem?.WEEKDAY, // 周
                       XXSJPZId: KHItem?.XXSJPZId, // 时间ID
@@ -280,10 +282,14 @@ const Index = () => {
       });
     }
     return tableData;
-
   };
 
-  const processingDatas = (data: any, timeData: any, week: any, bjId: string | undefined = undefined) => {
+  const processingDatas = (
+    data: any,
+    timeData: any,
+    week: any,
+    bjId: string | undefined = undefined,
+  ) => {
     const tableData: any[] = [];
     const sameClassData: any[] = [];
     let Weekss: any = [];
@@ -293,7 +299,7 @@ const Index = () => {
       Weekss = week;
       weekIndex = Weeks.indexOf(week[0]);
     } else {
-      Weekss = Weeks
+      Weekss = Weeks;
     }
     if (!timeData.length) {
       setPKiskai(true);
@@ -308,7 +314,11 @@ const Index = () => {
               jsId: '',
               FJLXId: '', // 场地类型ID
               rowspan: timeKey === 0 ? timeData?.length : 0,
-              SD: `${moment(stateTime).add(( weekIndex || index) * 7, 'days').format('MM.DD')}-${moment(stateTime).add(6 + (( weekIndex || index) * 7), 'days').format('MM.DD')} `
+              SD: `${moment(stateTime)
+                .add((weekIndex || index) * 7, 'days')
+                .format('MM.DD')}-${moment(stateTime)
+                .add(6 + (weekIndex || index) * 7, 'days')
+                .format('MM.DD')} `,
             },
             course: {
               cla: timeItem?.TITLE,
@@ -345,7 +355,7 @@ const Index = () => {
                     dis: bjId !== KHItem?.KHBJSJ?.id,
                     fjmc: KHItem?.FJSJ?.FJMC || KHItem?.FJSJ?.label,
                     jcmc: KHItem?.XXSJPZ?.TITLE,
-                    XNXQId: KHItem?.XNXQId
+                    XNXQId: KHItem?.XNXQId,
                   };
                   if (KHItem?.WEEKDAY === '1') {
                     table?.monday.push(newObj);
@@ -388,7 +398,7 @@ const Index = () => {
     return tableData;
   };
   const processingDataDS = (data: any, timeData: any, bjId: string | undefined = undefined) => {
-    const NewArr = ['单周', '双周']
+    const NewArr = ['单周', '双周'];
     const tableData: any[] = [];
     const sameClassData: any[] = [];
     if (!timeData.length) {
@@ -475,7 +485,7 @@ const Index = () => {
                     });
                   }
                 }
-              } else if ((item === '单周' && weekNum % 2 !== 0)) {
+              } else if (item === '单周' && weekNum % 2 !== 0) {
                 if (KHItem?.XXSJPZId === timeItem?.id) {
                   const currentTeacher = KHItem?.KHBJSJ?.KHBJJs?.find(
                     (items: any) => items?.JSLX === '主教师',
@@ -540,7 +550,7 @@ const Index = () => {
     return tableData;
   };
   const processingDataZ = (data: any, timeData: any, bjId: string | undefined = undefined) => {
-    const NewArr = ['每周']
+    const NewArr = ['每周'];
     const tableData: any[] = [];
     const sameClassData: any[] = [];
     if (!timeData.length) {
@@ -654,7 +664,7 @@ const Index = () => {
 
   // 选择校区后选择学年学期
   const getXNXQData = async () => {
-    const xnxq = getQueryString('xnxqid');
+    const xnxq = getQueryObj().xnxqid;
     const res = await queryXNXQList(currentUser?.xxId);
     const newData = res.xnxqList;
     const curTerm = res.current;
@@ -685,7 +695,7 @@ const Index = () => {
         });
       });
       if (resXQ.data?.length) {
-        const XQSJ = getQueryString('XQSJ');
+        const { XQSJ } = getQueryObj();
         if (XQSJ !== null) {
           setCampusId(XQSJ);
         } else {
@@ -742,7 +752,7 @@ const Index = () => {
 
   // 返回上一页
   const onReset = () => {
-    const bjID = getQueryString('courseId');
+    const bjID = getQueryObj().courseId;
     if (bjID) {
       history.go(-1);
       setState(true);
@@ -774,13 +784,14 @@ const Index = () => {
       }
       await initWXAgentConfig(['checkJsApi']);
     })();
-    const bjId = getQueryString('courseId');
-    const XQSJId = getQueryString('XQSJ');
-    const XNXQId = getQueryString('xnxqid');
+    const queryObj = getQueryObj();
+    const bjId = queryObj.courseId;
+    const XQSJId = queryObj.XQSJ;
+    const XNXQId = queryObj.xnxqid;
     if (bjId !== null) {
       setCurXNXQId(XNXQId);
       (async () => {
-        const njInfo = await getKHBJSJ({ id: bjId });
+        const njInfo = await getKHBJSJ({ id: bjId! });
         if (njInfo.status === 'ok') {
           setRecordValue({
             BJId: njInfo.data.id,
@@ -795,9 +806,8 @@ const Index = () => {
     }
   }, []);
 
-
   useEffect(() => {
-    const bjId = getQueryString('courseId');
+    const bjId = getQueryObj().courseId;
     if (bjId !== null) {
       setState(false);
       setKey('2');
@@ -821,7 +831,7 @@ const Index = () => {
 
   // 根据学年学期ID 获取学年课程名称数据，和班级名称数据， 获取当前学校学年的学期的场地排课情况
   useEffect(() => {
-    const bjId = getQueryString('courseId');
+    const bjId = getQueryObj().courseId;
     if (curXNXQId && campusId) {
       // 获取系统时间配置信息
       getSysTime();
@@ -834,14 +844,12 @@ const Index = () => {
       // 场地数据
       getCDData();
       getTime();
-
     }
   }, [curXNXQId, campusId]);
 
   return (
     <div className={styles.CourseArrange}>
       <PageContainer>
-
         {state ? (
           <Tabs
             activeKey={key}
@@ -849,92 +857,101 @@ const Index = () => {
               setKey(value);
             }}
           >
-            {<TabPane tab="行政班课表" key="1">
-              {key === '1' && <CourseScheduling
-                type='行政班课表'
-                kcmcData={kcmcData}
-                processingDatas={processingDatas}
-                campus={campus}
-                setCampus={setCampus}
-                campusId={campusId}
-                curXNXQId={curXNXQId}
-                setCurXNXQId={setCurXNXQId}
-                xXSJPZData={xXSJPZData}
-                setXXSJPZData={setXXSJPZData}
-                currentUser={currentUser}
-                termList={termList}
-                setCampusId={setCampusId}
-                showDrawer={showDrawer}
-                onExcelTableClick={onExcelTableClick}
-                pKiskai={pKiskai}
-                setPKiskai={setPKiskai}
-                Weeks={Weeks}
-              />}
-            </TabPane>
+            {
+              <TabPane tab="行政班课表" key="1">
+                {key === '1' && (
+                  <CourseScheduling
+                    type="行政班课表"
+                    kcmcData={kcmcData}
+                    processingDatas={processingDatas}
+                    campus={campus}
+                    setCampus={setCampus}
+                    campusId={campusId}
+                    curXNXQId={curXNXQId}
+                    setCurXNXQId={setCurXNXQId}
+                    xXSJPZData={xXSJPZData}
+                    setXXSJPZData={setXXSJPZData}
+                    currentUser={currentUser}
+                    termList={termList}
+                    setCampusId={setCampusId}
+                    showDrawer={showDrawer}
+                    onExcelTableClick={onExcelTableClick}
+                    pKiskai={pKiskai}
+                    setPKiskai={setPKiskai}
+                    Weeks={Weeks}
+                  />
+                )}
+              </TabPane>
             }
             <TabPane tab="课程班课表" key="2">
-              {key === '2' && <CourseScheduling
-                type='课程班课表'
-                kcmcData={kcmcData}
-                processingDatas={processingDatas}
-                campus={campus}
-                setCampus={setCampus}
-                campusId={campusId}
-                curXNXQId={curXNXQId}
-                setCurXNXQId={setCurXNXQId}
-                xXSJPZData={xXSJPZData}
-                setXXSJPZData={setXXSJPZData}
-                currentUser={currentUser}
-                termList={termList}
-                setCampusId={setCampusId}
-                showDrawer={showDrawer}
-                onExcelTableClick={onExcelTableClick}
-                pKiskai={pKiskai}
-                setPKiskai={setPKiskai}
-                Weeks={Weeks}
-              />}
+              {key === '2' && (
+                <CourseScheduling
+                  type="课程班课表"
+                  kcmcData={kcmcData}
+                  processingDatas={processingDatas}
+                  campus={campus}
+                  setCampus={setCampus}
+                  campusId={campusId}
+                  curXNXQId={curXNXQId}
+                  setCurXNXQId={setCurXNXQId}
+                  xXSJPZData={xXSJPZData}
+                  setXXSJPZData={setXXSJPZData}
+                  currentUser={currentUser}
+                  termList={termList}
+                  setCampusId={setCampusId}
+                  showDrawer={showDrawer}
+                  onExcelTableClick={onExcelTableClick}
+                  pKiskai={pKiskai}
+                  setPKiskai={setPKiskai}
+                  Weeks={Weeks}
+                />
+              )}
             </TabPane>
             <TabPane tab="场地课表" key="3">
-              {key === '3' && <ClassScheduling
-                type='场地课表'
-                processingDatas={processingDatas}
-                campus={campus}
-                setCampus={setCampus}
-                campusId={campusId}
-                curXNXQId={curXNXQId}
-                setCurXNXQId={setCurXNXQId}
-                xXSJPZData={xXSJPZData}
-                setXXSJPZData={setXXSJPZData}
-                currentUser={currentUser}
-                termList={termList}
-                setCampusId={setCampusId}
-                showDrawer={showDrawer}
-                onExcelTableClick={onExcelTableClick}
-                pKiskai={pKiskai}
-                setPKiskai={setPKiskai}
-                Weeks={Weeks}
-              />}
+              {key === '3' && (
+                <ClassScheduling
+                  type="场地课表"
+                  processingDatas={processingDatas}
+                  campus={campus}
+                  setCampus={setCampus}
+                  campusId={campusId}
+                  curXNXQId={curXNXQId}
+                  setCurXNXQId={setCurXNXQId}
+                  xXSJPZData={xXSJPZData}
+                  setXXSJPZData={setXXSJPZData}
+                  currentUser={currentUser}
+                  termList={termList}
+                  setCampusId={setCampusId}
+                  showDrawer={showDrawer}
+                  onExcelTableClick={onExcelTableClick}
+                  pKiskai={pKiskai}
+                  setPKiskai={setPKiskai}
+                  Weeks={Weeks}
+                />
+              )}
             </TabPane>
             <TabPane tab="教师课表" key="4">
-              {key === '4' && <ClassScheduling
-                type='教师课表'
-                processingDatas={processingDatas}
-                campus={campus}
-                setCampus={setCampus}
-                campusId={campusId}
-                curXNXQId={curXNXQId}
-                setCurXNXQId={setCurXNXQId}
-                xXSJPZData={xXSJPZData}
-                setXXSJPZData={setXXSJPZData}
-                currentUser={currentUser}
-                termList={termList}
-                setCampusId={setCampusId}
-                showDrawer={showDrawer}
-                onExcelTableClick={onExcelTableClick}
-                pKiskai={pKiskai}
-                setPKiskai={setPKiskai}
-                Weeks={Weeks}
-              />}
+              {key === '4' && (
+                <ClassScheduling
+                  type="教师课表"
+                  processingDatas={processingDatas}
+                  campus={campus}
+                  setCampus={setCampus}
+                  campusId={campusId}
+                  curXNXQId={curXNXQId}
+                  setCurXNXQId={setCurXNXQId}
+                  xXSJPZData={xXSJPZData}
+                  setXXSJPZData={setXXSJPZData}
+                  currentUser={currentUser}
+                  termList={termList}
+                  setCampusId={setCampusId}
+                  showDrawer={showDrawer}
+                  onExcelTableClick={onExcelTableClick}
+                  pKiskai={pKiskai}
+                  setPKiskai={setPKiskai}
+                  Weeks={Weeks}
+                />
+              )}
             </TabPane>
           </Tabs>
         ) : (
@@ -952,9 +969,14 @@ const Index = () => {
                   返回上一页
                 </Button>
                 {`${recordValue && recordValue.BJId ? '编辑排课' : '新增排课'}`}
-                <a className={styles.xuzhi} onClick={() => {
-                  setVisiblePKXZ(true)
-                }}><QuestionCircleOutlined /> 排课须知</a>
+                <a
+                  className={styles.xuzhi}
+                  onClick={() => {
+                    setVisiblePKXZ(true);
+                  }}
+                >
+                  <QuestionCircleOutlined /> 排课须知
+                </a>
               </div>
             </>
 
@@ -966,8 +988,7 @@ const Index = () => {
               className={styles.tabs}
             >
               <TabPane tab="按周" key="one">
-                {
-                  keys === 'one' &&
+                {keys === 'one' && (
                   <AddArrangingZ
                     campus={campus}
                     campusId={campusId}
@@ -982,11 +1003,10 @@ const Index = () => {
                     setRqDisable={setRqDisable}
                     Weeks={Weeks}
                   />
-                }
+                )}
               </TabPane>
               <TabPane tab="单双周" key="two">
-                {
-                  keys === 'two' &&
+                {keys === 'two' && (
                   <AddArrangingDS
                     campus={campus}
                     campusId={campusId}
@@ -1001,11 +1021,10 @@ const Index = () => {
                     setRqDisable={setRqDisable}
                     Weeks={Weeks}
                   />
-                }
+                )}
               </TabPane>
               <TabPane tab="按天" key="three">
-                {
-                  keys === 'three' &&
+                {keys === 'three' && (
                   <AddArranging
                     campus={campus}
                     campusId={campusId}
@@ -1019,9 +1038,8 @@ const Index = () => {
                     TimeData={TimeData}
                     setRqDisable={setRqDisable}
                   />
-                }
+                )}
               </TabPane>
-
             </Tabs>
           </>
         )}
@@ -1030,21 +1048,33 @@ const Index = () => {
           visible={VisiblePKXZ}
           title="排课须知"
           onOk={() => {
-            setVisiblePKXZ(true)
+            setVisiblePKXZ(true);
           }}
           onCancel={() => {
-            setVisiblePKXZ(false)
+            setVisiblePKXZ(false);
           }}
           footer={null}
           className={styles.PKXZ}
         >
-          <p className={styles.titles}><div /> <span>排课规则</span>  </p>
+          <p className={styles.titles}>
+            <div /> <span>排课规则</span>{' '}
+          </p>
           <p>1. 排课支持两种模式：第一种，循环排课，即“按周”、“单双周”排课；第二种，“按天”排课。</p>
-          <p>2. 循环排课时必须先清除其他类型下的排课信息，且“按周”排课与“单双周”排课不可同时使用，即选择“按周”进行排课时，如果该班级存在的“单双周”排课信息，则需先清除已有排课信息后方可操作，反之亦然。</p>
+          <p>
+            2.
+            循环排课时必须先清除其他类型下的排课信息，且“按周”排课与“单双周”排课不可同时使用，即选择“按周”进行排课时，如果该班级存在的“单双周”排课信息，则需先清除已有排课信息后方可操作，反之亦然。
+          </p>
           <p>3. 当循环排课模式无法满足排课需求时，可使用“按天”排课模式。</p>
-          <p>4. “按天”排课也可作为循环排课的补充，可以先进行循环排课，然后使用“按天”排课进行细节调整。</p>
-          <p className={styles.titles} style={{ marginTop: 15 }}><div /> <span>操作建议</span>  </p>
-          <p>建议您先依据学校课表安排，选择一种适合的循环排课方式，在“按周”或“单双周”页签下完成排课后，可在“按天”排课中进行细节调整。</p>
+          <p>
+            4.
+            “按天”排课也可作为循环排课的补充，可以先进行循环排课，然后使用“按天”排课进行细节调整。
+          </p>
+          <p className={styles.titles} style={{ marginTop: 15 }}>
+            <div /> <span>操作建议</span>{' '}
+          </p>
+          <p>
+            建议您先依据学校课表安排，选择一种适合的循环排课方式，在“按周”或“单双周”页签下完成排课后，可在“按天”排课中进行细节调整。
+          </p>
           <p>例如：</p>
           <p>1. 每周循环上课，选择“按周”进行排课，随后在“按天”排课中进行调整；</p>
           <p>2. 单双周循环上课，选择“单双周”进行排课，随后在“按天”排课中进行调整；</p>
@@ -1052,7 +1082,6 @@ const Index = () => {
         </Modal>
       </PageContainer>
     </div>
-
   );
 };
 

@@ -1,5 +1,5 @@
 import { getStudentListByBjid } from '@/services/after-class/khfwbj';
-import { getQueryString } from '@/utils/utils';
+import { getQueryObj } from '@/utils/utils';
 import { Checkbox } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel, history } from 'umi';
@@ -25,8 +25,7 @@ const AfterClassDetails = () => {
     localStorage.getItem('studentId') || currentUser?.student?.[0].XSJBSJId || testStudentId;
   // 获取报名的课后服务
   const [BaoMinData, setBaoMinData] = useState<any>();
-  const classid = getQueryString('classid');
-  const path = getQueryString('path');
+  const { classid, path } = getQueryObj();
   useEffect(() => {
     (async () => {
       if (classid) {

@@ -2,8 +2,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-15 11:14:11
- * @LastEditTime: 2022-04-22 16:41:32
- * @LastEditors: Wu Zhan
+ * @LastEditTime: 2022-06-17 16:15:05
+ * @LastEditors: zpl
  */
 import { useEffect, useState } from 'react';
 import { Button, Form, Input, message, Select } from 'antd';
@@ -14,15 +14,15 @@ import { getIgnoreTeacherByClassesId } from '@/services/after-class/jzgjbsj';
 import { createKHJSTDK } from '@/services/after-class/khjstdk';
 import ShowName from '@/components/ShowName';
 import { CreateJSCQBQ } from '@/services/after-class/jscqbq';
-import { getQueryString } from '@/utils/utils';
+import { getQueryObj } from '@/utils/utils';
 
 const { TextArea } = Input;
 const { Option } = Select;
 const DkApply = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  const prevDay = getQueryString('date');
-  const dealClassId = getQueryString('classId');
+  const prevDay = getQueryObj().date;
+  const dealClassId = getQueryObj().classId;
   const [JsData, setJsData] = useState<API.JZGJBSJ[]>();
   const [DKJsId, setDKJsId] = useState();
   const [form] = Form.useForm();

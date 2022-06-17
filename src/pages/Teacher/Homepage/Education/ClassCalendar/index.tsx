@@ -20,7 +20,7 @@ import {
 import styles from './index.less';
 import noData from '@/assets/noCourses1.png';
 import noOrder from '@/assets/noOrder1.png';
-import { getQueryString } from '@/utils/utils';
+import { getQueryObj } from '@/utils/utils';
 import moment from 'moment';
 
 type propstype = {
@@ -41,9 +41,9 @@ const ClassCalendar = (props: propstype) => {
   const { setDatedata, type, form, setReloadList } = props;
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  const prevDay = getQueryString('date');
-  const dealClassId = getQueryString('classId');
-  const dealJcId = getQueryString('XXSJPZId');
+  const prevDay = getQueryObj().date;
+  const dealClassId = getQueryObj().classId;
+  const dealJcId = getQueryObj().XXSJPZId;
   const [day, setDay] = useState<string>(
     !prevDay || prevDay === 'null' ? dayjs().format('YYYY-MM-DD') : prevDay,
   );

@@ -12,7 +12,7 @@ import type { DataSourceType } from '@/components/ExcelTable2';
 import PromptInformation from '@/components/PromptInformation';
 import { theme } from '@/theme-default';
 import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
-import { getQueryString } from '@/utils/utils';
+import { getQueryObj } from '@/utils/utils';
 import styles from './index.less';
 import { getAllXQSJ } from '@/services/after-class/xqsj';
 import noJF from '@/assets/noJF.png';
@@ -26,28 +26,44 @@ const { Option } = Select;
 type selectType = { label: string; value: string };
 
 // 课程排课
-const CourseScheduling = (
-  props: {
-    processingDatas: (data: any, timeData: any, week: any, bjId?: string | undefined) => any[]
-    campus: any,
-    setCampus: React.Dispatch<any>,
-    campusId: string | undefined,
-    setCampusId: React.Dispatch<React.SetStateAction<string | undefined>>
-    curXNXQId: any,
-    setCurXNXQId: React.Dispatch<any>,
-    xXSJPZData: any,
-    setXXSJPZData: React.Dispatch<any>,
-    currentUser: any,
-    termList: any,
-    showDrawer: () => void,
-    onExcelTableClick: (value: any, record: any) => void,
-    pKiskai: boolean,
-    setPKiskai: React.Dispatch<React.SetStateAction<boolean>>
-    type?: string | undefined;
-    Weeks: any;
-  }) => {
-
-  const { processingDatas, campus, setCampus, campusId, setCampusId, xXSJPZData, curXNXQId, setCurXNXQId, setXXSJPZData, currentUser, termList, onExcelTableClick, showDrawer, pKiskai, setPKiskai, type, Weeks } = props;
+const CourseScheduling = (props: {
+  processingDatas: (data: any, timeData: any, week: any, bjId?: string | undefined) => any[];
+  campus: any;
+  setCampus: React.Dispatch<any>;
+  campusId: string | undefined;
+  setCampusId: React.Dispatch<React.SetStateAction<string | undefined>>;
+  curXNXQId: any;
+  setCurXNXQId: React.Dispatch<any>;
+  xXSJPZData: any;
+  setXXSJPZData: React.Dispatch<any>;
+  currentUser: any;
+  termList: any;
+  showDrawer: () => void;
+  onExcelTableClick: (value: any, record: any) => void;
+  pKiskai: boolean;
+  setPKiskai: React.Dispatch<React.SetStateAction<boolean>>;
+  type?: string | undefined;
+  Weeks: any;
+}) => {
+  const {
+    processingDatas,
+    campus,
+    setCampus,
+    campusId,
+    setCampusId,
+    xXSJPZData,
+    curXNXQId,
+    setCurXNXQId,
+    setXXSJPZData,
+    currentUser,
+    termList,
+    onExcelTableClick,
+    showDrawer,
+    pKiskai,
+    setPKiskai,
+    type,
+    Weeks,
+  } = props;
 
   // ExcelTable表格所需要的数据
   const [tableDataSource, setTableDataSource] = useState<DataSourceType>([]);
@@ -147,70 +163,70 @@ const CourseScheduling = (
     align: 'center' | 'left' | 'right';
     width: number;
   }[] = [
-      {
-        title: '教学周',
-        dataIndex: 'room',
-        key: 'room',
-        align: 'center',
-        width: 100,
-      },
-      {
-        title: '节次',
-        dataIndex: 'course',
-        key: 'course',
-        align: 'center',
-        width: 136,
-      },
-      {
-        title: '周一',
-        dataIndex: 'monday',
-        key: 'monday',
-        align: 'center',
-        width: 136,
-      },
-      {
-        title: '周二',
-        dataIndex: 'tuesday',
-        key: 'tuesday',
-        align: 'center',
-        width: 136,
-      },
-      {
-        title: '周三',
-        dataIndex: 'wednesday',
-        key: 'wednesday',
-        align: 'center',
-        width: 136,
-      },
-      {
-        title: '周四',
-        dataIndex: 'thursday',
-        key: 'thursday',
-        align: 'center',
-        width: 136,
-      },
-      {
-        title: '周五',
-        dataIndex: 'friday',
-        key: 'friday',
-        align: 'center',
-        width: 136,
-      },
-      {
-        title: '周六',
-        dataIndex: 'saturday',
-        key: 'saturday',
-        align: 'center',
-        width: 136,
-      },
-      {
-        title: '周日',
-        dataIndex: 'sunday',
-        key: 'sunday',
-        align: 'center',
-        width: 136,
-      },
-    ];
+    {
+      title: '教学周',
+      dataIndex: 'room',
+      key: 'room',
+      align: 'center',
+      width: 100,
+    },
+    {
+      title: '节次',
+      dataIndex: 'course',
+      key: 'course',
+      align: 'center',
+      width: 136,
+    },
+    {
+      title: '周一',
+      dataIndex: 'monday',
+      key: 'monday',
+      align: 'center',
+      width: 136,
+    },
+    {
+      title: '周二',
+      dataIndex: 'tuesday',
+      key: 'tuesday',
+      align: 'center',
+      width: 136,
+    },
+    {
+      title: '周三',
+      dataIndex: 'wednesday',
+      key: 'wednesday',
+      align: 'center',
+      width: 136,
+    },
+    {
+      title: '周四',
+      dataIndex: 'thursday',
+      key: 'thursday',
+      align: 'center',
+      width: 136,
+    },
+    {
+      title: '周五',
+      dataIndex: 'friday',
+      key: 'friday',
+      align: 'center',
+      width: 136,
+    },
+    {
+      title: '周六',
+      dataIndex: 'saturday',
+      key: 'saturday',
+      align: 'center',
+      width: 136,
+    },
+    {
+      title: '周日',
+      dataIndex: 'sunday',
+      key: 'sunday',
+      align: 'center',
+      width: 136,
+    },
+  ];
   // 获取校区信息 默认选择第一个校区
   const getCampus = async () => {
     // 获取年级信息
@@ -225,7 +241,7 @@ const CourseScheduling = (
         });
       });
       if (resXQ.data?.length) {
-        const XQSJ = getQueryString('XQSJ');
+        const { XQSJ } = getQueryObj();
         if (XQSJ !== null) {
           setCampusId(XQSJ);
         } else {
@@ -248,7 +264,6 @@ const CourseScheduling = (
 
   // 根据学年学期ID 获取学年课程名称数据，和班级名称数据， 获取当前学校学年的学期的场地排课情况
   useEffect(() => {
-    // const bjId = getQueryString('courseId');
     if (curXNXQId && campusId) {
       // 获取系统时间配置信息
       getSysTime();
@@ -258,7 +273,6 @@ const CourseScheduling = (
       getCDLXData();
     }
   }, [curXNXQId, campusId]);
-
 
   // 筛选之后 table 排课数据信息 刷新table
   useEffect(() => {
@@ -270,12 +284,12 @@ const CourseScheduling = (
 
   // 获取课程班排课数据信息
   const CDgetPKData = async () => {
-    const bjId = getQueryString('courseId');
+    const bjId = getQueryObj().courseId;
     setLoading(true);
     const res = await getAllPK({
       XNXQId: curXNXQId,
       XXJBSJId: currentUser?.xxId,
-      FJSJId: cdmcValue
+      FJSJId: cdmcValue,
     });
     if (res.status === 'ok') {
       if (bjId === null) {
@@ -286,7 +300,7 @@ const CourseScheduling = (
   };
   // 获取行政班排课数据信息
   const JSgetPKData = async () => {
-    const bjId = getQueryString('courseId');
+    const bjId = getQueryObj().courseId;
     setLoading(true);
     const res = await getAllPK({
       XNXQId: curXNXQId,
@@ -331,7 +345,7 @@ const CourseScheduling = (
         {/* 默认state的来回切换 新增排课与排课管理页面 */}
         {/* {state === true ? ( */}
         <div>
-          <div className={styles.SearchBoxs} >
+          <div className={styles.SearchBoxs}>
             {/* 渲染的是四个选项框组件 */}
             <Row>
               <Col span={6}>
@@ -377,8 +391,8 @@ const CourseScheduling = (
               </Col>
               <Col span={1}> </Col>
               <Col span={6}>
-                {
-                  type === '教师课表' ? <div className={styles.SearchBox}>
+                {type === '教师课表' ? (
+                  <div className={styles.SearchBox}>
                     <label>教师姓名：</label>
                     <TeacherSelect
                       type={4}
@@ -386,13 +400,15 @@ const CourseScheduling = (
                       xxId={currentUser?.xxId}
                       kcId={undefined}
                       onChange={(value: any) => {
-                        setTeacherId(value)
+                        setTeacherId(value);
                       }}
                     />
-                  </div> : <></>
-                }
-                {
-                  type === '场地课表' ? <div className={styles.SearchBox}>
+                  </div>
+                ) : (
+                  <></>
+                )}
+                {type === '场地课表' ? (
+                  <div className={styles.SearchBox}>
                     <label>场地类型：</label>
                     <Select
                       value={CDLXId}
@@ -412,35 +428,39 @@ const CourseScheduling = (
                         );
                       })}
                     </Select>
-                  </div> : <></>
-                }
+                  </div>
+                ) : (
+                  <></>
+                )}
               </Col>
             </Row>
             <Row>
-              {
-                type === '场地课表' ?
-                  <>
-                    <Col span={6}>
-                      <div className={styles.SearchBox} style={{ marginTop: 10 }}>
-                        <label>场地名称：</label>
-                        <Select
-                          value={cdmcValue}
-                          allowClear
-                          placeholder="请选择"
-                          onChange={(value) => setCdmcValue(value)}
-                        >
-                          {cdmcData?.map((item: selectType) => {
-                            return (
-                              <Option value={item.value} key={item.value}>
-                                {item.label}
-                              </Option>
-                            );
-                          })}
-                        </Select>
-                      </div>
-                    </Col>
-                    <Col span={1}> </Col></>
-                  : <></>}
+              {type === '场地课表' ? (
+                <>
+                  <Col span={6}>
+                    <div className={styles.SearchBox} style={{ marginTop: 10 }}>
+                      <label>场地名称：</label>
+                      <Select
+                        value={cdmcValue}
+                        allowClear
+                        placeholder="请选择"
+                        onChange={(value) => setCdmcValue(value)}
+                      >
+                        {cdmcData?.map((item: selectType) => {
+                          return (
+                            <Option value={item.value} key={item.value}>
+                              {item.label}
+                            </Option>
+                          );
+                        })}
+                      </Select>
+                    </div>
+                  </Col>
+                  <Col span={1}> </Col>
+                </>
+              ) : (
+                <></>
+              )}
               <Col span={6}>
                 <div className={styles.SearchBox} style={{ marginTop: 10 }}>
                   <label>教学周：</label>
@@ -450,15 +470,15 @@ const CourseScheduling = (
                     placeholder="请选择"
                     onChange={(value: string) => {
                       if (value) {
-                        setWeekNum([value])
+                        setWeekNum([value]);
                       } else {
-                        setWeekNum(undefined)
+                        setWeekNum(undefined);
                       }
                     }}
                   >
                     {Weeks?.map((item: any) => {
                       return (
-                        <Option value={item} >
+                        <Option key={item} value={item}>
                           {item}
                         </Option>
                       );
@@ -491,7 +511,7 @@ const CourseScheduling = (
               switchPages={showDrawer}
               onExcelTableClick={onExcelTableClick}
               radioValue={radioValue}
-              bjmcValue=''
+              bjmcValue=""
               xXSJPZData={xXSJPZData}
               KbType={type}
               style={{
@@ -501,13 +521,12 @@ const CourseScheduling = (
           ) : (
             <div className={styles.noDate}>
               {' '}
-              <img src={noJF} alt="" /> <p> {type === '场地课表' ? '请选择场地' : '请选择教师'}查看课表</p>{' '}
+              <img src={noJF} alt="" />{' '}
+              <p> {type === '场地课表' ? '请选择场地' : '请选择教师'}查看课表</p>{' '}
             </div>
           )}
-
         </div>
       </Spin>
-
     </>
   );
 };

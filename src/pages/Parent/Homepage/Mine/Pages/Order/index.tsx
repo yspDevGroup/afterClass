@@ -6,7 +6,7 @@ import { Link, useModel } from 'umi';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { deleteKHXSDD, getStudentOrders } from '@/services/after-class/khxsdd';
-import { enHenceMsg, getQueryString } from '@/utils/utils';
+import { enHenceMsg, getQueryObj } from '@/utils/utils';
 import noOrder from '@/assets/noOrder.png';
 import Nodata from '@/components/Nodata';
 import GoBack from '@/components/GoBack';
@@ -42,7 +42,7 @@ const OrderList = (props: {
           const { KHBJSJ, KHXXZZFW, ...rest } = item;
           const color = item.DDZT === '已付款' ? '#15B628' : '#888';
           return (
-            <div className={styles.Information}>
+            <div key={item.id} className={styles.Information}>
               <Link
                 to={{
                   pathname: '/parent/mine/orderDetails',
@@ -114,7 +114,7 @@ const Order: React.FC = () => {
   const [orderInfo, setOrderInfo] = useState<any>([]);
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  const type = getQueryString('type') || undefined;
+  const { type } = getQueryObj();
   const studentId =
     localStorage.getItem('studentId') ||
     (currentUser?.student && currentUser.student[0].XSJBSJId) ||
@@ -143,28 +143,27 @@ const Order: React.FC = () => {
       <div className={styles.orderList}>
         <Tabs type="card" defaultActiveKey={type}>
           <TabPane tab="全部" key="total">
-            <OrderList
-              data={orderInfo}
-              children={children}
-              currentUser={currentUser}
-              triggerEvt={fetch}
-            />
+            <OrderList data={orderInfo} currentUser={currentUser} triggerEvt={fetch}>
+              {children}
+            </OrderList>
           </TabPane>
           <TabPane tab="待付款" key="toPay">
             <OrderList
               data={orderInfo?.filter((item: API.KHXSDD) => item.DDZT === '待付款')}
-              children={children}
               currentUser={currentUser}
               triggerEvt={fetch}
-            />
+            >
+              {children}
+            </OrderList>
           </TabPane>
           <TabPane tab="已完成" key="paid">
             <OrderList
               data={orderInfo?.filter((item: API.KHXSDD) => item.DDZT === '已付款')}
-              children={children}
               currentUser={currentUser}
               triggerEvt={fetch}
-            />
+            >
+              {children}
+            </OrderList>
           </TabPane>
         </Tabs>
       </div>

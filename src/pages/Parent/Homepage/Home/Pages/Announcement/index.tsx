@@ -2,15 +2,15 @@
  * @description: 公告详情
  * @author: zpl
  * @Date: 2021-06-29 17:14:51
- * @LastEditTime: 2022-04-19 18:46:22
- * @LastEditors: Wu Zhan
+ * @LastEditTime: 2022-06-17 15:55:45
+ * @LastEditors: zpl
  */
 import React, { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import GoBack from '@/components/GoBack';
 import Footer from '@/components/Footer';
 import { XXTZGG } from '@/services/after-class/xxtzgg';
-import { enHenceMsg, getQueryString } from '@/utils/utils';
+import { enHenceMsg, getQueryObj } from '@/utils/utils';
 import imgPop from '@/assets/mobileBg.png';
 import styles from './index.less';
 
@@ -23,11 +23,8 @@ import MobileCon from '@/components/MobileCon';
 const Announcement = () => {
   const { initialState } = useModel('@@initialState');
   const [content, setContent] = useState<any>();
-  const pageId = getQueryString('listid');
-  const type = getQueryString('type');
-  const ly = getQueryString('ly');
-  const articlepage = getQueryString('articlepage');
-  const index = getQueryString('index');
+  const pageId = getQueryObj().listid;
+  const { type, ly, articlepage, index } = getQueryObj();
   useEffect(() => {
     async function announcements() {
       let res: any;
@@ -136,4 +133,3 @@ const Announcement = () => {
 };
 
 export default Announcement;
-

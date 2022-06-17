@@ -2,8 +2,8 @@
  * @description: 服务详情
  * @author: wsl
  * @Date: 2021-09-26 17:28:08
- * @LastEditTime: 2022-04-20 10:13:12
- * @LastEditors: Wu Zhan
+ * @LastEditTime: 2022-06-17 16:06:02
+ * @LastEditors: zpl
  */
 import GoBack from '@/components/GoBack';
 import { Button, Checkbox, Modal } from 'antd';
@@ -14,7 +14,7 @@ import { getStudent, KHXXZZFW } from '@/services/after-class/khxxzzfw';
 import { getXXTZGG } from '@/services/after-class/xxtzgg';
 import { createKHXSDD } from '@/services/after-class/khxsdd';
 import { Link, useModel, history } from 'umi';
-import { enHenceMsg, getQueryString } from '@/utils/utils';
+import { enHenceMsg, getQueryObj } from '@/utils/utils';
 import { signService } from '@/services/after-class/xsjbsj';
 import noOrder from '@/assets/noOrder.png';
 import GroupS from '@/assets/GroupS.png';
@@ -31,9 +31,7 @@ const Details = () => {
   const [KHFUXY, setKHFUXY] = useState<any>([]);
   const linkRef = useRef<HTMLAnchorElement | null>(null);
   const [orderInfo, setOrderInfo] = useState<any>();
-  const path = getQueryString('path');
-  const id = getQueryString('id');
-  const type = getQueryString('type');
+  const { path, id, type } = getQueryObj();
 
   const StorageXSId = localStorage.getItem('studentId');
   useEffect(() => {

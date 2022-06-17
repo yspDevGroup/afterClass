@@ -4,13 +4,13 @@ import CourseRefund from './CourseRefund';
 import ServiceRefund from './ServiceRefund';
 import ServiceAterClass from './ServiceAterClass';
 import { useEffect, useState } from 'react';
-import { getQueryString } from '@/utils/utils';
+import { getQueryObj } from '@/utils/utils';
 
 const { TabPane } = Tabs;
 const Index = () => {
   const [keys, setKeys] = useState<string>();
   useEffect(() => {
-    const index = getQueryString('index');
+    const { index } = getQueryObj();
     if (index) {
       setKeys(index);
     } else {

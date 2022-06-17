@@ -1,8 +1,8 @@
 /* eslint-disable no-useless-escape */
 /* eslint-disable no-param-reassign */
-import { parse } from 'querystring';
 import { message } from 'antd';
 import { history } from 'umi';
+import { parse, stringify } from 'querystring';
 import moment from 'moment';
 import { getAllKHXSCQ } from '@/services/after-class/khxscq';
 import { getKHPKSJByBJID } from '@/services/after-class/khpksj';
@@ -10,6 +10,21 @@ import { getKHBJSJ } from '@/services/after-class/khbjsj';
 import { getEnv } from '@/services/after-class/other';
 import { DateRange, Week } from './Timefunction';
 import type { MenuDataItem } from '@ant-design/pro-layout/lib/typings';
+
+/**
+ * url中的查询字符串转化为json格式
+ *
+ * @param {string} [queryString] 待转换的查询串
+ */
+export const getQueryObj = (queryString?: string) =>
+  parse(queryString || window.location.href.split('?')[1]) as NodeJS.Dict<string>;
+
+/**
+ * 转化json数据为url中的查询字符串
+ *
+ * @param {Record<string, string>} jsonData 待转换对象
+ */
+export const getQueryString = (jsonData: Record<string, string>) => stringify(jsonData);
 
 export const envjudge = () => {
   const isMobile = window.navigator.userAgent.match(
@@ -320,19 +335,6 @@ export const gotoLink = (url: string, onTop?: boolean) => {
     // 本系统内跳转
     history.push(url);
   }
-};
-
-/**
- * 根据路径search拼接参数获取参数对应的值
- *
- * @export
- * @returns
- */
-export const getQueryString = (name: string) => {
-  const regs = new RegExp(`(^|&)${name}=([^&]*)(&|$)`);
-  const r = decodeURI(window.location.search.substr(1)).match(regs);
-  if (r != null) return unescape(r[2]);
-  return null;
 };
 
 /**

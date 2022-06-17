@@ -1,30 +1,29 @@
 import { Tabs } from 'antd';
 import PageContainer from '@/components/PageContainer';
 import Detail from './Detail';
-import { getQueryString } from '@/utils/utils';
+import { getQueryObj } from '@/utils/utils';
 import { useEffect, useState } from 'react';
 
 const { TabPane } = Tabs;
 const ServiceSetting = () => {
   const [keys, setKeys] = useState<string>();
   useEffect(() => {
-    const type = getQueryString('type');
-    const index = getQueryString('index');
+    const { index, type } = getQueryObj();
     if (index) {
-      setKeys(index)
+      setKeys(index);
     } else if (type) {
-      setKeys(type)
+      setKeys(type);
     } else {
-      setKeys('normal')
+      setKeys('normal');
     }
-  }, [])
+  }, []);
 
   return (
     <PageContainer cls="serviceSetting">
       <Tabs
         activeKey={keys}
         onChange={(key) => {
-          setKeys(key)
+          setKeys(key);
         }}
       >
         <TabPane tab="课后服务协议" key="normal">

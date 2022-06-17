@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Badge, Divider, Modal } from 'antd';
 import moment from 'moment';
-import { enHenceMsg, getQueryString } from '@/utils/utils';
+import { enHenceMsg, getQueryObj } from '@/utils/utils';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import GoBack from '@/components/GoBack';
 import ShowName from '@/components/ShowName';
@@ -21,11 +21,10 @@ const Detail: React.FC = () => {
   const [classDetail, setClassDetail] = useState<any>();
   const [timetableList, setTimetableList] = useState<any[]>();
   const [isLoading, setIsLoading] = useState(false);
-  const classid = getQueryString('classid');
-  const index = getQueryString('index');
+  const { classid, index } = getQueryObj('classid');
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  const claim = getQueryString('status');
+  const claim = getQueryObj().status;
   const userId = currentUser.JSId || testTeacherId;
 
   const fetchData = async (bjid: string) => {
@@ -311,7 +310,12 @@ const Detail: React.FC = () => {
                     break;
                 }
                 return (
-                  <div className={styles.card} style={style} onClick={() => handleModal(value)}>
+                  <div
+                    key={value.index}
+                    className={styles.card}
+                    style={style}
+                    onClick={() => handleModal(value)}
+                  >
                     <p>
                       {value.tag && value.tag === '假'
                         ? `【${value.tag}】`

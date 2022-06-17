@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import { Badge, Modal } from 'antd';
-import { getQueryString } from '@/utils/utils';
+import { getQueryObj } from '@/utils/utils';
 import moment from 'moment';
 import styles from './index.less';
 import noData from '@/assets/noCourse.png';
@@ -26,8 +26,7 @@ const CourseTable: React.FC = () => {
   const [mainTeacher, setMainTeacher] = useState<any>();
   const [teacherList, setTeacherList] = useState<any[]>([]);
   const [timetableList, setTimetableList] = useState<any[]>();
-  const classid = getQueryString('classid');
-  const path = getQueryString('path');
+  const { classid, path } = getQueryObj();
   const myDate: Date = new Date();
   const currentDate = moment(myDate).format('YYYY-MM-DD');
   const StorageXSId =
@@ -125,7 +124,7 @@ const CourseTable: React.FC = () => {
               };
             }
             if (res.data?.length) {
-              const curCQ = res.data.find((item) => item.CQRQ === day);
+              const curCQ = res.data.find((item: any) => item.CQRQ === day);
               if (curCQ) {
                 switch (curCQ?.CQZT) {
                   case '请假':
@@ -254,7 +253,7 @@ const CourseTable: React.FC = () => {
                   <span>副班：</span>
                   {teacherList.map((ele) => {
                     return (
-                      <span className={styles.teacherName}>
+                      <span key={ele.id} className={styles.teacherName}>
                         <ShowName
                           type="userName"
                           openid={ele?.JZGJBSJ?.WechatUserId}
@@ -289,6 +288,7 @@ const CourseTable: React.FC = () => {
               timetableList?.map((value) => {
                 return (
                   <div
+                    key={value.index}
                     className={styles.card}
                     style={value?.style}
                     onClick={() => handleModal(value)}

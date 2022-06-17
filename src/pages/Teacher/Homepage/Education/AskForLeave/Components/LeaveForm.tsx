@@ -2,8 +2,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-15 11:14:11
- * @LastEditTime: 2022-04-21 14:52:56
- * @LastEditors: Wu Zhan
+ * @LastEditTime: 2022-06-17 16:13:22
+ * @LastEditors: zpl
  */
 import { useState } from 'react';
 import { Button, Form, Input, message } from 'antd';
@@ -12,7 +12,7 @@ import ClassCalendar from '../../ClassCalendar';
 import styles from '../index.less';
 import { compareTime } from '@/utils/Timefunction';
 import { getClassDays } from '@/utils/TimeTable';
-import { getQueryString } from '@/utils/utils';
+import { getQueryObj } from '@/utils/utils';
 import { CreateJSCQBQ } from '@/services/after-class/jscqbq';
 import { createKHJSQJ } from '@/services/after-class/khjsqj';
 import { getMainTeacher } from '@/services/after-class/khbjsj';
@@ -21,8 +21,8 @@ const { TextArea } = Input;
 const LeaveForm = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  const prevDay = getQueryString('date');
-  const dealClassId = getQueryString('classId');
+  const prevDay = getQueryObj().date;
+  const dealClassId = getQueryObj().classId;
   const [form] = Form.useForm();
   // 课表中选择课程后的数据回显
   const [dateData, setDateData] = useState<any>([]);
