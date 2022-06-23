@@ -19,7 +19,7 @@ import type { LocationDescriptor, Location } from 'history';
 import type { ReactChild, ReactFragment, ReactPortal } from 'react';
 
 const isDev = process.env.NODE_ENV === 'development';
-const authCallbackPath = '/auth_callback';
+const authCallbackPath = '/auth';
 const loginPath = '/user';
 
 /** 获取用户信息比较慢的时候会展示一个 loading */
@@ -298,7 +298,7 @@ const errorHandler = (error: ResponseError) => {
         {
           removeOAuthToken();
           const path = location.pathname.toLowerCase();
-          const isAuthPage = path.startsWith('/authcallback');
+          const isAuthPage = path.startsWith(authCallbackPath);
           if (!isAuthPage) {
             console.log('401');
             history.push(`/403`);

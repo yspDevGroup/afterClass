@@ -2,9 +2,10 @@
  * @description: 微信相关路由
  * @author: zpl
  * @Date: 2021-06-10 16:40:10
- * @LastEditTime: 2021-06-10 18:42:56
+ * @LastEditTime: 2022-06-22 16:58:27
  * @LastEditors: zpl
  */
+import { request } from 'umi';
 import { getDepList } from '@/services/after-class/wechat';
 
 /**
@@ -41,3 +42,45 @@ export const queryXQList = async (
   }
   return wxInfo.xqList;
 };
+
+/** 获取企业微信认证链接 GET /callback/authRedirect */
+export async function getWechatAuthRedirect(
+  params: {
+    suiteID: string;
+    scope: 'snsapi_userinfo' | 'snsapi_privateinfo';
+    callback: string;
+  },
+  options?: Record<string, any>,
+) {
+  return request<{
+    errCode: number;
+    data: string;
+    msg: string;
+  }>(`/callback/authRedirect`, {
+    method: 'GET',
+    prefix: '/wechat_api',
+    params,
+    ...(options || {}),
+  });
+}
+
+/** 获取企业微信登录用户信息 GET /user/loginInfo */
+export async function getWechatLoginInfo(
+  params: {
+    code: string;
+    state: string;
+    suiteID: string;
+  },
+  options?: Record<string, any>,
+) {
+  return request<{
+    errCode: number;
+    data: string;
+    msg: string;
+  }>(`/user/loginInfo`, {
+    method: 'GET',
+    prefix: '/wechat_api',
+    params,
+    ...(options || {}),
+  });
+}

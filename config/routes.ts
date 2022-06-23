@@ -16,6 +16,20 @@
     ],
   },
   {
+    path: '/auth',
+    layout: false,
+    routes: [
+      {
+        path: '/auth/comwx',
+        component: './Auth/ComWX',
+      },
+      {
+        path: '/auth/comwx/oncode',
+        component: './Auth/ComWX/onCode',
+      },
+    ],
+  },
+  {
     path: '/auth_callback',
     layout: false,
     routes: [
