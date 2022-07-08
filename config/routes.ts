@@ -21,11 +21,25 @@
     routes: [
       {
         path: '/auth/comwx',
-        component: './Auth/ComWX',
+        routes: [
+          {
+            path: '/auth/comwx/oncode',
+            component: './Auth/ComWX/onCode',
+          },
+          {
+            path: '/auth/comwx',
+            component: './Auth/ComWX',
+          },
+        ],
       },
       {
-        path: '/auth/comwx/oncode',
-        component: './Auth/ComWX/onCode',
+        path: '/auth/sso',
+        routes: [
+          {
+            path: '/auth/sso/oncode',
+            component: './Auth/SSO/onCode',
+          },
+        ],
       },
     ],
   },
