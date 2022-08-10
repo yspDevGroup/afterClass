@@ -162,7 +162,10 @@ declare const REACT_APP_ENV: 'test' | 'dev' | 'pre' | false;
 declare const ENV_title: string;
 declare const ENV_subTitle: string;
 declare const ENV_clientId: '00002';
+/** 是否为本地开发模式 */
 declare const ENV_debug: boolean;
+/** 测试用企业Code */
+declare const ENV_test_enterCode: string;
 declare const testStudentId: string;
 declare const testStudentNJId: string;
 declare const testStudentBJId: string;

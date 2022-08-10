@@ -103,7 +103,7 @@ export const getBuildOptions = async (): Promise<BuildOptions> => {
       return {
         ENV_type: 'dev',
         ENV_copyRight: '2022 版权所有：陕西五育汇智信息技术有限公司',
-        ENV_host: 'http:/localhost:8000',
+        ENV_host: 'http:/localhost:8001',
         ssoHost: 'http://platform.test.xianyunshipei.com',
         crpHost: 'http://crpweb.test.xianyunshipei.com',
         // crpHost: 'http://localhost:8001',
@@ -279,14 +279,27 @@ export const getLoginPath = ({ suiteID, buildOptions, reLogin }: GetLoginPathPro
         // 为方便本地调试登录，认证回调地址通过参数传递给后台
         const callback = encodeURIComponent(`${ENV_host}/auth_callback/password`);
         const url = new URL(`${ssoHost}/oauth2/password`);
-        url.searchParams.append('response_type', authType);
         url.searchParams.append('client_id', ENV_clientId);
-        url.searchParams.append('logo', `${ENV_host}/logo.png`);
-        url.searchParams.append('title', `${ENV_title}`);
-        url.searchParams.append('subtitle', `${ENV_subTitle}`);
+        if (ENV_debug && typeof ENV_test_enterCode !== 'undefined') {
+          // ENV_test_enterCode为测试用企业code，请在local中配置自己要用的code，不要提交到正式代码中
+          url.searchParams.append('enterprise_code', ENV_test_enterCode);
+        }
+        const { enterprise_code } = getQueryObj();
+        if (enterprise_code) {
+          url.searchParams.append('enterprise_code', enterprise_code);
+        }
         url.searchParams.append('redirect_uri', callback);
         url.searchParams.append('reLogin', String(reLogin || 'false'));
         loginPath = url.href;
+
+        // url.searchParams.append('response_type', authType);
+        // url.searchParams.append('client_id', ENV_clientId);
+        // url.searchParams.append('logo', `${ENV_host}/logo.png`);
+        // url.searchParams.append('title', `${ENV_title}`);
+        // url.searchParams.append('subtitle', `${ENV_subTitle}`);
+        // url.searchParams.append('redirect_uri', callback);
+        // url.searchParams.append('reLogin', String(reLogin || 'false'));
+        // loginPath = url.href;
       }
       break;
   }

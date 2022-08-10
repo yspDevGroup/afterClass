@@ -14,18 +14,11 @@ export default {
       pathRewrite: { '^/api': '' },
     },
   },
-  ssh: {
+  prod: {
     '/api/': {
       target: 'http://api.prod.xianyunshipei.com',
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
-    },
-  },
-  pre: {
-    '/api/': {
-      target: 'your pre url',
-      changeOrigin: true,
-      pathRewrite: { '^': '' },
     },
   },
 };
